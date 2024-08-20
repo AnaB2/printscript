@@ -1,6 +1,6 @@
 package org.example
 
-import org.example.token.TokenType
+import token.TokenType
 import java.util.regex.Pattern
 
 class PatternMatcher(private val strategyMap: Map<TokenType, TokenClassifierStrategy>) {

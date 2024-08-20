@@ -1,4 +1,4 @@
-package org.example.token
+package token
 
 class Token(
     private var type: TokenType,
@@ -12,6 +12,14 @@ class Token(
 
     fun getValue(): String {
         return value
+    }
+
+    fun getPosition(): TokenPosition {
+        return initialPosition
+    }
+
+    fun getFinalPosition(): TokenPosition {
+        return finalPosition
     }
 
     override fun equals(other: Any?): Boolean {

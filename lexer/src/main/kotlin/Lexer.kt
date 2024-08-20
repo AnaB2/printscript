@@ -1,8 +1,8 @@
 package org.example
 
-import org.example.token.Token
-import org.example.token.TokenPosition
-import org.example.token.TokenType
+import token.Token
+import token.TokenPosition
+import token.TokenType
 import java.util.regex.Matcher
 
 

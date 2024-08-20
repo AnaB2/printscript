@@ -1,4 +1,4 @@
-package org.example.token
+package token
 
 enum class TokenType {
     IDENTIFIER,
@@ -18,4 +18,8 @@ enum class TokenType {
     ASSIGN,
     UNKNOWN,
     LITERAL,
+    STRING,
+    NUMBER,
+    BLOCK_START,
+    BLOCK_END
 }

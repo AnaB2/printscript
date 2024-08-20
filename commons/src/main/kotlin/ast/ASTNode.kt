@@ -1,7 +1,7 @@
 package ast
 
-import org.example.token.TokenPosition
-import org.example.token.TokenType
+import token.TokenPosition
+import token.TokenType
 
 sealed class AstNode {
     abstract val position: TokenPosition

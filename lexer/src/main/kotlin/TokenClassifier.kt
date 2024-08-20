@@ -1,6 +1,6 @@
 package org.example
 
-import org.example.token.TokenType
+import token.TokenType
 
 
 class TokenClassifier(private val version:String) {
