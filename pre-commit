@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# Function to run tests
+run_tests() {
+    echo "**********Running tests...**********"
+    ./gradlew test --daemon --parallel --continue
+    return $?
+}
+
+# Function to run ktlint checks
+run_ktlint_checks() {
+    echo "**********Running ktlint checks...**********"
+    ./gradlew ktlintCheck ktlintFormat --daemon --parallel --continue
+    return $?
+}
+
+#Function to run verify code coverage
+run_kover() {
+    echo "**********Running kover...**********"
+    ./gradlew koverVerify
+}
+
+# Main function
+main() {
+    run_tests
+    tests_result=$?
+
+    if [ $tests_result -ne 0 ]; then
+        echo "**********Tests failed. Please fix the issues before committing.**********"
+        exit $tests_result
+    fi
+
+    run_ktlint_checks
+    ktlint_result=$?
+
+    if [ $ktlint_result -ne 0 ]; then
+        echo "**********Ktlint check failed. Please fix the issues before committing.**********"
+        exit $ktlint_result
+    fi
+
+    run_kover
+    kover_result=$?
+
+    if [ $kover_result -ne 0 ]; then
+      echo "**********Code coverage failed. Plese fix issues before committing.**********"
+      exit $kover_result
+    fi
+    echo "**********Tests, ktlint and coverage checks passed. Committing...**********"
+    exit 0
+}
+
+# Run main function
+main

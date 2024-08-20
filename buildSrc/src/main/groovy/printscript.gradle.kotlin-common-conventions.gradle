@@ -1,0 +1,66 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+    id "org.jlleitschuh.gradle.ktlint"
+    id "org.jetbrains.kotlinx.kover"
+}
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.jetbrains.kotlin:kotlin-test'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+
+tasks.register('installGitHook', Copy) {
+    description = 'Install pre-commit git hook'
+    from(new File(rootProject.rootDir, 'pre-commit'))
+    into { new File(rootProject.rootDir, '.git/hooks') }
+    fileMode 0777
+
+    doLast {
+        println 'Git pre-commit hook installed successfully.'
+    }
+}
+
+
+tasks.register('customBuild') {
+    dependsOn 'build'
+    dependsOn 'check'
+}
+
+tasks.named('check') {
+    dependsOn 'ktlintCheck'
+    dependsOn 'koverVerify'
+}
+
+koverReport {
+    filters {
+        excludes {
+            // excludes class by fully-qualified JVM class name, wildcards '*' and '?' are available
+            classes("org.commons")
+        }
+    }
+    verify {
+        rule {
+            minBound(80)
+            filters {
+                excludes{
+//                    packages("cli")
+//                    packages("ast")
+//                    packages("token")
+//                    packages("utils")
+//                    packages("position")
+                }
+
+            }
+        }
+    }
+}
