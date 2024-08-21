@@ -4,12 +4,18 @@ import ast.AstNode
 import ast.BinaryNode
 import ast.LiteralNode
 import token.Token
+import token.TokenType
 
 class OperationFactory {
     fun createAST(tokens: List<Token>): AstNode {
+        if (tokens.isEmpty()) {
+            throw IllegalArgumentException("Cannot create AST from an empty token list")
+        }
+
         if (tokens.size == 1) {
             return createLiteralNode(tokens[0])
         }
+
         for (token in tokens) {
             if (isAdditionOrSubtraction(token)) {
                 return BinaryNode(
@@ -20,6 +26,7 @@ class OperationFactory {
                 )
             }
         }
+
         for (token in tokens) {
             if (isMultiplicationOrDivision(token)) {
                 return BinaryNode(
@@ -30,6 +37,7 @@ class OperationFactory {
                 )
             }
         }
+
         throw Exception("Error in operation")
     }
 

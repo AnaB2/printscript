@@ -1,23 +1,23 @@
 package factories
 
+import ASTFactory
 import ast.AstNode
 import ast.DeclarationNode
 import ast.LiteralNode
 import token.Token
 import token.TokenType
-import ASTFactory
 
 class DeclarationFactory : ASTFactory {
     override fun createAST(tokens: List<Token>): AstNode {
         val keywordToken = tokens.find { it.getType() == TokenType.KEYWORD }!!
         val identifierToken = tokens.find { it.getType() == TokenType.IDENTIFIER }!!
+        val declaratorToken = tokens.find { it.getType() == TokenType.DECLARATOR }!!
         val dataTypeToken = tokens.find { it.getType() == TokenType.DATA_TYPE }!!
-        val expressionToken = tokens.last() // Assuming the last token is the expression
 
         val exprNode = LiteralNode(
-            value = expressionToken.getValue(),
-            type = expressionToken.getType(),
-            position = expressionToken.getPosition()
+            value = dataTypeToken.getValue(),
+            type = dataTypeToken.getType(),
+            position = dataTypeToken.getPosition()
         )
 
         return DeclarationNode(

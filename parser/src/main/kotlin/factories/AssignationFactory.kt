@@ -10,24 +10,32 @@ import token.TokenType
 
 class AssignationFactory : ASTFactory {
     override fun createAST(tokens: List<Token>): AstNode {
-        val assignationToken = tokens.find { it.getType() == TokenType.ASSIGNATION }!!
+        val assignationToken = tokens.find { it.getType() == TokenType.ASSIGNATION }
+            ?: throw Exception("Assignation token not found")
+
         val leftTokens = getLeftTokens(tokens)
         val rightTokens = getRightTokens(tokens, leftTokens)
-        val leftNode = if (leftTokens.size > 1) {
-            variableDeclaration(leftTokens)
-        } else {
-            createLiteralNode(leftTokens[0])
+
+        val leftNode = when {
+            leftTokens.size > 1 -> variableDeclaration(leftTokens)
+            leftTokens.isNotEmpty() -> createLiteralNode(leftTokens[0])
+            else -> throw Exception("Invalid left side of assignment")
         }
-        val rightNode = if (rightTokens.isEmpty()) {
-            NilNode
-        } else if (rightTokens.size > 1) {
-            createAssignedTree(rightTokens)
+
+        val rightNode = when {
+            rightTokens.isEmpty() -> NilNode
+            rightTokens.size > 1 -> createAssignedTree(rightTokens)
+            else -> createLiteralNode(rightTokens[0])
+        }
+
+        val leftNodeId = if (leftNode is LiteralNode) {
+            leftNode.value
         } else {
-            createLiteralNode(rightTokens[0])
+            throw Exception("Left side of assignment must be a literal or identifier")
         }
 
         return AssignationNode(
-            id = leftNode.toString(),
+            id = leftNodeId,
             expression = rightNode,
             valType = assignationToken.getType(),
             position = assignationToken.getPosition()
@@ -35,12 +43,18 @@ class AssignationFactory : ASTFactory {
     }
 
     private fun createLiteralNode(token: Token): AstNode {
-        return LiteralNode(value = token.getValue(), type = token.getType(), position = token.getPosition())
+        return LiteralNode(
+            value = token.getValue(),
+            type = token.getType(),
+            position = token.getPosition()
+        )
     }
 
-    private fun getRightTokens(tokens: List<Token>, leftTokens: List<Token>) = tokens.drop(leftTokens.size + 1)
+    private fun getRightTokens(tokens: List<Token>, leftTokens: List<Token>) =
+        tokens.drop(leftTokens.size + 1)
 
-    private fun getLeftTokens(tokens: List<Token>) = tokens.takeWhile { it.getValue() != "=" }
+    private fun getLeftTokens(tokens: List<Token>) =
+        tokens.takeWhile { it.getType() != TokenType.ASSIGNATION }
 
     private fun createAssignedTree(tokens: List<Token>): AstNode {
         return if (tokens.any { it.getType() == TokenType.FUNCTION }) {

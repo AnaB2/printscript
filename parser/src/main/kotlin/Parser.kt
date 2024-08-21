@@ -43,6 +43,9 @@ class Parser {
                 singleRow = mutableListOf()
             }
         }
+        if (singleRow.isNotEmpty()) {
+            rows.add(singleRow) // Agregar la última línea si no está vacía
+        }
         if (rows.isEmpty()) {
             throw Exception("Error: Not valid code.")
         }
