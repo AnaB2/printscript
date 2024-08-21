@@ -1,5 +1,5 @@
 import org.example.Lexer
-import org.example.TokenClassifier
+import org.example.TokenMapper
 import org.junit.jupiter.api.Assertions.assertIterableEquals
 import org.junit.jupiter.api.Test
 import token.Token
@@ -8,7 +8,7 @@ import token.TokenType
 import kotlin.test.assertEquals
 
 class LexerTests {
-    private val tkClassifier = TokenClassifier("1.0")
+    private val tkClassifier = TokenMapper("1.0")
     private val lexer = Lexer(tkClassifier)
 
     @Test

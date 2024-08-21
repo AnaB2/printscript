@@ -3,7 +3,7 @@ package org.example
 import token.TokenType
 
 
-class TokenClassifier(private val version:String) {
+class TokenMapper(private val version:String) {
 
     private val strategyMap: MutableMap<TokenType, TokenClassifierStrategy> = mutableMapOf();
 
