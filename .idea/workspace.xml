@@ -4,15 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ceda677f-9fce-48e1-9baf-d3eb19766111" name="Changes" comment="upload parser using the new ast">
+    <list default="true" id="ceda677f-9fce-48e1-9baf-d3eb19766111" name="Changes" comment="fix assignation, declaration &amp; println">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commons/src/main/kotlin/token/TokenPosition.kt" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/kotlin/token/TokenPosition.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/parser/src/main/kotlin/Parser.kt" beforeDir="false" afterPath="$PROJECT_DIR$/parser/src/main/kotlin/Parser.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/parser/src/main/kotlin/factories/AssignationFactory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/parser/src/main/kotlin/factories/AssignationFactory.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/parser/src/main/kotlin/factories/DeclarationFactory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/parser/src/main/kotlin/factories/DeclarationFactory.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/parser/src/main/kotlin/factories/OperationFactory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/parser/src/main/kotlin/factories/OperationFactory.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/parser/src/main/kotlin/factories/PrintlnFactory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/parser/src/main/kotlin/factories/PrintlnFactory.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/parser/src/test/kotlin/ParserTests.kt" beforeDir="false" afterPath="$PROJECT_DIR$/parser/src/test/kotlin/ParserTests.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,45 +74,69 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Gradle.ParserTest (1).executor": "Run",
-    "Gradle.ParserTest (2).executor": "Run",
-    "Gradle.ParserTest.executor": "Run",
-    "Gradle.ParserTest.test parser execution with declaration only.executor": "Run",
-    "Gradle.ParserTest.test parser execution with println and multiple concatenations.executor": "Run",
-    "Gradle.ParserTest.test parser execution with println statement.executor": "Run",
-    "Gradle.ParserTest.test parser execution with println.executor": "Run",
-    "Gradle.ParserTest.test parser execution with variable assignment.executor": "Run",
-    "Gradle.ParserTest.test parser execution with variable declaration and addition operation.executor": "Run",
-    "Gradle.ParserTest.testCreateASTForAssignation.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "main",
-    "jdk.selected.JAVA_MODULE": "corretto-21 (3)",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/zartf/projects/Print-Script",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Gradle.ParserTest (1).executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ParserTest (2).executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ParserTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ParserTest.test parser execution with declaration only.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ParserTest.test parser execution with println and multiple concatenations.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ParserTest.test parser execution with println statement.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ParserTest.test parser execution with println.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ParserTest.test parser execution with variable assignment.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ParserTest.test parser execution with variable declaration and addition operation.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ParserTest.testCreateASTForAssignation.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;corretto-21 (3)&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/zartf/projects/Print-Script&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "kotlin-gradle-user-dirs": [
-      "C:\\Users\\zartf\\.gradle"
+  &quot;keyToStringList&quot;: {
+    &quot;kotlin-gradle-user-dirs&quot;: [
+      &quot;C:\\Users\\zartf\\.gradle&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.ParserTest.test parser execution with println and multiple concatenations">
+  <component name="RunManager" selected="Gradle.LexerTests">
+    <configuration name="LexerTests" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":lexer:test" />
+            <option value="--tests" />
+            <option value="&quot;LexerTests&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
     <configuration name="ParserTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -192,30 +209,6 @@
       <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="ParserTest.test parser execution with variable assignment" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":parser:test" />
-            <option value="--tests" />
-            <option value="&quot;org.example.ParserTest.test parser execution with variable assignment&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>true</RunAsTest>
-      <method v="2" />
-    </configuration>
     <configuration name="ParserTest.test parser execution with variable declaration and addition operation" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -242,11 +235,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.LexerTests" />
         <item itemvalue="Gradle.ParserTest.test parser execution with println and multiple concatenations" />
         <item itemvalue="Gradle.ParserTest.test parser execution with println" />
         <item itemvalue="Gradle.ParserTest" />
         <item itemvalue="Gradle.ParserTest.test parser execution with variable declaration and addition operation" />
-        <item itemvalue="Gradle.ParserTest.test parser execution with variable assignment" />
       </list>
     </recent_temporary>
   </component>
@@ -274,7 +267,7 @@
       <workItem from="1724125095463" duration="926000" />
       <workItem from="1724166360999" duration="1884000" />
       <workItem from="1724187463183" duration="609000" />
-      <workItem from="1724189035467" duration="10069000" />
+      <workItem from="1724189035467" duration="10542000" />
     </task>
     <task id="LOCAL-00001" summary="Add new modules about lexer,parser, interpreter, commons">
       <option name="closed" value="true" />
@@ -300,7 +293,23 @@
       <option name="project" value="LOCAL" />
       <updated>1724191411074</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="fix assignation, declaration &amp; println">
+      <option name="closed" value="true" />
+      <created>1724257648052</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1724257648054</updated>
+    </task>
+    <task id="LOCAL-00005" summary="fix assignation, declaration &amp; println">
+      <option name="closed" value="true" />
+      <created>1724257664086</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1724257664086</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -310,7 +319,8 @@
     <MESSAGE value="Add new modules about lexer,parser, interpreter, commons" />
     <MESSAGE value="add commons &amp; lexer files" />
     <MESSAGE value="upload parser using the new ast" />
-    <option name="LAST_COMMIT_MESSAGE" value="upload parser using the new ast" />
+    <MESSAGE value="fix assignation, declaration &amp; println" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix assignation, declaration &amp; println" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
