@@ -1,6 +1,7 @@
 package token
 
 enum class TokenType {
+
     IDENTIFIER,
     KEYWORD,
     PUNCTUATOR,
@@ -17,7 +18,11 @@ enum class TokenType {
     DATA_TYPE,
     ASSIGN,
     UNKNOWN,
-    LITERAL,
+    OPERATOR_PLUS,
+    OPERATOR_MINUS,
+    OPERATOR_MULTIPLY,
+    OPERATOR_DIVIDE,
+    LITERAL,;
     STRING,
     NUMBER,
     BLOCK_START,
