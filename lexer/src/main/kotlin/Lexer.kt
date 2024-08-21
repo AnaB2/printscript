@@ -6,7 +6,7 @@ import token.TokenType
 import java.util.regex.Matcher
 
 
-class Lexer(private val classifier: TokenClassifier) {
+class Lexer(private val classifier: TokenMapper) {
 
     private val patternMatcher = PatternMatcher(classifier.getStrategyMap())
 
