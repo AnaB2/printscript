@@ -38,7 +38,8 @@ class InterpreterTests {
     fun `test addition of integers`() {
         val left = LiteralNode("10", TokenType.NUMBERLITERAL, position)
         val right = LiteralNode("5", TokenType.NUMBERLITERAL, position)
-        val node = BinaryNode(left, right, TokenType.OPERATOR, position)
+        val operatorToken = Token(TokenType.OPERATOR, "+", position, position) // Create a token for "+"
+        val node = BinaryNode(left, right, operatorToken, position)
         val interpreter = Interpreter()
         val result = interpreter.evaluate(node)
         assertEquals(15, result)
@@ -48,7 +49,8 @@ class InterpreterTests {
     fun `test string concatenation`() {
         val left = LiteralNode("Hello", TokenType.STRINGLITERAL, position)
         val right = LiteralNode("World", TokenType.STRINGLITERAL, position)
-        val node = BinaryNode(left, right, TokenType.OPERATOR, position)
+        val operatorToken = Token(TokenType.OPERATOR, "+", position, position) // Create a token for "+"
+        val node = BinaryNode(left, right, operatorToken, position)
         val interpreter = Interpreter()
         val result = interpreter.evaluate(node)
         assertEquals("HelloWorld", result)
@@ -58,7 +60,8 @@ class InterpreterTests {
     fun `test subtraction of integers`() {
         val left = LiteralNode("15", TokenType.NUMBERLITERAL, position)
         val right = LiteralNode("5", TokenType.NUMBERLITERAL, position)
-        val node = BinaryNode(left, right, TokenType.OPERATOR, position)
+        val operatorToken = Token(TokenType.OPERATOR, "-", position, position) // Create a token for "-"
+        val node = BinaryNode(left, right, operatorToken, position)
         val interpreter = Interpreter()
         val result = interpreter.evaluate(node)
         assertEquals(10, result)
@@ -68,7 +71,8 @@ class InterpreterTests {
     fun `test multiplication of integers`() {
         val left = LiteralNode("3", TokenType.NUMBERLITERAL, position)
         val right = LiteralNode("4", TokenType.NUMBERLITERAL, position)
-        val node = BinaryNode(left, right, TokenType.OPERATOR, position)
+        val operatorToken = Token(TokenType.OPERATOR, "*", position, position) // Create a token for "*"
+        val node = BinaryNode(left, right, operatorToken, position)
         val interpreter = Interpreter()
         val result = interpreter.evaluate(node)
         assertEquals(12, result)
@@ -78,7 +82,8 @@ class InterpreterTests {
     fun `test division of integers`() {
         val left = LiteralNode("20", TokenType.NUMBERLITERAL, position)
         val right = LiteralNode("4", TokenType.NUMBERLITERAL, position)
-        val node = BinaryNode(left, right, TokenType.OPERATOR, position)
+        val operatorToken = Token(TokenType.OPERATOR, "/", position, position) // Create a token for "/"
+        val node = BinaryNode(left, right, operatorToken, position)
         val interpreter = Interpreter()
         val result = interpreter.evaluate(node)
         assertEquals(5, result)
@@ -88,12 +93,14 @@ class InterpreterTests {
     fun `test division by zero`() {
         val left = LiteralNode("20", TokenType.NUMBERLITERAL, position)
         val right = LiteralNode("0", TokenType.NUMBERLITERAL, position)
-        val node = BinaryNode(left, right, TokenType.OPERATOR, position)
+        val operatorToken = Token(TokenType.OPERATOR, "/", position, position) // Create a token for "/"
+        val node = BinaryNode(left, right, operatorToken, position)
         val interpreter = Interpreter()
         assertThrows(RuntimeException::class.java) {
             interpreter.evaluate(node)
         }
     }
+
 
     @Test
     fun `test variable assignment`() {
@@ -175,16 +182,85 @@ class InterpreterTests {
             interpreter.evaluate(node)
         }
     }
-   @Test
-   fun `test unsupported operator exception`() {
-       val left = LiteralNode("10", TokenType.NUMBERLITERAL, position)
-       val right = LiteralNode("5", TokenType.NUMBERLITERAL, position)
-       val node = BinaryNode(left, right, TokenType.OPERATOR, position)
-       val interpreter = Interpreter()
+    @Test
+    fun `test greater than operator`() {
+        val left = LiteralNode("10", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("5", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, ">", position, position) // Create a token for ">"
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter()
 
-       assertThrows(RuntimeException::class.java) {
-           interpreter.evaluate(node)
-       }
-   }
+        val result = interpreter.evaluate(node)
+
+        // Assuming the result is a Boolean, we expect "10 > 5" to be true
+        assertEquals(true, result)
+    }
+
+    @Test
+    fun `test unsupported operator exception`() {
+        val left = LiteralNode("10", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("5", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "^", position, position) // Use an unsupported operator
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter()
+
+        assertThrows(RuntimeException::class.java) {
+            interpreter.evaluate(node)
+        }
+    }
+
+    @Test
+    fun `test less than operator`() {
+        val left = LiteralNode("5", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("10", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "<", position, position) // Create a token for "<"
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter()
+
+        val result = interpreter.evaluate(node)
+
+        // Assuming the result is a Boolean, we expect "5 < 10" to be true
+        assertEquals(true, result)
+    }
+
+    @Test
+    fun `test supported operator exception`() {
+        val left = LiteralNode("10", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("5", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "+", position, position) // Use a supported operator
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter()
+
+        assertDoesNotThrow {
+            interpreter.evaluate(node)
+        }
+    }
+
+    @Test
+    fun `test greater than exception`() {
+        val left = LiteralNode("10", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("true", TokenType.BOOLEAN, position)
+        val operatorToken = Token(TokenType.OPERATOR, ">", position, position) // Create a token for ">"
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter()
+
+        assertThrows(RuntimeException::class.java) {
+            interpreter.evaluate(node)
+        }
+    }
+
+    @Test
+    fun `test less than exception`() {
+        val left = LiteralNode("10", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("true", TokenType.BOOLEAN, position)
+        val operatorToken = Token(TokenType.OPERATOR, "<", position, position) // Create a token for "<"
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter()
+
+        assertThrows(RuntimeException::class.java) {
+            interpreter.evaluate(node)
+        }
+    }
+
 }
 
