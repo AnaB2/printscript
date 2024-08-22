@@ -29,9 +29,12 @@ class Interpreter {
                 "false" -> false
                 else -> throw RuntimeException("Invalid boolean value: ${node.value}")
             }
+            TokenType.IDENTIFIER -> variables[node.value]
+                ?: throw RuntimeException("Undefined variable: ${node.value}")
             else -> throw RuntimeException("Unsupported literal type: ${node.type}")
         }
     }
+
 
     private fun handleBinary(node: BinaryNode): Any? {
         val leftValue = evaluate(node.left) ?: throw RuntimeException("Invalid left operand")
@@ -104,5 +107,6 @@ class Interpreter {
             ?: throw RuntimeException("Condition must evaluate to a boolean")
         return if (condition) evaluate(node.thenBlock) else evaluate(node.elseBlock)
     }
+
 }
 
