@@ -27,7 +27,7 @@ class TokenMapper(private val version:String) {
         strategyMap[TokenType.PARENTHESIS] = RegexTokenClassifier("""\(|\)""".toRegex())
         strategyMap[TokenType.DECLARATOR] = RegexTokenClassifier(""":""".toRegex())
         strategyMap[TokenType.ASSIGNATION] = RegexTokenClassifier("""=""".toRegex())
-        strategyMap[TokenType.TYPE_OF_DATA] = RegexTokenClassifier("""\bstring\b|\bnumber\b""".toRegex())
+        strategyMap[TokenType.DATA_TYPE] = RegexTokenClassifier("""\bstring\b|\bnumber\b""".toRegex())
         strategyMap[TokenType.OPERATOR] = RegexTokenClassifier("""[\+\-\*/%=><!&|^~]+""".toRegex()) // Cambié * a + para evitar cadenas vacías
         strategyMap[TokenType.IDENTIFIER] = RegexTokenClassifier("""\b[a-zA-Z_][a-zA-Z0-9_]*\b""".toRegex())
         strategyMap[TokenType.STRINGLITERAL] = RegexTokenClassifier("\'[^\']*\'|\"[^\"]*\"".toRegex())

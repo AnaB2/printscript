@@ -13,8 +13,8 @@ class DeclarationFactory : ASTFactory {
             ?: throw IllegalArgumentException("Expected a KEYWORD token but found none.")
         val identifierToken = tokens.find { it.getType() == TokenType.IDENTIFIER }
             ?: throw IllegalArgumentException("Expected an IDENTIFIER token but found none.")
-        val dataTypeToken = tokens.find { it.getType() == TokenType.DATA_TYPE || it.getType() == TokenType.TYPE_OF_DATA }
-            ?: throw IllegalArgumentException("Expected a DATA_TYPE or TYPE_OF_DATA token but found none.")
+        val dataTypeToken = tokens.find { it.getType() == TokenType.DATA_TYPE || it.getType() == TokenType.DATA_TYPE }
+            ?: throw IllegalArgumentException("Expected a DATA_TYPE or DATA_TYPE token but found none.")
         val expressionToken = tokens.last() // Assuming the last token is the expression
 
         val exprNode = LiteralNode(

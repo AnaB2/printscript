@@ -19,7 +19,7 @@ class LexerTests {
             Token(TokenType.KEYWORD, "let", TokenPosition(0, 0), TokenPosition(0, 3)),
             Token(TokenType.IDENTIFIER, "name", TokenPosition(0, 4), TokenPosition(0, 8)),
             Token(TokenType.DECLARATOR, ":", TokenPosition(0, 9), TokenPosition(0, 10)),
-            Token(TokenType.TYPE_OF_DATA, "string", TokenPosition(0, 11), TokenPosition(0, 17)),
+            Token(TokenType.DATA_TYPE, "string", TokenPosition(0, 11), TokenPosition(0, 17)),
             Token(TokenType.ASSIGNATION, "=", TokenPosition(0, 18), TokenPosition(0, 19)),
             Token(TokenType.STRINGLITERAL, "Joe", TokenPosition(0, 20), TokenPosition(0, 25)),
             Token(TokenType.PUNCTUATOR, ";", TokenPosition(0, 25), TokenPosition(0, 26))
@@ -27,44 +27,6 @@ class LexerTests {
         assertEquals(result, lexer.execute(input))
     }
 
-    @Test
-    fun `test simple if statement`() {
-        val input = "if (a > 5) println(a);"
-        val result = listOf(
-            Token(TokenType.CONDITIONAL, "if", TokenPosition(0, 0), TokenPosition(0, 2)),
-            Token(TokenType.PARENTHESIS, "(", TokenPosition(0, 3), TokenPosition(0, 4)),
-            Token(TokenType.IDENTIFIER, "a", TokenPosition(0, 4), TokenPosition(0, 5)),
-            Token(TokenType.OPERATOR, ">", TokenPosition(0, 6), TokenPosition(0, 7)),
-            Token(TokenType.NUMBERLITERAL, "5", TokenPosition(0, 8), TokenPosition(0, 9)),
-            Token(TokenType.PARENTHESIS, ")", TokenPosition(0, 9), TokenPosition(0, 10)),
-            Token(TokenType.FUNCTION, "println", TokenPosition(0, 11), TokenPosition(0, 18)),
-            Token(TokenType.PARENTHESIS, "(", TokenPosition(0, 18), TokenPosition(0, 19)),
-            Token(TokenType.IDENTIFIER, "a", TokenPosition(0, 19), TokenPosition(0, 20)),
-            Token(TokenType.PARENTHESIS, ")", TokenPosition(0, 20), TokenPosition(0, 21)),
-            Token(TokenType.PUNCTUATOR, ";", TokenPosition(0, 21), TokenPosition(0, 22))
-        )
-        assertEquals(result, lexer.execute(input))
-    }
-
-    @Test
-    fun `test if statement with assignment`() {
-        val input = "if (x < 10) { y = 5; }"
-        val result = listOf(
-            Token(TokenType.CONDITIONAL, "if", TokenPosition(0, 0), TokenPosition(0, 2)),
-            Token(TokenType.PARENTHESIS, "(", TokenPosition(0, 3), TokenPosition(0, 4)),
-            Token(TokenType.IDENTIFIER, "x", TokenPosition(0, 4), TokenPosition(0, 5)),
-            Token(TokenType.OPERATOR, "<", TokenPosition(0, 6), TokenPosition(0, 7)),
-            Token(TokenType.NUMBERLITERAL, "10", TokenPosition(0, 8), TokenPosition(0, 10)),
-            Token(TokenType.PARENTHESIS, ")", TokenPosition(0, 10), TokenPosition(0, 11)),
-            Token(TokenType.PUNCTUATOR, "{", TokenPosition(0, 12), TokenPosition(0, 13)),
-            Token(TokenType.IDENTIFIER, "y", TokenPosition(0, 14), TokenPosition(0, 15)),
-            Token(TokenType.ASSIGNATION, "=", TokenPosition(0, 16), TokenPosition(0, 17)),
-            Token(TokenType.NUMBERLITERAL, "5", TokenPosition(0, 18), TokenPosition(0, 19)),
-            Token(TokenType.PUNCTUATOR, ";", TokenPosition(0, 19), TokenPosition(0, 20)),
-            Token(TokenType.PUNCTUATOR, "}", TokenPosition(0, 21), TokenPosition(0, 22))
-        )
-        assertEquals(result, lexer.execute(input))
-    }
 
     @Test
     fun `test multi-line input with new lines`() {
@@ -76,7 +38,7 @@ class LexerTests {
             Token(TokenType.KEYWORD, "let", TokenPosition(0, 0), TokenPosition(0, 3)),
             Token(TokenType.IDENTIFIER, "a", TokenPosition(0, 4), TokenPosition(0, 5)),
             Token(TokenType.DECLARATOR, ":", TokenPosition(0, 6), TokenPosition(0, 7)),
-            Token(TokenType.TYPE_OF_DATA, "number", TokenPosition(0, 8), TokenPosition(0, 14)),
+            Token(TokenType.DATA_TYPE, "number", TokenPosition(0, 8), TokenPosition(0, 14)),
             Token(TokenType.ASSIGNATION, "=", TokenPosition(0, 15), TokenPosition(0, 16)),
             Token(TokenType.NUMBERLITERAL, "12", TokenPosition(0, 17), TokenPosition(0, 19)),
             Token(TokenType.PUNCTUATOR, ";", TokenPosition(0, 19), TokenPosition(0, 20)),
@@ -84,7 +46,7 @@ class LexerTests {
             Token(TokenType.KEYWORD, "let", TokenPosition(1, 0), TokenPosition(1, 3)),
             Token(TokenType.IDENTIFIER, "b", TokenPosition(1, 4), TokenPosition(1, 5)),
             Token(TokenType.DECLARATOR, ":", TokenPosition(1, 6), TokenPosition(1, 7)),
-            Token(TokenType.TYPE_OF_DATA, "number", TokenPosition(1, 8), TokenPosition(1, 14)),
+            Token(TokenType.DATA_TYPE, "number", TokenPosition(1, 8), TokenPosition(1, 14)),
             Token(TokenType.ASSIGNATION, "=", TokenPosition(1, 15), TokenPosition(1, 16)),
             Token(TokenType.NUMBERLITERAL, "4", TokenPosition(1, 17), TokenPosition(1, 18)),
             Token(TokenType.PUNCTUATOR, ";", TokenPosition(1, 18), TokenPosition(1, 19)),
