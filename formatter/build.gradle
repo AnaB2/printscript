@@ -1,7 +1,6 @@
 plugins {
     id 'printscript.gradle.kotlin-library-conventions'
 }
-
 dependencies {
     implementation project(':commons')
 }

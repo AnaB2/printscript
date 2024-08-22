@@ -10,8 +10,8 @@ class ProgramTest {
     @Test
     fun `test lexer, parser, and interpreter`() {
         val input = """
-        let x:number = 42;
-        let y:number = 10;
+        let x : number = 42;
+        let y : number = 10;
         println(x + y);
     """.trimIndent()
 
@@ -22,7 +22,7 @@ class ProgramTest {
 
         // Step 2: Parser
         val parser = Parser()
-        val astNodes = parser.execute(tokens.filterNotNull())  // Filter out null tokens if any
+        val astNodes = parser.execute(tokens)  // Filter out null tokens if any
 
         // Step 3: Interpreter
         val interpreter = Interpreter()
