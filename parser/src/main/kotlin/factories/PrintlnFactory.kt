@@ -9,14 +9,14 @@ import token.TokenType
 class PrintlnFactory : ASTFactory {
     override fun createAST(tokens: List<Token>): ASTNode {
         if (tokens.size < 4) {
-            throw IllegalArgumentException("Invalid token structure for println")
+            throw IllegalArgumentException("Invalid token structure for println: Too few tokens")
         }
 
-        val openParenIndex = tokens.indexOfFirst { it.getType() == TokenType.PUNCTUATOR && it.getValue() == "(" }
-        val closeParenIndex = tokens.indexOfLast { it.getType() == TokenType.PUNCTUATOR && it.getValue() == ")" }
+        val openParenIndex = tokens.indexOfFirst { it.getType() == TokenType.PARENTHESIS && it.getValue() == "(" }
+        val closeParenIndex = tokens.indexOfLast { it.getType() == TokenType.PARENTHESIS && it.getValue() == ")" }
 
         if (openParenIndex == -1 || closeParenIndex == -1 || openParenIndex >= closeParenIndex) {
-            throw IllegalArgumentException("Invalid token structure for println")
+            throw IllegalArgumentException("Invalid token structure for println: Missing or misordered parentheses")
         }
 
         val expressionTokens = tokens.subList(openParenIndex + 1, closeParenIndex)
@@ -33,4 +33,3 @@ class PrintlnFactory : ASTFactory {
         return tokens.isNotEmpty() && tokens[0].getType() == TokenType.FUNCTION && tokens[0].getValue() == "println"
     }
 }
-
