@@ -166,6 +166,5 @@ class InterpreterTests {
         interpreter.evaluate(node)
         assertEquals("Condition is false", outputStream.toString().trim())
     }
-
 }
 

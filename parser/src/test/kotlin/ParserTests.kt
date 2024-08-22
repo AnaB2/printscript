@@ -20,9 +20,9 @@ class ParserTests {
         )
 
         val parser = Parser()
-        val abstractSyntaxTrees = parser.execute(tokens)
+        val asts = parser.execute(tokens)
 
-        val assignationNode = abstractSyntaxTrees[0] as AssignationNode
+        val assignationNode = asts[0] as AssignationNode
 
         assertEquals("var", assignationNode.id)
         assertEquals("hello", (assignationNode.expression as LiteralNode).value)
@@ -65,9 +65,9 @@ class ParserTests {
         )
 
         val parser = Parser()
-        val abstractSyntaxTrees = parser.execute(tokens)
+        val asts = parser.execute(tokens)
 
-        val ast = abstractSyntaxTrees[0] as PrintNode
+        val ast = asts[0] as PrintNode
         val expressionNode = ast.expression as BinaryNode
 
         assertEquals("println", tokens[0].getValue())
@@ -90,9 +90,9 @@ class ParserTests {
         )
 
         val parser = Parser()
-        val abstractSyntaxTrees = parser.execute(tokens)
+        val asts = parser.execute(tokens)
 
-        val ast = abstractSyntaxTrees[0] as PrintNode
+        val ast = asts[0] as PrintNode
         val rightNode = ast.expression as BinaryNode
 
         assertEquals(TokenType.FUNCTION, tokens[0].getType())
@@ -102,5 +102,34 @@ class ParserTests {
         val innerRightNode = rightNode.right as BinaryNode
         assertEquals("world", (innerRightNode.left as LiteralNode).value)
         assertEquals("!", (innerRightNode.right as LiteralNode).value)
+    }
+
+    @Test
+    fun `test parser execution with multiple declarations in one line`() {
+        val tokens = listOf(
+            Token(TokenType.KEYWORD, "let", TokenPosition(0, 0), TokenPosition(1, 3)),
+            Token(TokenType.IDENTIFIER, "x", TokenPosition(0, 4), TokenPosition(1, 5)),
+            Token(TokenType.DECLARATOR, ":", TokenPosition(0, 6), TokenPosition(1, 7)),
+            Token(TokenType.DATA_TYPE, "number", TokenPosition(0, 8), TokenPosition(1, 14)),
+            Token(TokenType.PUNCTUATOR, ";", TokenPosition(0, 15), TokenPosition(1, 16)),
+            Token(TokenType.KEYWORD, "let", TokenPosition(1, 17), TokenPosition(2, 20)),
+            Token(TokenType.IDENTIFIER, "y", TokenPosition(1, 21), TokenPosition(2, 22)),
+            Token(TokenType.DECLARATOR, ":", TokenPosition(1, 23), TokenPosition(2, 24)),
+            Token(TokenType.DATA_TYPE, "string", TokenPosition(1, 25), TokenPosition(2, 31)),
+            Token(TokenType.PUNCTUATOR, ";", TokenPosition(1, 32), TokenPosition(2, 33))
+        )
+
+        val parser = Parser()
+        val asts = parser.execute(tokens)
+
+        assertEquals(2, asts.size)
+
+        val firstDeclaration = asts[0] as DeclarationNode
+        assertEquals("x", firstDeclaration.id)
+        assertEquals(TokenType.DATA_TYPE, firstDeclaration.valType)
+
+        val secondDeclaration = asts[1] as DeclarationNode
+        assertEquals("y", secondDeclaration.id)
+        assertEquals(TokenType.DATA_TYPE, secondDeclaration.valType)
     }
 }
