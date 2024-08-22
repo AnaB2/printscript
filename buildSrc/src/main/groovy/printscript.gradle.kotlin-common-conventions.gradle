@@ -34,7 +34,6 @@ tasks.register('installGitHook', Copy) {
 tasks.register('customBuild') {
     dependsOn 'build'
     dependsOn 'check'
-    dependsOn 'koverVerify'
 }
 
 tasks.named('check') {
