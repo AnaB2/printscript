@@ -73,7 +73,9 @@ class ParserTests {
         assertEquals("println", tokens[0].getValue())
         assertEquals("Hello", (expressionNode.left as LiteralNode).value)
         assertEquals("world", (expressionNode.right as LiteralNode).value)
+        assertEquals("+", expressionNode.operator.getValue())  // Adjusted to compare the Token's value
     }
+
 
     @Test
     fun `test parser execution with println and multiple concatenations`() {
@@ -90,14 +92,15 @@ class ParserTests {
         )
 
         val parser = Parser()
-        val asts = parser.execute(tokens)
+        val abstractSyntaxTrees = parser.execute(tokens)
 
-        val ast = asts[0] as PrintNode
+        val ast = abstractSyntaxTrees[0] as PrintNode
         val rightNode = ast.expression as BinaryNode
 
         assertEquals(TokenType.FUNCTION, tokens[0].getType())
         assertEquals("Hello", (rightNode.left as LiteralNode).value)
-        assertEquals(TokenType.OPERATOR, rightNode.operator)
+
+        assertEquals(TokenType.OPERATOR, rightNode.operator.getType())
 
         val innerRightNode = rightNode.right as BinaryNode
         assertEquals("world", (innerRightNode.left as LiteralNode).value)
@@ -131,5 +134,36 @@ class ParserTests {
         val secondDeclaration = asts[1] as DeclarationNode
         assertEquals("y", secondDeclaration.id)
         assertEquals(TokenType.DATA_TYPE, secondDeclaration.valType)
+    }
+
+    @Test
+    fun `test parser with lexer input, assignation, declaration & println`() {
+        val input = "let x : number = 5+5;println(x+70);"
+        val tokenMapper = TokenMapper("1.0")
+        val lexer = Lexer(tokenMapper)
+
+        val tokens = lexer.execute(input)
+        tokens.forEach { println(it) }
+
+        val parser = Parser()
+        val asts = parser.execute(tokens)
+
+        assertEquals(2, asts.size)
+
+        val ast = asts[0] as DeclarationNode
+        assertEquals("x", ast.id)
+        assertEquals(TokenType.KEYWORD, ast.declType)
+        assertEquals(TokenType.DATA_TYPE, ast.valType)
+
+        val rightNode = ast.expr as BinaryNode
+        assertEquals("+", rightNode.operator)
+        assertEquals("5", (rightNode.left as LiteralNode).value)
+        assertEquals("5", (rightNode.right as LiteralNode).value)
+
+        val secondTree = asts[1] as PrintNode
+        val expressionNode = secondTree.expression as BinaryNode
+        assertEquals("+", expressionNode.operator)
+        assertEquals("x", (expressionNode.left as LiteralNode).value)
+        assertEquals("70", (expressionNode.right as LiteralNode).value)
     }
 }

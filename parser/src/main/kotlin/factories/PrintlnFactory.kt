@@ -8,7 +8,7 @@ import token.TokenType
 
 class PrintlnFactory : ASTFactory {
     override fun createAST(tokens: List<Token>): ASTNode {
-        if (tokens.size < 4) { // Need at least "println", "(", expression, ")"
+        if (tokens.size < 4) {
             throw IllegalArgumentException("Invalid token structure for println")
         }
 
@@ -33,3 +33,4 @@ class PrintlnFactory : ASTFactory {
         return tokens.isNotEmpty() && tokens[0].getType() == TokenType.FUNCTION && tokens[0].getValue() == "println"
     }
 }
+

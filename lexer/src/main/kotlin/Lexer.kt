@@ -10,8 +10,8 @@ class Lexer(private val classifier: TokenMapper) {
 
     private val patternMatcher = PatternMatcher(classifier.getStrategyMap())
 
-    fun execute(input: String): List<Token?> {
-        val tokens = mutableListOf<Token?>()
+    fun execute(input: String): List<Token> {
+        val tokens = mutableListOf<Token>()
         var row = 0
         input.lines().forEach { lineContent ->
             processLine(lineContent, row, tokens)
@@ -20,7 +20,7 @@ class Lexer(private val classifier: TokenMapper) {
         return tokens
     }
 
-    private fun processLine(lineContent: String, row: Int, tokens: MutableList<Token?>) {
+    private fun processLine(lineContent: String, row: Int, tokens: MutableList<Token>) {
         val matcher = createMatcher(lineContent)
         while (matcher.find()) {
             val tokenValue = matcher.group()

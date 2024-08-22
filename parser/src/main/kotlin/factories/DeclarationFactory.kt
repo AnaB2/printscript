@@ -1,23 +1,26 @@
 package factories
 
 import ASTFactory
-import ast.ASTNode
 import ast.DeclarationNode
 import ast.LiteralNode
+import ast.ASTNode
 import token.Token
 import token.TokenType
 
 class DeclarationFactory : ASTFactory {
     override fun createAST(tokens: List<Token>): ASTNode {
-        val keywordToken = tokens.find { it.getType() == TokenType.KEYWORD }!!
-        val identifierToken = tokens.find { it.getType() == TokenType.IDENTIFIER }!!
-        val declaratorToken = tokens.find { it.getType() == TokenType.DECLARATOR }!!
-        val dataTypeToken = tokens.find { it.getType() == TokenType.DATA_TYPE }!!
+        val keywordToken = tokens.find { it.getType() == TokenType.KEYWORD }
+            ?: throw IllegalArgumentException("Expected a KEYWORD token but found none.")
+        val identifierToken = tokens.find { it.getType() == TokenType.IDENTIFIER }
+            ?: throw IllegalArgumentException("Expected an IDENTIFIER token but found none.")
+        val dataTypeToken = tokens.find { it.getType() == TokenType.DATA_TYPE || it.getType() == TokenType.TYPE_OF_DATA }
+            ?: throw IllegalArgumentException("Expected a DATA_TYPE or TYPE_OF_DATA token but found none.")
+        val expressionToken = tokens.last() // Assuming the last token is the expression
 
         val exprNode = LiteralNode(
-            value = dataTypeToken.getValue(),
-            type = dataTypeToken.getType(),
-            position = dataTypeToken.getPosition()
+            value = expressionToken.getValue(),
+            type = expressionToken.getType(),
+            position = expressionToken.getPosition()
         )
 
         return DeclarationNode(

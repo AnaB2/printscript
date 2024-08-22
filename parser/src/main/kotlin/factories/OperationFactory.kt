@@ -7,36 +7,29 @@ import token.Token
 
 class OperationFactory {
     fun createAST(tokens: List<Token>): ASTNode {
-        if (tokens.isEmpty()) {
-            throw IllegalArgumentException("Cannot create AST from an empty token list")
-        }
-
         if (tokens.size == 1) {
             return createLiteralNode(tokens[0])
         }
-
         for (token in tokens) {
             if (isAdditionOrSubtraction(token)) {
                 return BinaryNode(
                     left = createAST(tokens.subList(0, tokens.indexOf(token))),
                     right = createAST(tokens.subList(tokens.indexOf(token) + 1, tokens.size)),
-                    operator = token.getType(),
+                    operator = token,
                     position = token.getPosition()
                 )
             }
         }
-
         for (token in tokens) {
             if (isMultiplicationOrDivision(token)) {
                 return BinaryNode(
                     left = createAST(tokens.subList(0, tokens.indexOf(token))),
                     right = createAST(tokens.subList(tokens.indexOf(token) + 1, tokens.size)),
-                    operator = token.getType(),
+                    operator = token,
                     position = token.getPosition()
                 )
             }
         }
-
         throw Exception("Error in operation")
     }
 
