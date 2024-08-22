@@ -1,6 +1,6 @@
 package factories
 
-import ast.AstNode
+import ast.ASTNode
 import ast.FunctionNode
 import token.Token
 import token.TokenType
@@ -8,7 +8,7 @@ import ASTFactory
 import ast.LiteralNode
 
 class FunctionFactory : ASTFactory {
-    override fun createAST(tokens: List<Token>): AstNode {
+    override fun createAST(tokens: List<Token>): ASTNode {
         val functionToken = tokens.find { it.getType() == TokenType.FUNCTION }!!
         val expressionToken = tokens.last()
 

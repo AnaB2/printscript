@@ -1,13 +1,13 @@
 package factories
 
 import ASTFactory
-import ast.AstNode
+import ast.ASTNode
 import ast.PrintNode
 import token.Token
 import token.TokenType
 
 class PrintlnFactory : ASTFactory {
-    override fun createAST(tokens: List<Token>): AstNode {
+    override fun createAST(tokens: List<Token>): ASTNode {
         if (tokens.size < 4) { // Need at least "println", "(", expression, ")"
             throw IllegalArgumentException("Invalid token structure for println")
         }

@@ -1,14 +1,14 @@
 package factories
 
 import ASTFactory
-import ast.AstNode
+import ast.ASTNode
 import ast.DeclarationNode
 import ast.LiteralNode
 import token.Token
 import token.TokenType
 
 class DeclarationFactory : ASTFactory {
-    override fun createAST(tokens: List<Token>): AstNode {
+    override fun createAST(tokens: List<Token>): ASTNode {
         val keywordToken = tokens.find { it.getType() == TokenType.KEYWORD }!!
         val identifierToken = tokens.find { it.getType() == TokenType.IDENTIFIER }!!
         val declaratorToken = tokens.find { it.getType() == TokenType.DECLARATOR }!!

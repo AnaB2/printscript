@@ -1,4 +1,4 @@
-import ast.AstNode
+import ast.ASTNode
 import token.Token
 import factories.AssignationFactory
 import factories.ConditionalFactory
@@ -14,8 +14,8 @@ class Parser {
             AssignationFactory()
         )
 
-    fun execute(tokens: List<Token>): List<AstNode> {
-        val result = mutableListOf<AstNode>()
+    fun execute(tokens: List<Token>): List<ASTNode> {
+        val result = mutableListOf<ASTNode>()
         val sameLineTokens = getSameLineTokens(tokens)
         for (tokenList in sameLineTokens) {
             val astFactory = determineFactory(tokenList)

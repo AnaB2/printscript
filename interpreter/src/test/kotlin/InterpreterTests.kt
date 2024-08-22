@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 
-class InterpreterTest {
+class InterpreterTests {
 
     private val position = TokenPosition(1, 1)
 

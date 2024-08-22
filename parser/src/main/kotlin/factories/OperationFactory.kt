@@ -1,13 +1,12 @@
 package factories
 
-import ast.AstNode
+import ast.ASTNode
 import ast.BinaryNode
 import ast.LiteralNode
 import token.Token
-import token.TokenType
 
 class OperationFactory {
-    fun createAST(tokens: List<Token>): AstNode {
+    fun createAST(tokens: List<Token>): ASTNode {
         if (tokens.isEmpty()) {
             throw IllegalArgumentException("Cannot create AST from an empty token list")
         }
@@ -41,7 +40,7 @@ class OperationFactory {
         throw Exception("Error in operation")
     }
 
-    private fun createLiteralNode(token: Token): AstNode {
+    private fun createLiteralNode(token: Token): ASTNode {
         return LiteralNode(value = token.getValue(), type = token.getType(), position = token.getPosition())
     }
 

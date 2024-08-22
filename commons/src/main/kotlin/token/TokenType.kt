@@ -22,7 +22,7 @@ enum class TokenType {
     OPERATOR_MINUS,
     OPERATOR_MULTIPLY,
     OPERATOR_DIVIDE,
-    LITERAL,;
+    LITERAL,
     STRING,
     NUMBER,
     BLOCK_START,

@@ -2,14 +2,14 @@ package factories
 
 import ASTFactory
 import ast.AssignationNode
-import ast.AstNode
+import ast.ASTNode
 import ast.LiteralNode
 import ast.NilNode
 import token.Token
 import token.TokenType
 
 class AssignationFactory : ASTFactory {
-    override fun createAST(tokens: List<Token>): AstNode {
+    override fun createAST(tokens: List<Token>): ASTNode {
         val assignationToken = tokens.find { it.getType() == TokenType.ASSIGNATION }
             ?: throw Exception("Assignation token not found")
 
@@ -42,7 +42,7 @@ class AssignationFactory : ASTFactory {
         )
     }
 
-    private fun createLiteralNode(token: Token): AstNode {
+    private fun createLiteralNode(token: Token): ASTNode {
         return LiteralNode(
             value = token.getValue(),
             type = token.getType(),
@@ -56,7 +56,7 @@ class AssignationFactory : ASTFactory {
     private fun getLeftTokens(tokens: List<Token>) =
         tokens.takeWhile { it.getType() != TokenType.ASSIGNATION }
 
-    private fun createAssignedTree(tokens: List<Token>): AstNode {
+    private fun createAssignedTree(tokens: List<Token>): ASTNode {
         return if (tokens.any { it.getType() == TokenType.FUNCTION }) {
             FunctionFactory().createAST(tokens)
         } else {
@@ -64,7 +64,7 @@ class AssignationFactory : ASTFactory {
         }
     }
 
-    private fun variableDeclaration(tokens: List<Token>): AstNode {
+    private fun variableDeclaration(tokens: List<Token>): ASTNode {
         return DeclarationFactory().createAST(tokens)
     }
 

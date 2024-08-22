@@ -1,12 +1,11 @@
 import ast.*
-import token.*
 import token.TokenType
 
 class Interpreter {
     val variables = mutableMapOf<String, Any>()
 
 
-    fun evaluate(node: AstNode): Any? {
+    fun evaluate(node: ASTNode): Any? {
         return when (node) {
             is LiteralNode -> handleLiteral(node)
             is BinaryNode -> handleBinary(node)

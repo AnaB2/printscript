@@ -1,6 +1,6 @@
 package factories
 
-import ast.AstNode
+import ast.ASTNode
 import ast.BlockNode
 import ast.ConditionalNode
 import ast.LiteralNode
@@ -11,7 +11,7 @@ import ASTFactory
 import Parser
 
 class ConditionalFactory : ASTFactory {
-    override fun createAST(tokens: List<Token>): AstNode {
+    override fun createAST(tokens: List<Token>): ASTNode {
         val conditionToken = tokens.find { it.getType() == TokenType.CONDITIONAL && it.getValue() == "if" }!!
         val conditionNode = LiteralNode(
             value = conditionToken.getValue(),
@@ -29,7 +29,7 @@ class ConditionalFactory : ASTFactory {
         )
     }
 
-    private fun parseBlock(tokens: List<Token>, blockType: String): AstNode? {
+    private fun parseBlock(tokens: List<Token>, blockType: String): ASTNode? {
         val startIndex = tokens.indexOfFirst { it.getValue() == blockType } + 1
         val endIndex = tokens.indexOfFirst { it.getValue() == "}" && it.getType() == TokenType.PUNCTUATOR }
         return if (startIndex != -1 && endIndex != -1 && startIndex < endIndex) {

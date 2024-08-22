@@ -3,7 +3,7 @@ package ast
 import token.TokenPosition
 import token.TokenType
 
-sealed class AstNode {
+sealed class ASTNode {
     abstract val position: TokenPosition
 }
 
@@ -11,54 +11,54 @@ data class LiteralNode(
     val value: String,
     val type: TokenType,
     override val position: TokenPosition
-) : AstNode()
+) : ASTNode()
 
 data class BinaryNode(
-    val left: AstNode,
-    val right: AstNode,
+    val left: ASTNode,
+    val right: ASTNode,
     val operator: TokenType,
     override val position: TokenPosition,
-) : AstNode()
+) : ASTNode()
 
 data class PrintNode(
-    val expression: AstNode,
+    val expression: ASTNode,
     override val position: TokenPosition
-) : AstNode()
+) : ASTNode()
 
 data class DeclarationNode(
     val declType: TokenType,
     val id: String,
     val valType: TokenType,
-    val expr: AstNode,
+    val expr: ASTNode,
     override val position: TokenPosition,
-) : AstNode()
+) : ASTNode()
 
 data class AssignationNode(
     val id: String,
-    val expression: AstNode,
+    val expression: ASTNode,
     val valType: TokenType,
     override val position: TokenPosition,
-) : AstNode()
+) : ASTNode()
 
 data class BlockNode(
-    val nodes: List<AstNode>,
+    val nodes: List<ASTNode>,
     override val position: TokenPosition
-) : AstNode()
+) : ASTNode()
 
 data class ConditionalNode(
     val condition: LiteralNode,
-    val thenBlock: AstNode,
-    val elseBlock: AstNode,
+    val thenBlock: ASTNode,
+    val elseBlock: ASTNode,
     override val position: TokenPosition,
-) : AstNode()
+) : ASTNode()
 
 data class FunctionNode(
     val function: TokenType,
-    val expression: AstNode,
+    val expression: ASTNode,
     override val position: TokenPosition
-) : AstNode()
+) : ASTNode()
 
-data object NilNode : AstNode() {
+data object NilNode : ASTNode() {
     override val position: TokenPosition
         get() = TokenPosition(0, 0)
 }

@@ -8,7 +8,7 @@ import token.Token
 import token.TokenPosition
 import token.TokenType
 
-class ParserTest {
+class ParserTests {
 
     @Test
     fun `test parser execution with assignation`() {
