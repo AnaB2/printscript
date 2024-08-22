@@ -1,5 +1,6 @@
 import ast.*
-import token.TokenType
+import token.*
+
 
 class Interpreter {
     val variables = mutableMapOf<String, Any>()
@@ -35,19 +36,40 @@ class Interpreter {
         }
     }
 
-
     private fun handleBinary(node: BinaryNode): Any? {
         val leftValue = evaluate(node.left) ?: throw RuntimeException("Invalid left operand")
         val rightValue = evaluate(node.right) ?: throw RuntimeException("Invalid right operand")
 
-        return when (node.operator) {
-            TokenType.OPERATOR_PLUS -> handleAddition(leftValue, rightValue)
-            TokenType.OPERATOR_MINUS -> handleSubtraction(leftValue, rightValue)
-            TokenType.OPERATOR_MULTIPLY -> handleMultiplication(leftValue, rightValue)
-            TokenType.OPERATOR_DIVIDE -> handleDivision(leftValue, rightValue)
-            else -> throw RuntimeException("Unsupported operator: ${node.operator}")
+        val operator = node.operator.getValue() // This should be the actual operator symbol like "+", "-", etc.
+
+        return when (operator) {
+            "+" -> handleAddition(leftValue, rightValue)
+            "-" -> handleSubtraction(leftValue, rightValue)
+            "*" -> handleMultiplication(leftValue, rightValue)
+            "/" -> handleDivision(leftValue, rightValue)
+            ">" -> handleGreaterThan(leftValue, rightValue)
+            "<" -> handleLessThan(leftValue, rightValue)
+            else -> throw RuntimeException("Unsupported operator: $operator")
         }
     }
+
+
+    private fun handleGreaterThan(leftValue: Any, rightValue: Any): Any? {
+        return if (leftValue is Int && rightValue is Int) {
+            leftValue > rightValue
+        } else {
+            throw RuntimeException("Unsupported operands for >")
+        }
+    }
+
+    private fun handleLessThan(leftValue: Any, rightValue: Any): Any? {
+        return if (leftValue is Int && rightValue is Int) {
+            leftValue < rightValue
+        } else {
+            throw RuntimeException("Unsupported operands for <")
+        }
+    }
+
 
     private fun handleAddition(leftValue: Any, rightValue: Any): Any? {
         return when {

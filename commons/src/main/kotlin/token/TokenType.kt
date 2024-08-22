@@ -21,5 +21,6 @@ enum class TokenType {
     OPERATOR_MULTIPLY,
     OPERATOR_DIVIDE,
     LITERAL,
-    UNKNOWN
+    UNKNOWN;
+
 }

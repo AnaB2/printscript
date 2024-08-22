@@ -1,5 +1,6 @@
 package ast
 
+import token.Token
 import token.TokenPosition
 import token.TokenType
 
@@ -16,7 +17,7 @@ data class LiteralNode(
 data class BinaryNode(
     val left: ASTNode,
     val right: ASTNode,
-    val operator: TokenType,
+    val operator: Token,
     override val position: TokenPosition,
 ) : ASTNode()
 

@@ -38,7 +38,7 @@ class InterpreterTests {
     fun `test addition of integers`() {
         val left = LiteralNode("10", TokenType.NUMBERLITERAL, position)
         val right = LiteralNode("5", TokenType.NUMBERLITERAL, position)
-        val node = BinaryNode(left, right, TokenType.OPERATOR_PLUS, position)
+        val node = BinaryNode(left, right, TokenType.OPERATOR, position)
         val interpreter = Interpreter()
         val result = interpreter.evaluate(node)
         assertEquals(15, result)
@@ -48,7 +48,7 @@ class InterpreterTests {
     fun `test string concatenation`() {
         val left = LiteralNode("Hello", TokenType.STRINGLITERAL, position)
         val right = LiteralNode("World", TokenType.STRINGLITERAL, position)
-        val node = BinaryNode(left, right, TokenType.OPERATOR_PLUS, position)
+        val node = BinaryNode(left, right, TokenType.OPERATOR, position)
         val interpreter = Interpreter()
         val result = interpreter.evaluate(node)
         assertEquals("HelloWorld", result)
@@ -58,7 +58,7 @@ class InterpreterTests {
     fun `test subtraction of integers`() {
         val left = LiteralNode("15", TokenType.NUMBERLITERAL, position)
         val right = LiteralNode("5", TokenType.NUMBERLITERAL, position)
-        val node = BinaryNode(left, right, TokenType.OPERATOR_MINUS, position)
+        val node = BinaryNode(left, right, TokenType.OPERATOR, position)
         val interpreter = Interpreter()
         val result = interpreter.evaluate(node)
         assertEquals(10, result)
@@ -68,7 +68,7 @@ class InterpreterTests {
     fun `test multiplication of integers`() {
         val left = LiteralNode("3", TokenType.NUMBERLITERAL, position)
         val right = LiteralNode("4", TokenType.NUMBERLITERAL, position)
-        val node = BinaryNode(left, right, TokenType.OPERATOR_MULTIPLY, position)
+        val node = BinaryNode(left, right, TokenType.OPERATOR, position)
         val interpreter = Interpreter()
         val result = interpreter.evaluate(node)
         assertEquals(12, result)
@@ -78,7 +78,7 @@ class InterpreterTests {
     fun `test division of integers`() {
         val left = LiteralNode("20", TokenType.NUMBERLITERAL, position)
         val right = LiteralNode("4", TokenType.NUMBERLITERAL, position)
-        val node = BinaryNode(left, right, TokenType.OPERATOR_DIVIDE, position)
+        val node = BinaryNode(left, right, TokenType.OPERATOR, position)
         val interpreter = Interpreter()
         val result = interpreter.evaluate(node)
         assertEquals(5, result)
@@ -88,7 +88,7 @@ class InterpreterTests {
     fun `test division by zero`() {
         val left = LiteralNode("20", TokenType.NUMBERLITERAL, position)
         val right = LiteralNode("0", TokenType.NUMBERLITERAL, position)
-        val node = BinaryNode(left, right, TokenType.OPERATOR_DIVIDE, position)
+        val node = BinaryNode(left, right, TokenType.OPERATOR, position)
         val interpreter = Interpreter()
         assertThrows(RuntimeException::class.java) {
             interpreter.evaluate(node)
