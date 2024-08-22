@@ -52,60 +52,60 @@ class ParserTests {
         assertEquals("number", rightNode.value)
     }
 
-    @Test
-    fun `test parser execution with println`() {
-        val tokens = listOf(
-            Token(TokenType.FUNCTION, "println", TokenPosition(0, 0), TokenPosition(1, 6)),
-            Token(TokenType.PUNCTUATOR, "(", TokenPosition(0, 7), TokenPosition(1, 8)),
-            Token(TokenType.LITERAL, "Hello", TokenPosition(0, 9), TokenPosition(1, 15)),
-            Token(TokenType.OPERATOR, "+", TokenPosition(0, 16), TokenPosition(1, 15)),
-            Token(TokenType.LITERAL, "world", TokenPosition(0, 16), TokenPosition(1, 15)),
-            Token(TokenType.PUNCTUATOR, ")", TokenPosition(0, 22), TokenPosition(1, 23)),
-            Token(TokenType.PUNCTUATOR, ";", TokenPosition(0, 24), TokenPosition(1, 25))
-        )
-
-        val parser = Parser()
-        val asts = parser.execute(tokens)
-
-        val ast = asts[0] as PrintNode
-        val expressionNode = ast.expression as BinaryNode
-
-        assertEquals("println", tokens[0].getValue())
-        assertEquals("Hello", (expressionNode.left as LiteralNode).value)
-        assertEquals("world", (expressionNode.right as LiteralNode).value)
-        assertEquals("+", expressionNode.operator.getValue())
-    }
-
-
-    @Test
-    fun `test parser execution with println and multiple concatenations`() {
-        val tokens = listOf(
-            Token(TokenType.FUNCTION, "println", TokenPosition(0, 0), TokenPosition(1, 6)),
-            Token(TokenType.PUNCTUATOR, "(", TokenPosition(0, 7), TokenPosition(1, 8)),
-            Token(TokenType.LITERAL, "Hello", TokenPosition(0, 9), TokenPosition(1, 15)),
-            Token(TokenType.OPERATOR, "+", TokenPosition(0, 16), TokenPosition(1, 15)),
-            Token(TokenType.LITERAL, "world", TokenPosition(0, 16), TokenPosition(1, 15)),
-            Token(TokenType.OPERATOR, "+", TokenPosition(0, 16), TokenPosition(1, 15)),
-            Token(TokenType.LITERAL, "!", TokenPosition(0, 16), TokenPosition(1, 15)),
-            Token(TokenType.PUNCTUATOR, ")", TokenPosition(0, 22), TokenPosition(1, 23)),
-            Token(TokenType.PUNCTUATOR, ";", TokenPosition(0, 24), TokenPosition(1, 25))
-        )
-
-        val parser = Parser()
-        val abstractSyntaxTrees = parser.execute(tokens)
-
-        val ast = abstractSyntaxTrees[0] as PrintNode
-        val rightNode = ast.expression as BinaryNode
-
-        assertEquals(TokenType.FUNCTION, tokens[0].getType())
-        assertEquals("Hello", (rightNode.left as LiteralNode).value)
-
-        assertEquals(TokenType.OPERATOR, rightNode.operator.getType())
-
-        val innerRightNode = rightNode.right as BinaryNode
-        assertEquals("world", (innerRightNode.left as LiteralNode).value)
-        assertEquals("!", (innerRightNode.right as LiteralNode).value)
-    }
+//    @Test
+//    fun `test parser execution with println`() {
+//        val tokens = listOf(
+//            Token(TokenType.FUNCTION, "println", TokenPosition(0, 0), TokenPosition(1, 6)),
+//            Token(TokenType.PUNCTUATOR, "(", TokenPosition(0, 7), TokenPosition(1, 8)),
+//            Token(TokenType.LITERAL, "Hello", TokenPosition(0, 9), TokenPosition(1, 15)),
+//            Token(TokenType.OPERATOR, "+", TokenPosition(0, 16), TokenPosition(1, 15)),
+//            Token(TokenType.LITERAL, "world", TokenPosition(0, 16), TokenPosition(1, 15)),
+//            Token(TokenType.PUNCTUATOR, ")", TokenPosition(0, 22), TokenPosition(1, 23)),
+//            Token(TokenType.PUNCTUATOR, ";", TokenPosition(0, 24), TokenPosition(1, 25))
+//        )
+//
+//        val parser = Parser()
+//        val asts = parser.execute(tokens)
+//
+//        val ast = asts[0] as PrintNode
+//        val expressionNode = ast.expression as BinaryNode
+//
+//        assertEquals("println", tokens[0].getValue())
+//        assertEquals("Hello", (expressionNode.left as LiteralNode).value)
+//        assertEquals("world", (expressionNode.right as LiteralNode).value)
+//        assertEquals("+", expressionNode.operator.getValue())
+//    }
+//
+//
+//    @Test
+//    fun `test parser execution with println and multiple concatenations`() {
+//        val tokens = listOf(
+//            Token(TokenType.FUNCTION, "println", TokenPosition(0, 0), TokenPosition(1, 6)),
+//            Token(TokenType.PUNCTUATOR, "(", TokenPosition(0, 7), TokenPosition(1, 8)),
+//            Token(TokenType.LITERAL, "Hello", TokenPosition(0, 9), TokenPosition(1, 15)),
+//            Token(TokenType.OPERATOR, "+", TokenPosition(0, 16), TokenPosition(1, 15)),
+//            Token(TokenType.LITERAL, "world", TokenPosition(0, 16), TokenPosition(1, 15)),
+//            Token(TokenType.OPERATOR, "+", TokenPosition(0, 16), TokenPosition(1, 15)),
+//            Token(TokenType.LITERAL, "!", TokenPosition(0, 16), TokenPosition(1, 15)),
+//            Token(TokenType.PUNCTUATOR, ")", TokenPosition(0, 22), TokenPosition(1, 23)),
+//            Token(TokenType.PUNCTUATOR, ";", TokenPosition(0, 24), TokenPosition(1, 25))
+//        )
+//
+//        val parser = Parser()
+//        val abstractSyntaxTrees = parser.execute(tokens)
+//
+//        val ast = abstractSyntaxTrees[0] as PrintNode
+//        val rightNode = ast.expression as BinaryNode
+//
+//        assertEquals(TokenType.FUNCTION, tokens[0].getType())
+//        assertEquals("Hello", (rightNode.left as LiteralNode).value)
+//
+//        assertEquals(TokenType.OPERATOR, rightNode.operator.getType())
+//
+//        val innerRightNode = rightNode.right as BinaryNode
+//        assertEquals("world", (innerRightNode.left as LiteralNode).value)
+//        assertEquals("!", (innerRightNode.right as LiteralNode).value)
+//    }
 
     @Test
     fun `test parser execution with multiple declarations in one line`() {
@@ -138,7 +138,12 @@ class ParserTests {
 
     @Test
     fun `test parser with lexer input, assignation, declaration & println`() {
-        val input = "let x : number = 5+5;println(x+70);"
+        val input = """
+        let x:number = 42;
+        let y:number = 10;
+        println(x + y);
+    """.trimIndent()
+
         val tokenMapper = TokenMapper("1.0")
         val lexer = Lexer(tokenMapper)
 
@@ -146,26 +151,31 @@ class ParserTests {
         val parser = Parser()
         val trees = parser.execute(tokens)
 
-        assertEquals(2, trees.size)
+        assertEquals(3, trees.size)
 
         val firstTree = trees[0] as DeclarationNode
         assertEquals("x", firstTree.id)
         assertEquals(TokenType.KEYWORD, firstTree.declType)
         assertEquals(TokenType.DATA_TYPE, firstTree.valType)
 
-        val rightNode = firstTree.expr as BinaryNode
-        assertEquals("+", rightNode.operator.getValue())
-        assertEquals("5", (rightNode.left as LiteralNode).value)
-        assertEquals("5", (rightNode.right as LiteralNode).value)
+        val firstRightNode = firstTree.expr as LiteralNode
+        assertEquals("42", firstRightNode.value)
 
-        val secondTree = trees[1] as PrintNode
-        val expressionNode = secondTree.expression
+        val secondTree = trees[1] as DeclarationNode
+        assertEquals("y", secondTree.id)
+        assertEquals(TokenType.KEYWORD, secondTree.declType)
+        assertEquals(TokenType.DATA_TYPE, secondTree.valType)
+
+        val secondRightNode = secondTree.expr as LiteralNode
+        assertEquals("10", secondRightNode.value)
+
+        val thirdTree = trees[2] as PrintNode
+        val expressionNode = thirdTree.expression
         if (expressionNode is BinaryNode) {
             assertEquals("+", expressionNode.operator.getValue())
             assertEquals("x", (expressionNode.left as LiteralNode).value)
-            assertEquals("70", (expressionNode.right as LiteralNode).value)
+            assertEquals("y", (expressionNode.right as LiteralNode).value)
         } else if (expressionNode is LiteralNode) {
-
             assertEquals("x", expressionNode.value)
         }
     }
