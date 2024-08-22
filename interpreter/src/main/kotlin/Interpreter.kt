@@ -64,7 +64,6 @@ class Interpreter {
             throw RuntimeException("Unsupported operands for -")
         }
     }
-
     private fun handleMultiplication(leftValue: Any, rightValue: Any): Any? {
         return if (leftValue is Int && rightValue is Int) {
             leftValue * rightValue
@@ -72,7 +71,6 @@ class Interpreter {
             throw RuntimeException("Unsupported operands for *")
         }
     }
-
     private fun handleDivision(leftValue: Any, rightValue: Any): Any? {
         return if (leftValue is Int && rightValue is Int) {
             if (rightValue == 0) throw RuntimeException("Division by zero")
@@ -81,7 +79,6 @@ class Interpreter {
             throw RuntimeException("Unsupported operands for /")
         }
     }
-
     private fun handleAssignment(node: AssignationNode): Any? {
         val value = evaluate(node.expression) ?: throw RuntimeException("Invalid assignment")
         variables[node.id] = value
@@ -107,6 +104,5 @@ class Interpreter {
             ?: throw RuntimeException("Condition must evaluate to a boolean")
         return if (condition) evaluate(node.thenBlock) else evaluate(node.elseBlock)
     }
-
 }
 

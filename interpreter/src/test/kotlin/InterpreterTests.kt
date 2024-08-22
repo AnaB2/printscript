@@ -166,5 +166,25 @@ class InterpreterTests {
         interpreter.evaluate(node)
         assertEquals("Condition is false", outputStream.toString().trim())
     }
+    @Test
+    fun `test undefined variable exception`() {
+        val node = LiteralNode("undefinedVariable", TokenType.IDENTIFIER, position)
+        val interpreter = Interpreter()
+
+        assertThrows(RuntimeException::class.java) {
+            interpreter.evaluate(node)
+        }
+    }
+   @Test
+   fun `test unsupported operator exception`() {
+       val left = LiteralNode("10", TokenType.NUMBERLITERAL, position)
+       val right = LiteralNode("5", TokenType.NUMBERLITERAL, position)
+       val node = BinaryNode(left, right, TokenType.OPERATOR, position)
+       val interpreter = Interpreter()
+
+       assertThrows(RuntimeException::class.java) {
+           interpreter.evaluate(node)
+       }
+   }
 }
 
