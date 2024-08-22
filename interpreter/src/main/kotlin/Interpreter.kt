@@ -14,6 +14,7 @@ class Interpreter {
             is PrintNode -> handlePrint(node)
             is BlockNode -> handleBlock(node)
             is ConditionalNode -> handleConditional(node)
+            is DeclarationNode -> handleDeclaration(node)
             is FunctionNode -> throw RuntimeException("Function not implemented")
             NilNode -> null
             else -> throw RuntimeException("Unknown node type: ${node::class}")
@@ -103,6 +104,12 @@ class Interpreter {
     }
     private fun handleAssignment(node: AssignationNode): Any? {
         val value = evaluate(node.expression) ?: throw RuntimeException("Invalid assignment")
+        variables[node.id] = value
+        return value
+    }
+
+    private fun handleDeclaration(node: DeclarationNode): Any? {
+        val value = evaluate(node.expr) ?: throw RuntimeException("Invalid assignment")
         variables[node.id] = value
         return value
     }
