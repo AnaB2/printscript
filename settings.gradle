@@ -17,4 +17,5 @@ include 'formatter'
 include 'linter'
 include 'linter'
 include 'linter'
+include 'cli'
 
