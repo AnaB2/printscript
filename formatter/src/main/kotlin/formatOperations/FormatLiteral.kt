@@ -2,7 +2,7 @@ package formatOperations
 
 import ast.ASTNode
 
-class FormatAssignation : FormatOperation {
+class FormatLiteral : FormatOperation {
     override fun canHandle(astNode: ASTNode): Boolean {
         TODO("Not yet implemented")
     }
