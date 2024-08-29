@@ -5,38 +5,40 @@ import Rule
 import token.Token
 import token.TokenType
 
-class EmptyPrintRule(private var errorMessage: String = "Println must not be called with an expression") : Rule {
+class PrintOnlyRule(private var errorMessage: String = "Println must not be called with an expression"
+): Rule {
 
     private val brokenRules = mutableListOf<BrokenRule>()
 
     override fun applyRule(tokens: List<List<Token>>): List<BrokenRule> {
         for (row in tokens) {
-            if (checkIsPrintln(row) && checkIsExpression(row)) {
-                brokenRules.add(BrokenRule(errorMessage, row[0].getPosition()))
+            if (containsPrintln(row)) {
+                val tokenSublist = row.subList(1, row.size)
+                if (containsExpression(tokenSublist)) brokenRules.add(BrokenRule(errorMessage, row[0].getPosition()))
             }
         }
         return brokenRules
     }
 
-    private fun checkIsPrintln(tokens : List<Token>): Boolean {
+    private fun containsPrintln(tokens : List<Token>): Boolean {
         val firstToken = tokens[0]
-        return isPrintln(firstToken)
+        return isPrintlnType(firstToken)
     }
 
-    private fun isPrintln(token: Token): Boolean {
+    private fun isPrintlnType(token: Token): Boolean {
         return token.getType() == TokenType.FUNCTION && token.getValue().lowercase() == "println"
     }
 
-    private fun checkIsExpression(tokens: List<Token>): Boolean {
+    private fun containsExpression(tokens: List<Token>): Boolean {
         for (token in tokens) {
-            if (isExpression(token)) {
+            if (isExpressionType(token)) {
                 return true
             }
         }
         return false
     }
 
-    private fun isExpression(token: Token): Boolean {
+    private fun isExpressionType(token: Token): Boolean {
         return token.getType() != TokenType.IDENTIFIER &&
                 token.getType() != TokenType.PUNCTUATOR &&
                 token.getType() != TokenType.LITERAL

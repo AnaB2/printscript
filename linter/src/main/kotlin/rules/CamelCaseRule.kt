@@ -14,7 +14,7 @@ class CamelCaseRule(
     override fun applyRule(tokens: List<List<Token>>): List<BrokenRule> {
         for (row in tokens) {
             for (token in row) {
-                if (isIdentifier()(token) && !isCamelCase(token)) {
+                if (isIdentifierType()(token) && !isCamelCase(token)) {
                     brokenRules.add(BrokenRule(errorMessage, token.getPosition()))
                 }
             }
@@ -22,11 +22,11 @@ class CamelCaseRule(
         return brokenRules
     }
 
-    private fun isIdentifier() = { token: Token -> token.getType() == TokenType.IDENTIFIER }
+    private fun isIdentifierType() = { token: Token -> token.getType() == TokenType.IDENTIFIER }
 
     private fun isCamelCase(token: Token): Boolean {
         val segment = token.getValue().split("_")
-        return segment.size <= 1 || segment.all { it[0].isLowerCase() }
+        return segment.size <= 1
     }
 
     override fun getRuleName(): String {
