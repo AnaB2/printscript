@@ -1,7 +1,6 @@
 package rules
 
 import BrokenRule
-import Rule
 import token.Token
 import token.TokenType
 
@@ -59,7 +58,7 @@ class InputOnlyRule(private var errorMessage: String = "ReadInputs must not be c
     }
 
     override fun getRuleName(): String {
-        return "InputOnlyRule"
+        return "InputOnly"
     }
 
     override fun getRuleDescription(): String {

@@ -7,7 +7,6 @@ import ast.LiteralNode
 import ast.NilNode
 import token.Token
 import token.TokenType
-import ASTFactory
 import Parser
 
 class ConditionalFactory : ASTFactory {

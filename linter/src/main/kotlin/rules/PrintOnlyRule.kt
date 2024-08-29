@@ -1,7 +1,6 @@
 package rules
 
 import BrokenRule
-import Rule
 import token.Token
 import token.TokenType
 
@@ -45,7 +44,7 @@ class PrintOnlyRule(private var errorMessage: String = "Println must not be call
     }
 
     override fun getRuleName(): String {
-        return "EmptyPrint"
+        return "PrintOnly"
     }
 
     override fun getRuleDescription(): String {

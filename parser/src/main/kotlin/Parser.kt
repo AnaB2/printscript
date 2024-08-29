@@ -1,9 +1,6 @@
 import ast.ASTNode
+import factories.*
 import token.Token
-import factories.AssignationFactory
-import factories.ConditionalFactory
-import factories.DeclarationFactory
-import factories.PrintlnFactory
 
 class Parser {
     private val factories: List<ASTFactory> =

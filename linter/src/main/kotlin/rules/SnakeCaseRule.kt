@@ -1,11 +1,11 @@
 package rules
 
 import BrokenRule
-import Rule
 import token.Token
 import token.TokenType
 
-class SnakeCaseRule(private var errorMessage: String = "The following identifier must be in snake_case") : Rule {
+class SnakeCaseRule(private var errorMessage: String = "The following identifier must be in snake case"
+) : Rule {
     private val brokenRules = mutableListOf<BrokenRule>()
 
     override fun applyRule(tokens: List<List<Token>>): List<BrokenRule> {

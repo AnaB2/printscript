@@ -1,12 +1,11 @@
 package rules
 
 import BrokenRule
-import Rule
 import token.Token
 import token.TokenType
 
 class CamelCaseRule(
-    private var errorMessage: String = "The following identifier must be in camelCase"
+    private var errorMessage: String = "The following identifier must be in camel case"
 ) : Rule {
 
     private val brokenRules = mutableListOf<BrokenRule>()

@@ -4,7 +4,6 @@ import ast.ASTNode
 import ast.FunctionNode
 import token.Token
 import token.TokenType
-import ASTFactory
 import ast.LiteralNode
 
 class FunctionFactory : ASTFactory {

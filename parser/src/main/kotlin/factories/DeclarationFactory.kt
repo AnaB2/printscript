@@ -1,6 +1,5 @@
 package factories
 
-import ASTFactory
 import ast.DeclarationNode
 import ast.LiteralNode
 import ast.ASTNode

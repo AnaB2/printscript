@@ -3,14 +3,6 @@ class LinterOutput {
     private var isCorrect: Boolean = true
     private var brokenRules: MutableList<String> = mutableListOf()
 
-    fun isCorrect(): Boolean {
-        return isCorrect
-    }
-
-    fun getBrokenRules(): List<String> {
-        return brokenRules
-    }
-
     fun addBrokenRule(brokenRule: BrokenRule) {
         isCorrect = false
         val ruleAsString = formatBrokenRule(brokenRule)

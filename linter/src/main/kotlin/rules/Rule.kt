@@ -1,3 +1,6 @@
+package rules
+
+import BrokenRule
 import token.Token
 
 interface Rule {

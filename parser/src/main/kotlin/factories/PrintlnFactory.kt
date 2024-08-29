@@ -1,6 +1,5 @@
 package factories
 
-import ASTFactory
 import ast.ASTNode
 import ast.PrintNode
 import token.Token
