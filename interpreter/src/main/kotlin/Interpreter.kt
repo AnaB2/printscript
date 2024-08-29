@@ -15,10 +15,22 @@ class Interpreter {
             is BlockNode -> handleBlock(node)
             is ConditionalNode -> handleConditional(node)
             is DeclarationNode -> handleDeclaration(node)
-            is FunctionNode -> throw RuntimeException("Function not implemented")
+            is FunctionNode -> handleFunction(node)
             NilNode -> null
             else -> throw RuntimeException("Unknown node type: ${node::class}")
         }
+    }
+
+    private fun handleFunction(node: FunctionNode): Any? {
+        return when (node.function) {
+            TokenType.FUNCTION -> {
+                val value = evaluate(node.expression)
+                println(value)
+                value
+            }
+            else -> throw RuntimeException("Unsupported function: ${node.function}")
+        }
+
     }
 
     private fun handleLiteral(node: LiteralNode): Any? {

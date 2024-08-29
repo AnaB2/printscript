@@ -262,5 +262,28 @@ class InterpreterTests {
         }
     }
 
+    @Test
+    fun `test function node`() {
+        val expression = LiteralNode("Hello, world!", TokenType.STRINGLITERAL, position)
+        val node = FunctionNode(TokenType.FUNCTION, expression, position)
+        val interpreter = Interpreter()
+
+        // Redirect output stream to capture print statements
+        val outputStream = ByteArrayOutputStream()
+        System.setOut(PrintStream(outputStream))
+
+        interpreter.evaluate(node)
+        assertEquals("Hello, world!", outputStream.toString().trim())
+    }
+
+    @Test
+    fun `test declaration node`() {
+        val expression = LiteralNode("42", TokenType.NUMBERLITERAL, position)
+        val node = DeclarationNode(TokenType.KEYWORD, "x", TokenType.DATA_TYPE, expression, position)
+        val interpreter = Interpreter()
+        interpreter.evaluate(node)
+        assertEquals(42, interpreter.variables["x"])
+    }
+
 }
 
