@@ -17,5 +17,4 @@ enum class TokenType {
     CONDITIONAL,
     LITERAL,
     UNKNOWN;
-
 }

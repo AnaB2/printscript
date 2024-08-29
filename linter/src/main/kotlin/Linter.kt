@@ -4,5 +4,5 @@ interface Linter {
 
     fun readJsonFile(filePath: String): String
 
-    fun check(trees: List<ASTNode>)
+    fun check(asts: List<ASTNode>)
 }
