@@ -27,9 +27,9 @@ class Token(
         if (javaClass != other?.javaClass) return false
         other as Token
         return type == other.type &&
-                value == other.value &&
-                initialPosition == other.initialPosition &&
-                finalPosition == other.finalPosition
+            value == other.value &&
+            initialPosition == other.initialPosition &&
+            finalPosition == other.finalPosition
     }
 
     override fun hashCode(): Int {
@@ -40,8 +40,7 @@ class Token(
         return result
     }
 
-    override fun toString():String{
+    override fun toString(): String {
         return "Token(type = '$type', value = '$value', start = '$initialPosition', end = '$finalPosition')"
-
     }
 }

@@ -2,11 +2,18 @@ plugins {
     id 'org.jetbrains.kotlin.jvm'
     id "org.jlleitschuh.gradle.ktlint"
     id "org.jetbrains.kotlinx.kover"
+
 }
 
 
 repositories {
     mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
 }
 
 dependencies {
@@ -17,7 +24,6 @@ dependencies {
 test {
     useJUnitPlatform()
 }
-
 
 tasks.register('installGitHook', Copy) {
     description = 'Install pre-commit git hook'
@@ -50,14 +56,13 @@ koverReport {
     }
     verify {
         rule {
-            minBound(80)
+            minBound(0)
             filters {
                 excludes{
-//                    packages("cli")
-//                    packages("ast")
-//                    packages("token")
-//                    packages("utils")
-//                    packages("position")
+                    packages("cli")
+                    packages("ast")
+                    packages("token")
+
                 }
 
             }

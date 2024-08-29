@@ -16,7 +16,7 @@ class OperationFactory {
                     left = createAST(tokens.subList(0, tokens.indexOf(token))),
                     right = createAST(tokens.subList(tokens.indexOf(token) + 1, tokens.size)),
                     operator = token,
-                    position = token.getPosition()
+                    position = token.getPosition(),
                 )
             }
         }
@@ -26,7 +26,7 @@ class OperationFactory {
                     left = createAST(tokens.subList(0, tokens.indexOf(token))),
                     right = createAST(tokens.subList(tokens.indexOf(token) + 1, tokens.size)),
                     operator = token,
-                    position = token.getPosition()
+                    position = token.getPosition(),
                 )
             }
         }
