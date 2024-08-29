@@ -1,4 +1,4 @@
 package formatOperations
 
-class FormatAssignation : FormatOperation {
+class Fgit ormatAssignation : FormatOperation {
 }
