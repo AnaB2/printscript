@@ -2,10 +2,8 @@ package org.example
 
 import token.TokenType
 
-
-class TokenMapper(private val version:String) {
-
-    private val strategyMap: MutableMap<TokenType, TokenClassifierStrategy> = mutableMapOf();
+class TokenMapper(private val version: String) {
+    private val strategyMap: MutableMap<TokenType, TokenClassifierStrategy> = mutableMapOf()
 
     init {
         initializeStrategies()
@@ -28,7 +26,7 @@ class TokenMapper(private val version:String) {
         strategyMap[TokenType.DECLARATOR] = RegexTokenClassifier(""":""".toRegex())
         strategyMap[TokenType.ASSIGNATION] = RegexTokenClassifier("""=""".toRegex())
         strategyMap[TokenType.DATA_TYPE] = RegexTokenClassifier("""\bstring\b|\bnumber\b""".toRegex())
-        strategyMap[TokenType.OPERATOR] = RegexTokenClassifier("""[\+\-\*/%=><!&|^~]+""".toRegex()) // Cambié * a + para evitar cadenas vacías
+        strategyMap[TokenType.OPERATOR] = RegexTokenClassifier("""[\+\-\*/%=><!&|^~]+""".toRegex())
         strategyMap[TokenType.IDENTIFIER] = RegexTokenClassifier("""\b[a-zA-Z_][a-zA-Z0-9_]*\b""".toRegex())
         strategyMap[TokenType.STRINGLITERAL] = RegexTokenClassifier("\'[^\']*\'|\"[^\"]*\"".toRegex())
         strategyMap[TokenType.NUMBERLITERAL] = RegexTokenClassifier("[0-9]+(\\.[0-9]+)?".toRegex())
