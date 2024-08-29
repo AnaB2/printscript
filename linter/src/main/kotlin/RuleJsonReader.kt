@@ -4,8 +4,8 @@ import java.io.File
 
 data class FormattingRules(
     val identifier: String,
-    val enablePrintRule: Boolean,
-    val enableInputRule: Boolean,
+    val enablePrintOnly: Boolean,
+    val enableInputOnly: Boolean,
 )
 
 class RuleJsonReader {
@@ -21,10 +21,10 @@ class RuleJsonReader {
             "snakecase" -> rules.add(SnakeCaseRule())
         }
 
-        if (formattingRules.enablePrintRule) {
+        if (formattingRules.enablePrintOnly) {
             rules.add(PrintOnlyRule())
         }
-        if (formattingRules.enableInputRule) {
+        if (formattingRules.enableInputOnly) {
             rules.add(InputOnlyRule())
         }
         return rules
