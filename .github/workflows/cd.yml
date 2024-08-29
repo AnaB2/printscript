@@ -18,6 +18,10 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
       - name: Publish to GitHub Packages
         run: ./gradlew publish
         env:
