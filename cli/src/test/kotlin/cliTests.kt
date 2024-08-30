@@ -1,62 +1,92 @@
+import org.junit.jupiter.api.Assertions.assertTrue
+import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import kotlin.test.Test
-import kotlin.test.assertTrue
+import org.junit.jupiter.api.BeforeEach
+import java.nio.file.Paths
 
 class CliTests {
 
-    @Test
-    fun `test cli validation`() {
-        // Arrange
-        val input = "let x = 5; print(x);"
-        val version = "1.0"
+    private val originalOut = System.out
+    private val originalIn = System.`in`
+    private lateinit var outContent: ByteArrayOutputStream
 
-        // Act
-        val result = runCatching {
-            validate(input, version, isFile = false)
-        }
-
-        // Assert
-        assertTrue(result.isSuccess, "Validation should succeed without exceptions.")
+    @BeforeEach
+    fun setUpStreams() {
+        outContent = ByteArrayOutputStream()
+        System.setOut(PrintStream(outContent))
+        System.setIn(originalIn)
+    }
+    fun getResourceFilePath(fileName: String): String {
+        return Paths.get("resources", fileName).toAbsolutePath().toString()
     }
 
     @Test
-    fun `test cli execution`() {
-        // Arrange
-        val input = "let x = 5; print(x);"
-        val version = "1.0"
-        val outputStream = ByteArrayOutputStream()
-        System.setOut(PrintStream(outputStream))  // Capturar la salida del sistema
+    fun testFileInputValidation() {
+        val input = "validation\nfile\n${getResourceFilePath("valid_file.txt")}\n1.0\n"
+        System.setIn(ByteArrayInputStream(input.toByteArray()))
 
-        // Act
-        val result = runCatching {
-            // Tokenizar el input
-            val tokens = tokenize(input, version, isFile = false)
+        main()
 
-            // Parsear los tokens a nodos AST
-            val parser = Parser()
-            val astNodes = parser.execute(tokens)
-
-            // Evaluar los nodos AST utilizando el Interpreter
-            val interpreter = Interpreter()
-            for (node in astNodes) {
-                interpreter.evaluate(node)
-            }
-        }
-        // Assert
-        val output = outputStream.toString().trim()
-        assertTrue(result.isSuccess, "Execution should succeed without exceptions.")
-        assertTrue(output.contains("5"), "Execution should print the value 5.")
-    }
-
-    // Implementar los métodos test para formatting y analyzing cuando estén disponibles
-    @Test
-    fun `test cli formatting`() {
-        // Implementar prueba para el formateo
+        assertTrue(outContent.toString().contains("Validating content..."))
+        assertTrue(outContent.toString().contains("Validation successful."))
     }
 
     @Test
-    fun `test cli analyzing`() {
-        // Implementar prueba para el análisis
+    fun testTextInputExecution() {
+        val input = "execution\ntext\nprint('Hello, World!')\n1.0\n"
+        System.setIn(ByteArrayInputStream(input.toByteArray()))
+
+        main()
+
+        assertTrue(outContent.toString().contains("Executing..."))
+        assertTrue(outContent.toString().contains("Execution finished!"))
+    }
+
+    @Test
+    fun testInvalidFilePath() {
+        val input = "validation\nfile\n${getResourceFilePath("invalid_file.txt")}\n1.0\n"
+        System.setIn(ByteArrayInputStream(input.toByteArray()))
+
+        main()
+
+        assertTrue(outContent.toString().contains("Error reading file"))
+    }
+
+    @Test
+    fun testFormatOperation() {
+        val input = "formatting\ntext\nprint('format this text')\n1.0\n"
+        System.setIn(ByteArrayInputStream(input.toByteArray()))
+
+        main()
+
+        assertTrue(outContent.toString().contains("Formatting completed!"))
+    }
+
+    @Test
+    fun testAnalyzeOperation() {
+        val input = "analyzing\ntext\nif (true) {}\n1.0\n"
+        System.setIn(ByteArrayInputStream(input.toByteArray()))
+
+        main()
+
+        assertTrue(outContent.toString().contains("Analysis completed!"))
+    }
+
+    @Test
+    fun testHandleErrorInExecution() {
+        val input = "execution\ntext\ninvalid code\n1.0\n"
+        System.setIn(ByteArrayInputStream(input.toByteArray()))
+
+        main()
+
+        assertTrue(outContent.toString().contains("Error processing"))
+    }
+
+    @Test
+    fun testShowProgress() {
+        showProgress()
+        assertTrue(outContent.toString().contains("Processing"))
     }
 }
