@@ -6,7 +6,7 @@ class FormatterPS(
     private val rulesPath : String,
     private val formatOperations : List<FormatOperation>,
 ) : Formatter {
-    private val rules : Map<String, Any> = RulesReader().readFile(rulesPath)
+    private val rulesReader : RulesReader = RulesReader(listOf("spaceBeforeColon", "spaceAfterColon", "spaceAroundEquals", "lineFeed"));
 
     override fun format(astNodeList: List<ASTNode>): String {
         val result : List<String> = astNodeList.map { astNode -> formatNode(astNode)}
@@ -19,6 +19,6 @@ class FormatterPS(
     }
 
     override fun getRules(): Map<String, Any> {
-        return rules;
+        return rulesReader.readFile(rulesPath)
     }
 }

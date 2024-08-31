@@ -1,10 +1,11 @@
 package formatOperations
 
 import ast.ASTNode
+import ast.AssignationNode
 
 class FormatAssignation : FormatOperation {
     override fun canHandle(astNode: ASTNode): Boolean {
-        TODO("Not yet implemented")
+        astNode is AssignationNode
     }
 
     override fun format(astNode: ASTNode): String {
