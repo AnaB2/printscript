@@ -1,10 +1,17 @@
-import ast.*
-import token.*
-
+import ast.ASTNode
+import ast.AssignationNode
+import ast.BinaryNode
+import ast.BlockNode
+import ast.ConditionalNode
+import ast.DeclarationNode
+import ast.FunctionNode
+import ast.LiteralNode
+import ast.NilNode
+import ast.PrintNode
+import token.TokenType
 
 class Interpreter {
     val variables = mutableMapOf<String, Any>()
-
 
     fun evaluate(node: ASTNode): Any? {
         return when (node) {
@@ -30,21 +37,23 @@ class Interpreter {
             }
             else -> throw RuntimeException("Unsupported function: ${node.function}")
         }
-
     }
 
     private fun handleLiteral(node: LiteralNode): Any? {
         return when (node.type) {
-            TokenType.NUMBERLITERAL -> node.value.toIntOrNull()
-                ?: throw RuntimeException("Invalid number literal: ${node.value}")
+            TokenType.NUMBERLITERAL ->
+                node.value.toIntOrNull()
+                    ?: throw RuntimeException("Invalid number literal: ${node.value}")
             TokenType.STRINGLITERAL -> node.value
-            TokenType.BOOLEAN -> when (node.value) {
-                "true" -> true
-                "false" -> false
-                else -> throw RuntimeException("Invalid boolean value: ${node.value}")
-            }
-            TokenType.IDENTIFIER -> variables[node.value]
-                ?: throw RuntimeException("Undefined variable: ${node.value}")
+            TokenType.BOOLEAN ->
+                when (node.value) {
+                    "true" -> true
+                    "false" -> false
+                    else -> throw RuntimeException("Invalid boolean value: ${node.value}")
+                }
+            TokenType.IDENTIFIER ->
+                variables[node.value]
+                    ?: throw RuntimeException("Undefined variable: ${node.value}")
             else -> throw RuntimeException("Unsupported literal type: ${node.type}")
         }
     }
@@ -66,8 +75,10 @@ class Interpreter {
         }
     }
 
-
-    private fun handleGreaterThan(leftValue: Any, rightValue: Any): Any? {
+    private fun handleGreaterThan(
+        leftValue: Any,
+        rightValue: Any,
+    ): Any? {
         return if (leftValue is Int && rightValue is Int) {
             leftValue > rightValue
         } else {
@@ -75,7 +86,10 @@ class Interpreter {
         }
     }
 
-    private fun handleLessThan(leftValue: Any, rightValue: Any): Any? {
+    private fun handleLessThan(
+        leftValue: Any,
+        rightValue: Any,
+    ): Any? {
         return if (leftValue is Int && rightValue is Int) {
             leftValue < rightValue
         } else {
@@ -83,8 +97,10 @@ class Interpreter {
         }
     }
 
-
-    private fun handleAddition(leftValue: Any, rightValue: Any): Any? {
+    private fun handleAddition(
+        leftValue: Any,
+        rightValue: Any,
+    ): Any? {
         return when {
             leftValue is Int && rightValue is Int -> leftValue + rightValue
             leftValue is String && rightValue is String -> leftValue + rightValue
@@ -92,21 +108,32 @@ class Interpreter {
         }
     }
 
-    private fun handleSubtraction(leftValue: Any, rightValue: Any): Any? {
+    private fun handleSubtraction(
+        leftValue: Any,
+        rightValue: Any,
+    ): Any? {
         return if (leftValue is Int && rightValue is Int) {
             leftValue - rightValue
         } else {
             throw RuntimeException("Unsupported operands for -")
         }
     }
-    private fun handleMultiplication(leftValue: Any, rightValue: Any): Any? {
+
+    private fun handleMultiplication(
+        leftValue: Any,
+        rightValue: Any,
+    ): Any? {
         return if (leftValue is Int && rightValue is Int) {
             leftValue * rightValue
         } else {
             throw RuntimeException("Unsupported operands for *")
         }
     }
-    private fun handleDivision(leftValue: Any, rightValue: Any): Any? {
+
+    private fun handleDivision(
+        leftValue: Any,
+        rightValue: Any,
+    ): Any? {
         return if (leftValue is Int && rightValue is Int) {
             if (rightValue == 0) throw RuntimeException("Division by zero")
             leftValue / rightValue
@@ -114,6 +141,7 @@ class Interpreter {
             throw RuntimeException("Unsupported operands for /")
         }
     }
+
     private fun handleAssignment(node: AssignationNode): Any? {
         val value = evaluate(node.expression) ?: throw RuntimeException("Invalid assignment")
         variables[node.id] = value
@@ -141,9 +169,9 @@ class Interpreter {
     }
 
     private fun handleConditional(node: ConditionalNode): Any? {
-        val condition = evaluate(node.condition) as? Boolean
-            ?: throw RuntimeException("Condition must evaluate to a boolean")
+        val condition =
+            evaluate(node.condition) as? Boolean
+                ?: throw RuntimeException("Condition must evaluate to a boolean")
         return if (condition) evaluate(node.thenBlock) else evaluate(node.elseBlock)
     }
 }
-

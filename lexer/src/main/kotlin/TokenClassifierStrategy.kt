@@ -1,5 +1,5 @@
 package org.example
 
 interface TokenClassifierStrategy {
-    fun classify(tokenValue:String):Boolean
+    fun classify(tokenValue: String): Boolean
 }
