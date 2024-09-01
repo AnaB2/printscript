@@ -40,11 +40,11 @@ class Linter(private var version: LinterVersion) {
         fileManager.saveToFile(content, filePath)
     }
 
-    fun generateTxtContent(brokenRules: List<BrokenRule>): String {
+    fun createTxtContent(brokenRules: List<BrokenRule>): String {
         return fileManager.createTxtReport(brokenRules)
     }
 
-    fun generateHtmlContent(brokenRules: List<BrokenRule>): String {
+    fun createHtmlContent(brokenRules: List<BrokenRule>): String {
         return fileManager.createHtmlReport(brokenRules)
     }
 }
