@@ -1,12 +1,22 @@
-import ast.*
-import token.*
-import org.junit.jupiter.api.Assertions.*
+import ast.AssignationNode
+import ast.BinaryNode
+import ast.BlockNode
+import ast.ConditionalNode
+import ast.DeclarationNode
+import ast.FunctionNode
+import ast.LiteralNode
+import ast.PrintNode
+import org.junit.jupiter.api.Assertions.assertDoesNotThrow
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
+import token.Token
+import token.TokenPosition
+import token.TokenType
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 
 class InterpreterTests {
-
     private val position = TokenPosition(1, 1)
 
     @Test
@@ -101,11 +111,10 @@ class InterpreterTests {
         }
     }
 
-
     @Test
     fun `test variable assignment`() {
         val expression = LiteralNode("42", TokenType.NUMBERLITERAL, position)
-        val node = AssignationNode("x", expression,TokenType.ASSIGNATION, position)
+        val node = AssignationNode("x", expression, TokenType.ASSIGNATION, position)
         val interpreter = Interpreter()
         interpreter.evaluate(node)
         assertEquals(42, interpreter.variables["x"])
@@ -129,7 +138,7 @@ class InterpreterTests {
     fun `test block execution`() {
         val expr1 = LiteralNode("10", TokenType.NUMBERLITERAL, position)
         val expr2 = LiteralNode("20", TokenType.NUMBERLITERAL, position)
-        val assignment = AssignationNode("y", expr2,TokenType.ASSIGNATION, position)
+        val assignment = AssignationNode("y", expr2, TokenType.ASSIGNATION, position)
         val print = PrintNode(expr1, position)
         val block = BlockNode(listOf(assignment, print), position)
         val interpreter = Interpreter()
@@ -173,6 +182,7 @@ class InterpreterTests {
         interpreter.evaluate(node)
         assertEquals("Condition is false", outputStream.toString().trim())
     }
+
     @Test
     fun `test undefined variable exception`() {
         val node = LiteralNode("undefinedVariable", TokenType.IDENTIFIER, position)
@@ -182,6 +192,7 @@ class InterpreterTests {
             interpreter.evaluate(node)
         }
     }
+
     @Test
     fun `test greater than operator`() {
         val left = LiteralNode("10", TokenType.NUMBERLITERAL, position)
@@ -284,6 +295,4 @@ class InterpreterTests {
         interpreter.evaluate(node)
         assertEquals(42, interpreter.variables["x"])
     }
-
 }
-

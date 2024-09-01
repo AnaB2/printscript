@@ -1,3 +1,0 @@
-plugins {
-    id 'printscript.gradle.kotlin-library-conventions'
-}
