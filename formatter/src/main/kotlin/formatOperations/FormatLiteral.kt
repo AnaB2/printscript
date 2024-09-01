@@ -1,10 +1,12 @@
 package formatOperations
 
 import ast.ASTNode
+import ast.BinaryNode
+import ast.LiteralNode
 
 class FormatLiteral : FormatOperation {
     override fun canHandle(astNode: ASTNode): Boolean {
-        TODO("Not yet implemented")
+        return astNode is LiteralNode
     }
 
     override fun format(astNode: ASTNode): String {
