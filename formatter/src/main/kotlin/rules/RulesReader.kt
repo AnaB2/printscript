@@ -2,9 +2,10 @@ package rules
 
 import org.gradle.internal.impldep.org.yaml.snakeyaml.Yaml
 import java.io.File
+import kotlin.reflect.KClass
 
 class RulesReader(
-    private val requiredRules: List<String> // reglas requeridas en archivo, ej. para parser 1.0. -> listOf("spaceBeforeColon", "spaceAfterColon", "spaceAroundEquals", "lineFeed")
+    private val requiredRules: Map<String, KClass<*>> // reglas requeridas en archivo, ej. para parser 1.0. -> listOf("spaceBeforeColon", "spaceAfterColon", "spaceAroundEquals", "lineFeed")
 ) {
 
     fun readFile(path: String) : Map<String, Any> {
@@ -12,9 +13,16 @@ class RulesReader(
         val rulesMap: Map<String, Any> = Yaml().load(yaml); // convierte contenido a Map<String, Any>
 
         // chequea que se encuentren las configuraciones requeridas
-        val missingRules = requiredRules.filter { !rulesMap.containsKey(it) };
-        if(missingRules.isNotEmpty()) throw IllegalArgumentException("No se encuentran las siguientes reglas en el archivo: ${missingRules.joinToString(", ")}");
+        checkRules(rulesMap, requiredRules);
 
         return rulesMap;
+    }
+
+    // chequea que las reglas requeridas se encuentren en el archivo, y sean del tipo esperado
+    private fun checkRules(rulesMap: Map<String, Any>, requiredRules: Map<String, KClass<*>>){
+        for ((keyRequired, valueRequired) in requiredRules){
+            if(!rulesMap.containsKey(keyRequired)) throw IllegalArgumentException("No se encuentra la regla $keyRequired en el archivo");
+            if(rulesMap[keyRequired]==null || !valueRequired.isInstance(rulesMap[keyRequired])) throw IllegalArgumentException("El valor de la regla $keyRequired no es del tipo esperado");
+        }
     }
 }
