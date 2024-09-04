@@ -21,8 +21,8 @@ class RulesReader(
     // chequea que las reglas requeridas se encuentren en el archivo, y sean del tipo esperado
     private fun checkRules(rulesMap: Map<String, Any>, requiredRules: Map<String, KClass<*>>){
         for ((keyRequired, valueRequired) in requiredRules){
-            if(!rulesMap.containsKey(keyRequired)) throw IllegalArgumentException("No se encuentra la regla $keyRequired en el archivo");
-            if(rulesMap[keyRequired]==null || !valueRequired.isInstance(rulesMap[keyRequired])) throw IllegalArgumentException("El valor de la regla $keyRequired no es del tipo esperado");
+            if(!rulesMap.containsKey(keyRequired)) error("No se encuentra la regla $keyRequired en el archivo");
+            if(rulesMap[keyRequired]==null || !valueRequired.isInstance(rulesMap[keyRequired])) error("El valor de la regla $keyRequired no es del tipo esperado");
         }
     }
 }

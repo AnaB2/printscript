@@ -1,5 +1,6 @@
 package formatOperations
 
+import Formatter
 import ast.ASTNode
 import ast.BinaryNode
 import ast.FunctionNode
@@ -9,7 +10,9 @@ class FormatFunction: FormatOperation {
         return astNode is FunctionNode
     }
 
-    override fun format(astNode: ASTNode): String {
-        TODO("Not yet implemented")
+    override fun format(node: ASTNode, formatter: Formatter): String {
+        if (!canHandle(node)) error("Node isn't a FunctionNode") else node as FunctionNode
+        return formatter.format(node.expression)
+        // TIENE NOMBRE????
     }
 }

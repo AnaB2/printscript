@@ -1,7 +1,7 @@
 package formatOperations
 
+import Formatter
 import ast.ASTNode
-import ast.BinaryNode
 import ast.PrintNode
 
 class FormatPrint : FormatOperation {
@@ -9,7 +9,9 @@ class FormatPrint : FormatOperation {
         return astNode is PrintNode
     }
 
-    override fun format(astNode: ASTNode): String {
-        TODO("Not yet implemented")
+    override fun format(node: ASTNode, formatter: Formatter): String {
+        if(!canHandle(node)) error("Node isn't a PrintNode") else node as PrintNode
+        val expression = formatter.format(node.expression)
+        return "print($expression)"
     }
 }
