@@ -17,7 +17,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/AnaB2/PrintScript")
+            url = uri("https://maven.pkg.github.com/AnaB2/printScript")
             credentials {
                 username = System.getenv('USERNAME')
                 password = System.getenv('TOKEN')
