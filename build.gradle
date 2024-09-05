@@ -3,7 +3,7 @@ plugins {
     id 'maven-publish'
 }
 
-group = 'com.github.anab2'
+group = 'com.github.AnaB2'
 version = '1.0.0'
 
 
@@ -14,8 +14,8 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/AnaB2/PrintScript")
             credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
+                username = System.getenv("USERNAME")
+                password = System.getenv("TOKEN")
             }
         }
     }
