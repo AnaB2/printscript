@@ -19,8 +19,8 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/AnaB2/PrintScript")
             credentials {
-                username = System.getenv("USERNAME")
-                password = System.getenv("TOKEN")
+                username = project.findProperty('USERNAME') ?: System.getenv('USERNAME')
+                password = project.findProperty('TOKEN') ?: System.getenv('TOKEN')
             }
         }
     }
