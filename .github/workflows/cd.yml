@@ -1,0 +1,35 @@
+name: CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+
+      - name: Publish to GitHub Packages
+        run: ./gradlew publish
+        env:
+          USERNAME: ${{ secrets.USERNAME }}
+          TOKEN: ${{ secrets.USER_TOKEN }}

@@ -11,7 +11,7 @@ sealed class ASTNode {
 data class LiteralNode(
     val value: String,
     val type: TokenType,
-    override val position: TokenPosition
+    override val position: TokenPosition,
 ) : ASTNode()
 
 data class BinaryNode(
@@ -23,7 +23,7 @@ data class BinaryNode(
 
 data class PrintNode(
     val expression: ASTNode,
-    override val position: TokenPosition
+    override val position: TokenPosition,
 ) : ASTNode()
 
 data class DeclarationNode(
@@ -43,7 +43,7 @@ data class AssignationNode(
 
 data class BlockNode(
     val nodes: List<ASTNode>,
-    override val position: TokenPosition
+    override val position: TokenPosition,
 ) : ASTNode()
 
 data class ConditionalNode(
@@ -56,7 +56,7 @@ data class ConditionalNode(
 data class FunctionNode(
     val function: TokenType,
     val expression: ASTNode,
-    override val position: TokenPosition
+    override val position: TokenPosition,
 ) : ASTNode()
 
 data object NilNode : ASTNode() {

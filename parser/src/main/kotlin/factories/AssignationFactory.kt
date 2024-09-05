@@ -1,8 +1,8 @@
 package factories
 
 import ASTFactory
-import ast.AssignationNode
 import ast.ASTNode
+import ast.AssignationNode
 import ast.LiteralNode
 import ast.NilNode
 import token.Token
@@ -10,35 +10,39 @@ import token.TokenType
 
 class AssignationFactory : ASTFactory {
     override fun createAST(tokens: List<Token>): ASTNode {
-        val assignationToken = tokens.find { it.getType() == TokenType.ASSIGNATION }
-            ?: throw Exception("Assignation token not found")
+        val assignationToken =
+            tokens.find { it.getType() == TokenType.ASSIGNATION }
+                ?: throw Exception("Assignation token not found")
 
         val leftTokens = getLeftTokens(tokens)
         val rightTokens = getRightTokens(tokens, leftTokens)
 
-        val leftNode = when {
-            leftTokens.size > 1 -> variableDeclaration(leftTokens)
-            leftTokens.isNotEmpty() -> createLiteralNode(leftTokens[0])
-            else -> throw Exception("Invalid left side of assignment")
-        }
+        val leftNode =
+            when {
+                leftTokens.size > 1 -> variableDeclaration(leftTokens)
+                leftTokens.isNotEmpty() -> createLiteralNode(leftTokens[0])
+                else -> throw Exception("Invalid left side of assignment")
+            }
 
-        val rightNode = when {
-            rightTokens.isEmpty() -> NilNode
-            rightTokens.size > 1 -> createAssignedTree(rightTokens)
-            else -> createLiteralNode(rightTokens[0])
-        }
+        val rightNode =
+            when {
+                rightTokens.isEmpty() -> NilNode
+                rightTokens.size > 1 -> createAssignedTree(rightTokens)
+                else -> createLiteralNode(rightTokens[0])
+            }
 
-        val leftNodeId = if (leftNode is LiteralNode) {
-            leftNode.value
-        } else {
-            throw Exception("Left side of assignment must be a literal or identifier")
-        }
+        val leftNodeId =
+            if (leftNode is LiteralNode) {
+                leftNode.value
+            } else {
+                throw Exception("Left side of assignment must be a literal or identifier")
+            }
 
         return AssignationNode(
             id = leftNodeId,
             expression = rightNode,
             valType = assignationToken.getType(),
-            position = assignationToken.getPosition()
+            position = assignationToken.getPosition(),
         )
     }
 
@@ -46,15 +50,16 @@ class AssignationFactory : ASTFactory {
         return LiteralNode(
             value = token.getValue(),
             type = token.getType(),
-            position = token.getPosition()
+            position = token.getPosition(),
         )
     }
 
-    private fun getRightTokens(tokens: List<Token>, leftTokens: List<Token>) =
-        tokens.drop(leftTokens.size + 1)
+    private fun getRightTokens(
+        tokens: List<Token>,
+        leftTokens: List<Token>,
+    ) = tokens.drop(leftTokens.size + 1)
 
-    private fun getLeftTokens(tokens: List<Token>) =
-        tokens.takeWhile { it.getType() != TokenType.ASSIGNATION }
+    private fun getLeftTokens(tokens: List<Token>) = tokens.takeWhile { it.getType() != TokenType.ASSIGNATION }
 
     private fun createAssignedTree(tokens: List<Token>): ASTNode {
         return if (tokens.any { it.getType() == TokenType.FUNCTION }) {

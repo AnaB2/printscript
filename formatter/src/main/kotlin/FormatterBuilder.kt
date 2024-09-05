@@ -1,3 +1,3 @@
 interface FormatterBuilder {
-    fun build(rulesPath:String) : Formatter;
+    fun build(rulesPath: String): Formatter
 }

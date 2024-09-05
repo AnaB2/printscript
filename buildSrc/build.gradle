@@ -3,6 +3,7 @@ plugins {
     id 'groovy-gradle-plugin'
 }
 
+
 repositories {
     // Use the plugin portal to apply community plugins in convention plugins.
     gradlePluginPortal()
@@ -12,4 +13,5 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.10'
     implementation 'org.jlleitschuh.gradle:ktlint-gradle:12.1.0'
     implementation("org.jetbrains.kotlinx:kover-gradle-plugin:0.7.6")
+    implementation("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:1.7.10")
 }

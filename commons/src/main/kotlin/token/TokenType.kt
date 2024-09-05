@@ -1,7 +1,6 @@
 package token
 
 enum class TokenType {
-
     IDENTIFIER,
     KEYWORD,
     PUNCTUATOR,
@@ -16,6 +15,5 @@ enum class TokenType {
     FUNCTION,
     CONDITIONAL,
     LITERAL,
-    UNKNOWN;
-
+    UNKNOWN,
 }
