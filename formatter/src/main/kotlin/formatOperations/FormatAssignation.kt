@@ -3,7 +3,6 @@ package formatOperations
 import Formatter
 import ast.ASTNode
 import ast.AssignationNode
-import com.sun.jmx.mbeanserver.Util.cast
 import formatOperations.commons.HandleSemicolon
 import formatOperations.commons.HandleSpace
 

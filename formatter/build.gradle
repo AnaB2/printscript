@@ -3,4 +3,5 @@ plugins {
 }
 dependencies {
     implementation project(':commons')
+    implementation 'org.yaml:snakeyaml:1.30'
 }
