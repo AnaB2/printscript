@@ -19,14 +19,15 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/AnaB2/PrintScript")
             credentials {
-                username = System.getenv("USERNAME")
-                password = System.getenv("TOKEN")
+                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
             }
         }
     }
     publications {
         gpr(MavenPublication) {
-            from(components.java)
+            from components.java
+            artifactId = 'PrintScript'
         }
     }
 }
