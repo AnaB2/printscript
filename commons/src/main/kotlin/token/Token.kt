@@ -10,16 +10,8 @@ class Token(
         return type
     }
 
-    fun getValue(): String {
-        return value
-    }
-
     fun getPosition(): TokenPosition {
         return initialPosition
-    }
-
-    fun getFinalPosition(): TokenPosition {
-        return finalPosition
     }
 
     override fun equals(other: Any?): Boolean {

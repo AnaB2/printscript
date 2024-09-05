@@ -25,7 +25,7 @@ class PrintOnlyRule(private var errorMessage: String = "Println must not be call
     }
 
     private fun isPrintlnType(token: Token): Boolean {
-        return token.getType() == TokenType.FUNCTION && token.getValue().lowercase() == "println"
+        return token.getType() == TokenType.FUNCTION && token.value.lowercase() == "println"
     }
 
     private fun containsExpression(tokens: List<Token>): Boolean {

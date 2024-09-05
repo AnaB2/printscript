@@ -43,7 +43,7 @@ class AssignationFactory : ASTFactory {
 
     private fun createLiteralNode(token: Token): ASTNode {
         return LiteralNode(
-            value = token.getValue(),
+            value = token.value,
             type = token.getType(),
             position = token.getPosition()
         )

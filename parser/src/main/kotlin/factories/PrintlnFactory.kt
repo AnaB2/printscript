@@ -11,8 +11,8 @@ class PrintlnFactory : ASTFactory {
             throw IllegalArgumentException("Invalid token structure for println: Too few tokens")
         }
 
-        val openParenIndex = tokens.indexOfFirst { it.getType() == TokenType.PARENTHESIS && it.getValue() == "(" }
-        val closeParenIndex = tokens.indexOfLast { it.getType() == TokenType.PARENTHESIS && it.getValue() == ")" }
+        val openParenIndex = tokens.indexOfFirst { it.getType() == TokenType.PARENTHESIS && it.value == "(" }
+        val closeParenIndex = tokens.indexOfLast { it.getType() == TokenType.PARENTHESIS && it.value == ")" }
 
         if (openParenIndex == -1 || closeParenIndex == -1 || openParenIndex >= closeParenIndex) {
             throw IllegalArgumentException("Invalid token structure for println: Missing or misordered parentheses")
@@ -29,6 +29,6 @@ class PrintlnFactory : ASTFactory {
     }
 
     override fun canHandle(tokens: List<Token>): Boolean {
-        return tokens.isNotEmpty() && tokens[0].getType() == TokenType.FUNCTION && tokens[0].getValue() == "println"
+        return tokens.isNotEmpty() && tokens[0].getType() == TokenType.FUNCTION && tokens[0].value == "println"
     }
 }

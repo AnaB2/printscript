@@ -12,7 +12,7 @@ class FunctionFactory : ASTFactory {
         val expressionToken = tokens.last()
 
         val expressionNode = LiteralNode(
-            value = expressionToken.getValue(),
+            value = expressionToken.value,
             type = expressionToken.getType(),
             position = expressionToken.getPosition()
         )

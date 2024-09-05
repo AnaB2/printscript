@@ -24,7 +24,7 @@ class CamelCaseRule(
     private fun isIdentifierType() = { token: Token -> token.getType() == TokenType.IDENTIFIER }
 
     private fun isCamelCase(token: Token): Boolean {
-        val segment = token.getValue().split("_")
+        val segment = token.value.split("_")
         return segment.size <= 1
     }
 

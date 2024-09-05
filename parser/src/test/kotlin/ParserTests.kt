@@ -178,7 +178,7 @@ class ParserTests {
         val thirdTree = trees[2] as PrintNode
         val expressionNode = thirdTree.expression
         if (expressionNode is BinaryNode) {
-            assertEquals("+", expressionNode.operator.getValue())
+            assertEquals("+", expressionNode.operator.value)
             assertEquals("x", (expressionNode.left as LiteralNode).value)
             assertEquals("y", (expressionNode.right as LiteralNode).value)
         } else if (expressionNode is LiteralNode) {

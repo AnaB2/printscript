@@ -28,7 +28,7 @@ class InputOnlyRule(private var errorMessage: String = "ReadInputs must not be c
     }
 
     private fun isReadInputType(token: Token): Boolean {
-        return token.getType() == TokenType.FUNCTION && token.getValue().lowercase() == "readinput"
+        return token.getType() == TokenType.FUNCTION && token.value.lowercase() == "readinput"
     }
 
     private fun containsExpression(tokens: List<Token>): Boolean {

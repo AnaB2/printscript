@@ -21,7 +21,7 @@ class Linter(private var version: LinterVersion) {
     }
 
     fun check(trees: List<ASTNode>): LinterOutput {
-        val tokens = tokenizer.ASTNodesToTokens(trees)
+        val tokens = tokenizer.parseToTokens(trees)
         val brokenRules = validator.checkRule(rules, tokens)
         val scaOutput = LinterOutput()
         if (brokenRules.isNotEmpty()) {

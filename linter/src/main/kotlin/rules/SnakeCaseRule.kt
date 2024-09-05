@@ -20,7 +20,7 @@ class SnakeCaseRule(private var errorMessage: String = "The following identifier
     }
 
     private fun isSnakeCase(token: Token): Boolean {
-        val tokenString = token.getValue()
+        val tokenString = token.value
         for (i in 1 until tokenString.length - 1) {
             val currentChar = tokenString[i]
             if (currentChar.isUpperCase()) {

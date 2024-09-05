@@ -17,14 +17,14 @@ class DeclarationFactory : ASTFactory {
         val expressionToken = tokens.last() // Assuming the last token is the expression
 
         val exprNode = LiteralNode(
-            value = expressionToken.getValue(),
+            value = expressionToken.value,
             type = expressionToken.getType(),
             position = expressionToken.getPosition()
         )
 
         return DeclarationNode(
             declType = keywordToken.getType(),
-            id = identifierToken.getValue(),
+            id = identifierToken.value,
             valType = dataTypeToken.getType(),
             expr = exprNode,
             position = keywordToken.getPosition()
