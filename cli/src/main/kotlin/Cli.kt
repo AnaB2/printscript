@@ -1,11 +1,15 @@
+import commands.AnalyzingCommand
+import commands.ExecutionCommand
+import commands.FormattingCommand
+import commands.ValidationCommand
 import org.example.Lexer
 import org.example.TokenMapper
 import token.Token
 import java.io.File
-import java.io.BufferedReader
-import java.io.InputStream
 
 fun main() {
+    val invoker = CLIInvoker()
+
     println("Please choose the operation (validation, execution, formatting, analyzing):")
     val operation = readLine()?.lowercase()
 
@@ -23,7 +27,6 @@ fun main() {
             try {
                 val absolutePath = File(filePath).absolutePath
                 println("Attempting to read file: $absolutePath")
-
                 val fileContent = readFile(filePath)
                 println("File read successfully")
                 fileContent
@@ -42,6 +45,7 @@ fun main() {
             return
         }
     }
+
     if (source.isEmpty() || operation.isNullOrEmpty()) {
         println("Invalid input provided.")
         return
@@ -50,102 +54,35 @@ fun main() {
     println("Please enter the version (default is 1.0):")
     val version = readLine() ?: "1.0"
 
-    // Perform the chosen operation
-    when (operation) {
-        "validation" -> validate(source, version)
-        "execution" -> execute(source, version, sourceType == "file")
-        "formatting" -> format(source, version, emptyList(), sourceType == "file")
-        "analyzing" -> analyze(source, version, sourceType == "file")
-        else -> println("Unknown operation: $operation")
-    }
-}
-
-// Read file content based on the source type
-fun readFile(filePath: String): String {
-    return try {
-        // Choose the appropriate method to read the file
-        // You can switch between these methods based on your needs
-
-        // Method 1: Using BufferedReader
-        File(filePath).bufferedReader().use { it.readText() }
-
-        // Method 2: Using InputStream (read all lines)
-        // File(filePath).inputStream().bufferedReader().use { it.readText() }
-
-        // Method 3: Using File directly (read lines)
-        // File(filePath).useLines { lines -> lines.joinToString("\n") }
-
-    } catch (e: Exception) {
-        println("Error processing file: $e")
-        ""
-    }
-}
-
-fun validate(source: String, version: String) {
-    println("Validating content...")
-    val tokens = tokenize(source, version)
-
-    val parser = Parser()
-    try {
-        val astNodes = parser.execute(tokens)
-        println("Validation successful.")
-    } catch (e: Exception) {
-        println("Validation failed: ${e.message}")
-        if (e is ParsingException) {
-            println("Error at line ${e.line}, column ${e.column}")
+    // Creación del comando basado en la operación
+    val command = when (operation) {
+        "validation" -> ValidationCommand(source, version)
+        "execution" -> ExecutionCommand(source, version, sourceType == "file")
+        "formatting" -> FormattingCommand(source, version, emptyList())
+        "analyzing" -> AnalyzingCommand(source, version)
+        else -> {
+            println("Unknown operation: $operation")
+            return
         }
     }
-}
 
-fun execute(source: String, version: String, isFile: Boolean) {
-    try {
-        println("Executing...")
-        showProgress()
-
-        val tokens = tokenize(source, version)
-        val parser = Parser()
-        val astNodes = parser.execute(tokens)
-
-        val interpreter = Interpreter()
-        for (node in astNodes) {
-            interpreter.evaluate(node)
-        }
-
-        println("Execution finished!")
-    } catch (e: Exception) {
-        handleError(e, source)
-    }
-}
-
-fun format(source: String, version: String, args: List<String>, isFile: Boolean) {
-    try {
-        println("Formatting...")
-        showProgress()
-
-        // Placeholder, implement when Formatter is available
-        println("Formatting completed!")
-    } catch (e: Exception) {
-        handleError(e, source)
-    }
-}
-
-fun analyze(source: String, version: String, isFile: Boolean) {
-    try {
-        println("Analyzing...")
-        showProgress()
-
-        // Placeholder, implement when Analyzer is available
-        println("Analysis completed!")
-    } catch (e: Exception) {
-        handleError(e, source)
-    }
+    // Ejecutar el comando seleccionado
+    invoker.runCommand(command)
 }
 
 fun tokenize(source: String, version: String): List<Token> {
     val tokenMapper = TokenMapper(version)
     val lexer = Lexer(tokenMapper)
-
     return lexer.execute(source)
+}
+
+fun readFile(filePath: String): String {
+    return try {
+        File(filePath).bufferedReader().use { it.readText() }
+    } catch (e: Exception) {
+        println("Error processing file: $e")
+        ""
+    }
 }
 
 fun showProgress() {
@@ -165,3 +102,4 @@ fun handleError(e: Exception, source: String) {
 }
 
 class ParsingException(message: String, val line: Int, val column: Int) : Exception(message)
+
