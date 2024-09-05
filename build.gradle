@@ -3,10 +3,15 @@ plugins {
     id 'maven-publish'
 }
 
-group = 'com.github.anab2'
-version = '1.0.0'
+group = 'com.github.AnaB2'
+version = '1.0.0-SNAPSHOT'
 
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
 
 publishing {
     repositories {
@@ -14,14 +19,14 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/AnaB2/PrintScript")
             credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
+                username = project.findProperty('USERNAME') ?: System.getenv('USERNAME')
+                password = project.findProperty('TOKEN') ?: System.getenv('TOKEN')
             }
         }
     }
     publications {
         gpr(MavenPublication) {
-            from(components.java)
+            from components.java
         }
     }
 }
