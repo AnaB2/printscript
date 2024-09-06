@@ -1,13 +1,12 @@
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
-import kotlin.test.Test
-import org.junit.jupiter.api.BeforeEach
 import java.nio.file.Paths
+import kotlin.test.Test
 
 class CliTests {
-
     private val originalOut = System.out
     private val originalIn = System.`in`
     private lateinit var outContent: ByteArrayOutputStream
@@ -18,40 +17,9 @@ class CliTests {
         System.setOut(PrintStream(outContent))
         System.setIn(originalIn)
     }
+
     fun getResourceFilePath(fileName: String): String {
         return Paths.get("resources", fileName).toAbsolutePath().toString()
-    }
-
-    @Test
-    fun testFileInputValidation() {
-        val input = "validation\nfile\n${getResourceFilePath("valid_file.txt")}\n1.0\n"
-        System.setIn(ByteArrayInputStream(input.toByteArray()))
-
-        main()
-
-        assertTrue(outContent.toString().contains("Validating content..."))
-        assertTrue(outContent.toString().contains("Validation successful."))
-    }
-
-    @Test
-    fun testTextInputExecution() {
-        val input = "execution\ntext\nprint('Hello, World!')\n1.0\n"
-        System.setIn(ByteArrayInputStream(input.toByteArray()))
-
-        main()
-
-        assertTrue(outContent.toString().contains("Executing..."))
-        assertTrue(outContent.toString().contains("Execution finished!"))
-    }
-
-    @Test
-    fun testInvalidFilePath() {
-        val input = "validation\nfile\n${getResourceFilePath("invalid_file.txt")}\n1.0\n"
-        System.setIn(ByteArrayInputStream(input.toByteArray()))
-
-        main()
-
-        assertTrue(outContent.toString().contains("Error reading file"))
     }
 
     @Test

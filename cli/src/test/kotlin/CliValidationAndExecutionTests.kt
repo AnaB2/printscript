@@ -6,7 +6,6 @@ import java.io.PrintStream
 import kotlin.test.assertTrue
 
 class CliValidationAndExecutionTests {
-
     private val originalOut = System.out
     private val originalIn = System.`in`
     private lateinit var outContent: ByteArrayOutputStream
@@ -20,9 +19,10 @@ class CliValidationAndExecutionTests {
 
     @Test
     fun testValidationWithArithmeticOperations() {
-        val inputCode = """
+        val inputCode =
+            """
             let x: number = 5 + 3 * (2 - 1)
-        """.trimIndent()
+            """.trimIndent()
         val input = "validation\ntext\n$inputCode\n1.0\n"
         System.setIn(ByteArrayInputStream(input.toByteArray()))
 
@@ -31,6 +31,7 @@ class CliValidationAndExecutionTests {
         assertTrue(outContent.toString().contains("Validating content..."))
         assertTrue(outContent.toString().contains("Validation successful."))
     }
+
     @Test
     fun testValidationWithArithmeticOperations3() {
         val inputCode = "let x: number = 5 + 3 * (2 - 1)\n"
@@ -71,10 +72,11 @@ class CliValidationAndExecutionTests {
 
     @Test
     fun testValidationWithDeclarations() {
-        val inputCode = """
-           let x: number = 10
-           let y: number = x + 5
-           """.trimIndent()
+        val inputCode =
+            """
+            let x: number = 10
+            let y: number = x + 5
+            """.trimIndent()
         val input = "validation\ntext\n$inputCode\n1.0\n" // Make sure version is at the end
         System.setIn(ByteArrayInputStream(input.toByteArray()))
 
@@ -86,10 +88,11 @@ class CliValidationAndExecutionTests {
 
     @Test
     fun testExecutionWithArithmeticOperations() {
-        val inputCode = """
-        let result: number = 10 * (5 + 2)
-        println(result)
-    """.trimIndent()
+        val inputCode =
+            """
+            let result: number = 10 * (5 + 2)
+            println(result)
+            """.trimIndent()
         val input = "execution\ntext\n$inputCode\n1.0\n"
         System.setIn(ByteArrayInputStream(input.toByteArray()))
 
@@ -98,9 +101,9 @@ class CliValidationAndExecutionTests {
         System.setOut(PrintStream(outContent))
 
         try {
-            main()  // Call the main function
+            main() // Call the main function
         } finally {
-            System.setOut(System.out)  // Restore System.out
+            System.setOut(System.out) // Restore System.out
         }
 
         // Print the output for debugging
@@ -113,9 +116,10 @@ class CliValidationAndExecutionTests {
 
     @Test
     fun testExecutionWithPrintStatements() {
-        val inputCode = """
+        val inputCode =
+            """
             println('Hello, World!')
-        """.trimIndent()
+            """.trimIndent()
         val input = "execution\ntext\n$inputCode\n1.0\n"
         System.setIn(ByteArrayInputStream(input.toByteArray()))
 
@@ -128,12 +132,13 @@ class CliValidationAndExecutionTests {
 
     @Test
     fun testExecutionWithConditionalStatements() {
-        val inputCode = """
+        val inputCode =
+            """
             let x: number = 10
             if (x > 5) {
                 println('Greater than 5')
             }
-        """.trimIndent()
+            """.trimIndent()
         val input = "execution\ntext\n$inputCode\n1.0\n"
         System.setIn(ByteArrayInputStream(input.toByteArray()))
 
@@ -146,9 +151,10 @@ class CliValidationAndExecutionTests {
 
     @Test
     fun testValidationWithInvalidSyntax() {
-        val inputCode = """
+        val inputCode =
+            """
             let x: number = 5 + * 2
-        """.trimIndent()
+            """.trimIndent()
         val input = "validation\ntext\n$inputCode\n1.0\n"
         System.setIn(ByteArrayInputStream(input.toByteArray()))
 
@@ -160,9 +166,10 @@ class CliValidationAndExecutionTests {
 
     @Test
     fun testValidationWithStringManipulation() {
-        val inputCode = """
+        val inputCode =
+            """
             let message: string = 'Hello' + ', ' + 'world!'
-        """.trimIndent()
+            """.trimIndent()
         val input = "validation\ntext\n$inputCode\n1.0\n"
         System.setIn(ByteArrayInputStream(input.toByteArray()))
 
@@ -174,12 +181,13 @@ class CliValidationAndExecutionTests {
 
     @Test
     fun testExecutionWithStringManipulation() {
-        val inputCode = """
+        val inputCode =
+            """
             let greeting: string = 'Hello'
             let name: string = 'Alice'
             let message: string = greeting + ', ' + name + '!'
             println(message)
-        """.trimIndent()
+            """.trimIndent()
         val input = "execution\ntext\n$inputCode\n1.0\n"
         System.setIn(ByteArrayInputStream(input.toByteArray()))
 
@@ -192,12 +200,13 @@ class CliValidationAndExecutionTests {
 
     @Test
     fun testExecutionWithMultipleStatements() {
-        val inputCode = """
+        val inputCode =
+            """
             let x: number = 10
             let y: number = 20
             let z: number = x + y
             println(z)
-        """.trimIndent()
+            """.trimIndent()
         val input = "execution\ntext\n$inputCode\n1.0\n"
         System.setIn(ByteArrayInputStream(input.toByteArray()))
 
@@ -210,12 +219,13 @@ class CliValidationAndExecutionTests {
 
     @Test
     fun testExecutionWithBooleanCondition() {
-        val inputCode = """
+        val inputCode =
+            """
             let isTrue: boolean = true
             if (isTrue) {
                 println('This is true')
             }
-        """.trimIndent()
+            """.trimIndent()
         val input = "execution\ntext\n$inputCode\n1.0\n"
         System.setIn(ByteArrayInputStream(input.toByteArray()))
 
@@ -228,9 +238,10 @@ class CliValidationAndExecutionTests {
 
     @Test
     fun testValidationWithComplexExpression() {
-        val inputCode = """
+        val inputCode =
+            """
             let result: number = (10 + 5) * (3 - 2) / 5
-        """.trimIndent()
+            """.trimIndent()
         val input = "validation\ntext\n$inputCode\n1.0\n"
         System.setIn(ByteArrayInputStream(input.toByteArray()))
 
@@ -242,14 +253,15 @@ class CliValidationAndExecutionTests {
 
     @Test
     fun testExecutionWithNestedConditionals() {
-        val inputCode = """
+        val inputCode =
+            """
             let x: number = 10
             if (x > 5) {
                 if (x < 15) {
                     println('x is between 5 and 15')
                 }
             }
-        """.trimIndent()
+            """.trimIndent()
         val input = "execution\ntext\n$inputCode\n1.0\n"
         System.setIn(ByteArrayInputStream(input.toByteArray()))
 
@@ -260,4 +272,3 @@ class CliValidationAndExecutionTests {
         assertTrue(outContent.toString().contains("Execution finished!"))
     }
 }
-

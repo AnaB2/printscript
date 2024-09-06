@@ -51,6 +51,7 @@ class Interpreter {
                     "false" -> false
                     else -> throw RuntimeException("Invalid boolean value: ${node.value}")
                 }
+            TokenType.DATA_TYPE -> node.value
             TokenType.IDENTIFIER ->
                 variables[node.value]
                     ?: throw RuntimeException("Undefined variable: ${node.value}")
@@ -104,6 +105,8 @@ class Interpreter {
         return when {
             leftValue is Int && rightValue is Int -> leftValue + rightValue
             leftValue is String && rightValue is String -> leftValue + rightValue
+            leftValue is Int && rightValue is String -> (leftValue.toString() + rightValue)
+            leftValue is String && rightValue is Int -> (leftValue + rightValue.toString())
             else -> throw RuntimeException("Unsupported operands for +")
         }
     }
@@ -125,8 +128,12 @@ class Interpreter {
     ): Any? {
         return if (leftValue is Int && rightValue is Int) {
             leftValue * rightValue
+        } else if (leftValue is Float && rightValue is Float) {
+            leftValue * rightValue
+        } else if (leftValue is Double && rightValue is Double) {
+            leftValue * rightValue
         } else {
-            throw RuntimeException("Unsupported operands for *")
+            throw RuntimeException("Unsupported operands for multiplication: $leftValue, $rightValue")
         }
     }
 
