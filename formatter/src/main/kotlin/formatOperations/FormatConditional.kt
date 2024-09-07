@@ -2,8 +2,6 @@ package formatOperations
 
 import Formatter
 import ast.ASTNode
-import ast.BinaryNode
-import ast.BlockNode
 import ast.ConditionalNode
 
 class FormatConditional : FormatOperation {
@@ -11,11 +9,15 @@ class FormatConditional : FormatOperation {
         return astNode is ConditionalNode
     }
 
-    override fun format(node: ASTNode, formatter: Formatter): String {
-        if(!canHandle(node)) error("Node isn't a ConditionalNode") else node as ConditionalNode
-        val condition = formatter.format(node.condition)
-        val thenBlock = formatter.format(node.thenBlock)
-        val elseBlock = formatter.format(node.elseBlock)
+    override fun format(
+        node: ASTNode,
+        formatter: Formatter,
+    ): String {
+        if (!canHandle(node)) error("Node isn't a ConditionalNode")
+        val conditionalNode = node as ConditionalNode
+        val condition = formatter.format(conditionalNode.condition)
+        val thenBlock = formatter.format(conditionalNode.thenBlock)
+        val elseBlock = formatter.format(conditionalNode.elseBlock)
         return "if ($condition) {\n$thenBlock\n} else {\n$elseBlock\n}"
     }
 }

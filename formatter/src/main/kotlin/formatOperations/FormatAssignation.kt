@@ -14,11 +14,14 @@ class FormatAssignation : FormatOperation {
         return astNode is AssignationNode
     }
 
-    override fun format(node: ASTNode, formatter: Formatter): String {
+    override fun format(
+        node: ASTNode,
+        formatter: Formatter,
+    ): String {
         if (!canHandle(node)) error("Node isn't a AssignationNode") else node as AssignationNode
 
-        val spaceAroundEquals : Any? = formatter.getRules()["spaceAroundEquals"]
-        if(spaceAroundEquals==null || spaceAroundEquals !is Boolean) error("spaceAroundEquals is not a boolean")
+        val spaceAroundEquals: Any? = formatter.getRules()["spaceAroundEquals"]
+        if (spaceAroundEquals == null || spaceAroundEquals !is Boolean) error("spaceAroundEquals is not a boolean")
 
         val left = node.id
         val equals = handleSpace.handleSpace("=", spaceAroundEquals, spaceAroundEquals)

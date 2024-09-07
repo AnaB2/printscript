@@ -9,9 +9,13 @@ class FormatPrint : FormatOperation {
         return astNode is PrintNode
     }
 
-    override fun format(node: ASTNode, formatter: Formatter): String {
-        if(!canHandle(node)) error("Node isn't a PrintNode") else node as PrintNode
-        val expression = formatter.format(node.expression)
-        return "print($expression)"
+    override fun format(
+        node: ASTNode,
+        formatter: Formatter,
+    ): String {
+        if (!canHandle(node)) error("Node isn't a PrintNode")
+        val printNode = node as PrintNode
+        val expression = formatter.format(printNode.expression)
+        return "println($expression)"
     }
 }

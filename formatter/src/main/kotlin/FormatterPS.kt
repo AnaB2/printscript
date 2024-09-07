@@ -5,28 +5,34 @@ import formatOperations.commons.HandleSemicolon
 import rules.RulesReader
 
 class FormatterPS : Formatter {
-    private val rulesPath : String;
-    private val formatOperations : List<FormatOperation>;
-    private val rulesReader : RulesReader;
-    private val handleSemicolon = HandleSemicolon();
-    private val handleLineBreak = HandleLineBreak();
+    private val rulesPath: String
+    private val formatOperations: List<FormatOperation>
+    private val rulesReader: RulesReader
+    private val handleSemicolon = HandleSemicolon()
+    private val handleLineBreak = HandleLineBreak()
 
-     constructor(rulesPath: String, formatOperations: List<FormatOperation>){
-        this.rulesPath = rulesPath;
-        this.formatOperations = formatOperations;
-        rulesReader = RulesReader(
-            mapOf(
-                "spaceBeforeColon" to Boolean::class,
-                "spaceAfterColon" to Boolean::class,
-                "spaceAroundEquals" to Boolean::class,
-                "lineBreak" to Int::class
-            ));
+    constructor(rulesPath: String, formatOperations: List<FormatOperation>) {
+        this.rulesPath = rulesPath
+        this.formatOperations = formatOperations
+        rulesReader =
+            RulesReader(
+                mapOf(
+                    "spaceBeforeColon" to Boolean::class,
+                    "spaceAfterColon" to Boolean::class,
+                    "spaceAroundEquals" to Boolean::class,
+                    "lineBreak" to Int::class,
+                ),
+            )
     }
 
     override fun format(astNodes: List<ASTNode>): String {
         // formatear nodos de la lista
-        val formatedNodes : List<String> = astNodes.map { node -> formatNode(node)} // formatear cada nodo
-        val formatedNodesWithSemicolon = formatedNodes.map { line -> handleSemicolon.handleSemicolon(line) } // manejar punto y coma de cada linea
+        val formatedNodes: List<String> = astNodes.map { node -> formatNode(node) } // formatear cada nodo
+        val formatedNodesWithSemicolon =
+            formatedNodes.map {
+                    line ->
+                handleSemicolon.handleSemicolon(line)
+            } // manejar punto y coma de cada linea
 
         // añade saltos de línea y devuelve String
         val numberOfLineBreak = rulesReader.readFile(rulesPath)["lineBreak"] as Int
