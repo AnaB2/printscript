@@ -77,7 +77,7 @@ class ParserTests {
 //        assertEquals("println", tokens[0].getValue())
 //        assertEquals("Hello", (expressionNode.left as LiteralNode).value)
 //        assertEquals("world", (expressionNode.right as LiteralNode).value)
-//        assertEquals("+", expressionNode.operator.getValue())
+//         assertEquals("+", expressionNode.operator.getValue())
 //    }
 //
 //

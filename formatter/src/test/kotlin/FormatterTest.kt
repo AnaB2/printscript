@@ -93,6 +93,22 @@ class FormatterTest {
         assertEquals("println(x + 2 - y * 1000);", formatted)
     }
 
+    // EXPRESIONES COMPLEJAS
+
+    @Test
+    fun `test formatter with assignation, declaration and println`() {
+        val input = """
+            let x:number=42;
+            let y:number=10;
+            println(x+y);
+            """
+        val tokens = lexer.execute(input)
+        val ast = parser.execute(tokens)
+
+        val formatted = formatter.format(ast)
+        assertEquals("let x : number = 42;\nlet y : number = 10;\nprintln(x + y);", formatted)
+    }
+
     // CONDICIONAL
 
 //    @Test
