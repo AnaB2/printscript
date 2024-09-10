@@ -1,6 +1,14 @@
 plugins {
     id 'printscript.gradle.kotlin-library-conventions'
+    id 'printscript.gradle.kotlin-publishing-convention'
+
 }
 dependencies {
     implementation project(':commons')
+    implementation project(':lexer')
+    implementation project(':parser')
+    implementation 'org.yaml:snakeyaml:1.30'
 }
+
+group = 'printscript'
+version = '1.0.0-SNAPSHOT'

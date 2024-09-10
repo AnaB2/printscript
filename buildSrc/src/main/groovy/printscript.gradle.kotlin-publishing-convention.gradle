@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/AnaB2/printscript")
+            credentials {
+                username = System.getenv('USERNAME')
+                password = System.getenv('TOKEN')
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from components.java
+        }
+    }
+}
