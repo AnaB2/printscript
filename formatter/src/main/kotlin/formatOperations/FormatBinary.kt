@@ -20,6 +20,6 @@ class FormatBinary : FormatOperation {
         val binaryNode = node as BinaryNode
         val left = formatter.format(binaryNode.left)
         val right = formatter.format(binaryNode.right)
-        return "$left ${binaryNode.operator.getValue()} $right"
+        return "$left ${binaryNode.operator.value} $right"
     }
 }

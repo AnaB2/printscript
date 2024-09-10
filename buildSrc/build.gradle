@@ -1,17 +1,24 @@
 plugins {
-    // Support convention plugins written in Groovy. Convention plugins are build scripts in 'src/main' that automatically become available as plugins in the main build.
+    // Support convention plugins written in Groovy
     id 'groovy-gradle-plugin'
 }
-
 
 repositories {
     // Use the plugin portal to apply community plugins in convention plugins.
     gradlePluginPortal()
+    mavenCentral()
 }
 
 dependencies {
+    implementation 'org.codehaus.groovy:groovy-all:3.0.9' // Especificar la versión de Groovy
     implementation 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.10'
     implementation 'org.jlleitschuh.gradle:ktlint-gradle:12.1.0'
-    implementation("org.jetbrains.kotlinx:kover-gradle-plugin:0.7.6")
-    implementation("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:1.7.10")
+    implementation "org.jetbrains.kotlinx:kover-gradle-plugin:0.7.6"
+    implementation "org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:1.7.10"
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }

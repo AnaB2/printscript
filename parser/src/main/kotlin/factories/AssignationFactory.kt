@@ -1,6 +1,5 @@
 package factories
 
-import ASTFactory
 import ast.ASTNode
 import ast.AssignationNode
 import ast.LiteralNode
@@ -48,7 +47,7 @@ class AssignationFactory : ASTFactory {
 
     private fun createLiteralNode(token: Token): ASTNode {
         return LiteralNode(
-            value = token.getValue(),
+            value = token.value,
             type = token.getType(),
             position = token.getPosition(),
         )

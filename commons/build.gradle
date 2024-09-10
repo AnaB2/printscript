@@ -1,3 +1,6 @@
 plugins {
     id 'printscript.gradle.kotlin-library-conventions'
+    id 'printscript.gradle.kotlin-publishing-convention'
 }
+group = 'printscript'
+version = '1.0.0-SNAPSHOT'

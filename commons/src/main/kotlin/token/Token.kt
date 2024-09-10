@@ -2,7 +2,7 @@ package token
 
 class Token(
     private var type: TokenType,
-    private var value: String,
+    var value: String,
     private var initialPosition: TokenPosition,
     private var finalPosition: TokenPosition,
 ) {
@@ -10,16 +10,8 @@ class Token(
         return type
     }
 
-    fun getValue(): String {
-        return value
-    }
-
     fun getPosition(): TokenPosition {
         return initialPosition
-    }
-
-    fun getFinalPosition(): TokenPosition {
-        return finalPosition
     }
 
     override fun equals(other: Any?): Boolean {

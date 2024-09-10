@@ -63,7 +63,7 @@ class Interpreter {
         val leftValue = evaluate(node.left) ?: throw RuntimeException("Invalid left operand")
         val rightValue = evaluate(node.right) ?: throw RuntimeException("Invalid right operand")
 
-        val operator = node.operator.getValue() // This should be the actual operator symbol like "+", "-", etc.
+        val operator = node.operator.value // This should be the actual operator symbol like "+", "-", etc.
 
         return when (operator) {
             "+" -> handleAddition(leftValue, rightValue)

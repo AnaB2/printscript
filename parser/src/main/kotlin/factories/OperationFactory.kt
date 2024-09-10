@@ -34,10 +34,10 @@ class OperationFactory {
     }
 
     private fun createLiteralNode(token: Token): ASTNode {
-        return LiteralNode(value = token.getValue(), type = token.getType(), position = token.getPosition())
+        return LiteralNode(value = token.value, type = token.getType(), position = token.getPosition())
     }
 
-    private fun isMultiplicationOrDivision(token: Token) = token.getValue() == "*" || token.getValue() == "/"
+    private fun isMultiplicationOrDivision(token: Token) = token.value == "*" || token.value == "/"
 
-    private fun isAdditionOrSubtraction(token: Token) = token.getValue() == "+" || token.getValue() == "-"
+    private fun isAdditionOrSubtraction(token: Token) = token.value == "+" || token.value == "-"
 }
