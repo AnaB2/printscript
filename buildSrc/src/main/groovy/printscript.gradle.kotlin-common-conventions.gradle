@@ -5,7 +5,6 @@ plugins {
 
 }
 
-
 repositories {
     mavenCentral()
 }
@@ -16,10 +15,14 @@ java {
     }
 }
 
+
+
 dependencies {
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
 }
+
+
 
 test {
     useJUnitPlatform()
@@ -35,7 +38,6 @@ tasks.register('installGitHook', Copy) {
         println 'Git pre-commit hook installed successfully.'
     }
 }
-
 
 tasks.named('check') {
     dependsOn 'ktlintCheck'
@@ -64,3 +66,5 @@ koverReport {
         }
     }
 }
+
+
