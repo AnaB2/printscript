@@ -7,5 +7,5 @@ dependencies {
     implementation project(':commons')
     implementation project(':lexer')
 }
-group = 'com.github.AnaB2.parser'
+group = 'printscript'
 version = '1.0.0-SNAPSHOT'
