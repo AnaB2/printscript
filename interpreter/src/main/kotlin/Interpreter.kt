@@ -150,13 +150,13 @@ class Interpreter {
     }
 
     private fun handleAssignment(node: AssignationNode): Any? {
-        val value = evaluate(node.expression) ?: throw RuntimeException("Invalid assignment")
+        val value = evaluate(node.expression) ?: throw RuntimeException("Invalid assignment in Assignment")
         variables[node.id] = value
         return value
     }
 
     private fun handleDeclaration(node: DeclarationNode): Any? {
-        val value = evaluate(node.expr) ?: throw RuntimeException("Invalid assignment")
+        val value = evaluate(node.expr) ?: throw RuntimeException("Invalid assignment in Declaration")
         variables[node.id] = value
         return value
     }

@@ -13,6 +13,12 @@ class ValidationCommand(private val source: String, private val version: String)
         try {
             val astNodes = parser.execute(tokens)
             println("Validation successful.")
+
+            // Ejemplo de uso de astNodes: imprimir el AST para depuración
+            println("AST Nodes:")
+            astNodes.forEach { node ->
+                println(node) // Asume que el método toString() está bien implementado en ASTNode
+            }
         } catch (e: Exception) {
             println("Validation failed: ${e.message}")
             if (e is ParsingException) {
