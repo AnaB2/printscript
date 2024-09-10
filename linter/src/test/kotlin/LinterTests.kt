@@ -1,2 +1,1 @@
-class LinterTests {
-}
+class LinterTests

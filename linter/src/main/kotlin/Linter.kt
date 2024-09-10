@@ -36,7 +36,10 @@ class Linter(private var version: LinterVersion) {
         return rules
     }
 
-    fun writeToFile(content: String, filePath: String) {
+    fun writeToFile(
+        content: String,
+        filePath: String,
+    ) {
         fileManager.saveToFile(content, filePath)
     }
 

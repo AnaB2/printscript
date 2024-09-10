@@ -1,8 +1,10 @@
 import java.io.File
 
 class OutputFileManager {
-
-    fun saveToFile(content: String, filePath: String) {
+    fun saveToFile(
+        content: String,
+        filePath: String,
+    ) {
         val file = File(filePath)
         file.writeText(content)
     }

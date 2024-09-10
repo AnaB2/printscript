@@ -1,5 +1,4 @@
 class LinterOutput {
-
     private var isCorrect: Boolean = true
     private var brokenRules: MutableList<String> = mutableListOf()
 

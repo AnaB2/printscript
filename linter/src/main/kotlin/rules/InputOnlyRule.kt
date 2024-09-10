@@ -4,9 +4,9 @@ import BrokenRule
 import token.Token
 import token.TokenType
 
-class InputOnlyRule(private var errorMessage: String = "ReadInputs must not be called with an expression"
-): Rule {
-
+class InputOnlyRule(
+    private var errorMessage: String = "ReadInputs must not be called with an expression",
+) : Rule {
     private val brokenRules = mutableListOf<BrokenRule>()
 
     override fun applyRule(tokens: List<List<Token>>): List<BrokenRule> {
@@ -18,7 +18,7 @@ class InputOnlyRule(private var errorMessage: String = "ReadInputs must not be c
         return brokenRules
     }
 
-    private fun containsReadInput(tokens : List<Token>): Boolean {
+    private fun containsReadInput(tokens: List<Token>): Boolean {
         for (token in tokens) {
             if (isReadInputType(token)) {
                 return true
@@ -42,8 +42,8 @@ class InputOnlyRule(private var errorMessage: String = "ReadInputs must not be c
 
     private fun isExpressionType(token: Token): Boolean {
         return token.getType() != TokenType.IDENTIFIER &&
-                token.getType() != TokenType.PUNCTUATOR &&
-                token.getType() != TokenType.LITERAL
+            token.getType() != TokenType.PUNCTUATOR &&
+            token.getType() != TokenType.LITERAL
     }
 
     private fun splitTokens(tokens: List<Token>): List<Token> {

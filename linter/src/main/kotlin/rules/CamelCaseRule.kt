@@ -5,9 +5,8 @@ import token.Token
 import token.TokenType
 
 class CamelCaseRule(
-    private var errorMessage: String = "The following identifier must be in camel case"
+    private var errorMessage: String = "The following identifier must be in camel case",
 ) : Rule {
-
     private val brokenRules = mutableListOf<BrokenRule>()
 
     override fun applyRule(tokens: List<List<Token>>): List<BrokenRule> {

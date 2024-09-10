@@ -1,5 +1,9 @@
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import rules.*
+import rules.CamelCaseRule
+import rules.InputOnlyRule
+import rules.PrintOnlyRule
+import rules.Rule
+import rules.SnakeCaseRule
 import java.io.File
 
 data class FormattingRules(
@@ -9,7 +13,6 @@ data class FormattingRules(
 )
 
 class RuleJsonReader {
-
     fun getRulesFromJson(path: String): List<Rule> {
         val mapper = jacksonObjectMapper()
         val file = File(path)

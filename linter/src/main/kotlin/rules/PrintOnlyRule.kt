@@ -4,9 +4,9 @@ import BrokenRule
 import token.Token
 import token.TokenType
 
-class PrintOnlyRule(private var errorMessage: String = "Println must not be called with an expression"
-): Rule {
-
+class PrintOnlyRule(
+    private var errorMessage: String = "Println must not be called with an expression",
+) : Rule {
     private val brokenRules = mutableListOf<BrokenRule>()
 
     override fun applyRule(tokens: List<List<Token>>): List<BrokenRule> {
@@ -19,7 +19,7 @@ class PrintOnlyRule(private var errorMessage: String = "Println must not be call
         return brokenRules
     }
 
-    private fun containsPrintln(tokens : List<Token>): Boolean {
+    private fun containsPrintln(tokens: List<Token>): Boolean {
         val firstToken = tokens[0]
         return isPrintlnType(firstToken)
     }
@@ -39,8 +39,8 @@ class PrintOnlyRule(private var errorMessage: String = "Println must not be call
 
     private fun isExpressionType(token: Token): Boolean {
         return token.getType() != TokenType.IDENTIFIER &&
-                token.getType() != TokenType.PUNCTUATOR &&
-                token.getType() != TokenType.LITERAL
+            token.getType() != TokenType.PUNCTUATOR &&
+            token.getType() != TokenType.LITERAL
     }
 
     override fun getRuleName(): String {

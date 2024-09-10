@@ -4,7 +4,8 @@ import BrokenRule
 import token.Token
 import token.TokenType
 
-class SnakeCaseRule(private var errorMessage: String = "The following identifier must be in snake case"
+class SnakeCaseRule(
+    private var errorMessage: String = "The following identifier must be in snake case",
 ) : Rule {
     private val brokenRules = mutableListOf<BrokenRule>()
 
