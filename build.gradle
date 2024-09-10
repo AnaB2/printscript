@@ -1,33 +1,32 @@
-//plugins {
-//    id 'java'
-//    id 'maven-publish'
-//
-//}
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
 
-//group = 'com.github.AnaB2'
-//version = '1.0.0-SNAPSHOT'
-
-//java {
-//    toolchain {
-//        languageVersion = JavaLanguageVersion.of(17)
-//    }
-//}
+group = 'com.github.AnaB2'
+version = '1.0.0-SNAPSHOT'
 
 
-//publishing {
-//    repositories {
-//        maven {
-//            name = "GitHubPackages"
-//            url = uri("https://maven.pkg.github.com/AnaB2/printscript")
-//            credentials {
-//                username = System.getenv('USERNAME')
-//                password = System.getenv('TOKEN')
-//            }
-//        }
-//    }
-////    publications {
-//        gpr() {
-////            from components.java
-////        }
-////    }
-////}
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/AnaB2/printscript")
+            credentials {
+                username = System.getenv('USERNAME')
+                password = System.getenv('TOKEN')
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from components.java
+        }
+    }
+}

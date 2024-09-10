@@ -1,4 +1,5 @@
 import ast.ASTNode
+import factories.ASTFactory
 import factories.AssignationFactory
 import factories.ConditionalFactory
 import factories.DeclarationFactory
@@ -36,7 +37,7 @@ class Parser {
         val rows = mutableListOf<List<Token>>()
         var singleRow = mutableListOf<Token>()
         for (token in tokenList) {
-            if (token.getValue() != ";" && token.getValue() != "\n") {
+            if (token.value != ";" && token.value != "\n") {
                 singleRow.add(token)
             } else {
                 rows.add(singleRow)

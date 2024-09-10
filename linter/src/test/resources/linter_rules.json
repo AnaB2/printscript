@@ -1,0 +1,5 @@
+{
+  "identifier":"camelcase",
+  "enablePrintlnOnly": true,
+  "enableInputOnly": true
+}

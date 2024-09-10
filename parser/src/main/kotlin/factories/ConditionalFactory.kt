@@ -1,6 +1,5 @@
 package factories
 
-import ASTFactory
 import Parser
 import ast.ASTNode
 import ast.BlockNode
@@ -12,10 +11,10 @@ import token.TokenType
 
 class ConditionalFactory : ASTFactory {
     override fun createAST(tokens: List<Token>): ASTNode {
-        val conditionToken = tokens.find { it.getType() == TokenType.CONDITIONAL && it.getValue() == "if" }!!
+        val conditionToken = tokens.find { it.getType() == TokenType.CONDITIONAL && it.value == "if" }!!
         val conditionNode =
             LiteralNode(
-                value = conditionToken.getValue(),
+                value = conditionToken.value,
                 type = conditionToken.getType(),
                 position = conditionToken.getPosition(),
             )
@@ -34,8 +33,8 @@ class ConditionalFactory : ASTFactory {
         tokens: List<Token>,
         blockType: String,
     ): ASTNode? {
-        val startIndex = tokens.indexOfFirst { it.getValue() == blockType } + 1
-        val endIndex = tokens.indexOfFirst { it.getValue() == "}" && it.getType() == TokenType.PUNCTUATOR }
+        val startIndex = tokens.indexOfFirst { it.value == blockType } + 1
+        val endIndex = tokens.indexOfFirst { it.value == "}" && it.getType() == TokenType.PUNCTUATOR }
         return if (startIndex != -1 && endIndex != -1 && startIndex < endIndex) {
             val parser = Parser()
             val blockNodes = parser.execute(tokens.subList(startIndex, endIndex))
@@ -46,6 +45,6 @@ class ConditionalFactory : ASTFactory {
     }
 
     override fun canHandle(tokens: List<Token>): Boolean {
-        return tokens.any { it.getType() == TokenType.CONDITIONAL && it.getValue() == "if" }
+        return tokens.any { it.getType() == TokenType.CONDITIONAL && it.value == "if" }
     }
 }

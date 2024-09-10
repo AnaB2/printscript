@@ -1,6 +1,5 @@
 package factories
 
-import ASTFactory
 import ast.ASTNode
 import ast.FunctionNode
 import ast.LiteralNode
@@ -14,7 +13,7 @@ class FunctionFactory : ASTFactory {
 
         val expressionNode =
             LiteralNode(
-                value = expressionToken.getValue(),
+                value = expressionToken.value,
                 type = expressionToken.getType(),
                 position = expressionToken.getPosition(),
             )
