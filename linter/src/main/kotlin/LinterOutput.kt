@@ -1,3 +1,5 @@
+import token.TokenPosition
+
 class LinterOutput {
     private var isCorrect: Boolean = true
     private var brokenRules: MutableList<String> = mutableListOf()
@@ -11,5 +13,17 @@ class LinterOutput {
     private fun formatBrokenRule(brokenRule: BrokenRule): String {
         val position = brokenRule.errorPosition
         return "Broken rule: ${brokenRule.ruleDescription} at ${position.row}:${position.column}"
+    }
+
+    // new function for CLI, it basically generates the error message
+    fun getBrokenRules(): List<BrokenRule> {
+        return brokenRules.map { brokenRule ->
+            val parts = brokenRule.split(" at ")
+            val ruleDescription = parts[0].removePrefix("Broken rule: ")
+            val positionParts = parts[1].split(":")
+            val row = positionParts[0].toInt()
+            val column = positionParts[1].toInt()
+            BrokenRule(ruleDescription, TokenPosition(row, column))
+        }
     }
 }
