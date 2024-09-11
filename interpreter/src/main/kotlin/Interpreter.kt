@@ -176,6 +176,14 @@ class Interpreter {
     }
 
     private fun handleConditional(node: ConditionalNode): Any? {
+        val condition =
+            evaluate(node.condition) as? Boolean
+                ?: throw RuntimeException("Condition must evaluate to a boolean")
+        return if (condition) evaluate(node.thenBlock) else evaluate(node.elseBlock)
+    }
+
+    /*
+    private fun handleConditional(node: ConditionalNode): Any? {
         // Evalúa la condición
         val condition = evaluate(node.condition)
 
@@ -194,13 +202,5 @@ class Interpreter {
             node.elseBlock?.let { evaluate(it) } // Solo evalúa el bloque "else" si existe
         }
     }
-    /*
-     private fun handleConditional(node: ConditionalNode): Any? {
-        val condition =
-            evaluate(node.condition) as? Boolean
-                ?: throw RuntimeException("Condition must evaluate to a boolean")
-        return if (condition) evaluate(node.thenBlock) else evaluate(node.elseBlock)
-    }
-
      */
 }
