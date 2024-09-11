@@ -7,9 +7,11 @@ import formatOperations.FormatDeclaration
 import formatOperations.FormatFunction
 import formatOperations.FormatLiteral
 import formatOperations.FormatPrint
-import org.example.Lexer
-import org.example.TokenMapper
+import formatter.FormatterBuilderPS
+import org.example.lexer.Lexer
+import org.example.lexer.TokenMapper
 import org.junit.jupiter.api.Assertions.assertEquals
+import parser.Parser
 import token.Token
 import kotlin.test.Test
 

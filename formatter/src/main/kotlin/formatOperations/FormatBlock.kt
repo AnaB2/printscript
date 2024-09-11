@@ -1,8 +1,8 @@
 package formatOperations
 
-import Formatter
 import ast.ASTNode
 import ast.BlockNode
+import formatter.Formatter
 
 class FormatBlock : FormatOperation {
     override fun canHandle(astNode: ASTNode): Boolean {

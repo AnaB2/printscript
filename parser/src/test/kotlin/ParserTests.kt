@@ -1,12 +1,14 @@
 package org.example
-import Parser
 import ast.AssignationNode
 import ast.BinaryNode
 import ast.DeclarationNode
 import ast.LiteralNode
 import ast.PrintNode
+import org.example.lexer.Lexer
+import org.example.lexer.TokenMapper
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import parser.Parser
 import token.Token
 import token.TokenPosition
 import token.TokenType
@@ -68,7 +70,7 @@ class ParserTests {
 //            Token(TokenType.PUNCTUATOR, ";", TokenPosition(0, 24), TokenPosition(1, 25))
 //        )
 //
-//        val parser = Parser()
+//        val parser = parser.Parser()
 //        val asts = parser.execute(tokens)
 //
 //        val ast = asts[0] as PrintNode
@@ -95,7 +97,7 @@ class ParserTests {
 //            Token(TokenType.PUNCTUATOR, ";", TokenPosition(0, 24), TokenPosition(1, 25))
 //        )
 //
-//        val parser = Parser()
+//        val parser = parser.Parser()
 //        val abstractSyntaxTrees = parser.execute(tokens)
 //
 //        val ast = abstractSyntaxTrees[0] as PrintNode

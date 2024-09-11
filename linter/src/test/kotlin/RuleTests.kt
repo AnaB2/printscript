@@ -1,5 +1,7 @@
-import org.example.Lexer
-import org.example.TokenMapper
+import ast.Tokenizer
+import org.example.lexer.Lexer
+import org.example.lexer.TokenMapper
+import parser.Parser
 import rules.CamelCaseRule
 import rules.PrintOnlyRule
 import rules.SnakeCaseRule

@@ -1,11 +1,11 @@
 package factories
 
-import Parser
 import ast.ASTNode
 import ast.BlockNode
 import ast.ConditionalNode
 import ast.LiteralNode
 import ast.NilNode
+import parser.Parser
 import token.Token
 import token.TokenType
 

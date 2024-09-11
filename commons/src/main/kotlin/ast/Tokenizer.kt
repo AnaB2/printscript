@@ -1,13 +1,5 @@
-import ast.ASTNode
-import ast.AssignationNode
-import ast.BinaryNode
-import ast.BlockNode
-import ast.ConditionalNode
-import ast.DeclarationNode
-import ast.FunctionNode
-import ast.LiteralNode
-import ast.NilNode
-import ast.PrintNode
+package ast
+
 import token.Token
 import token.TokenType
 

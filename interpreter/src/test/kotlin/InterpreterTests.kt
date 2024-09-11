@@ -6,6 +6,7 @@ import ast.DeclarationNode
 import ast.FunctionNode
 import ast.LiteralNode
 import ast.PrintNode
+import interpreter.Interpreter
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows

@@ -1,3 +1,5 @@
+package formatter
+
 import ast.ASTNode
 
 interface Formatter {

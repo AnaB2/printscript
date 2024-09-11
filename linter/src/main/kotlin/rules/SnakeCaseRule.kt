@@ -1,6 +1,6 @@
 package rules
 
-import BrokenRule
+import linter.BrokenRule
 import token.Token
 import token.TokenType
 

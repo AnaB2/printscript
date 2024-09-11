@@ -1,4 +1,4 @@
-package org.example
+package org.example.lexer
 
 import token.Token
 import token.TokenPosition

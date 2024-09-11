@@ -1,3 +1,5 @@
+package formatter
+
 import formatOperations.FormatOperation
 
 class FormatterBuilderPS : FormatterBuilder {

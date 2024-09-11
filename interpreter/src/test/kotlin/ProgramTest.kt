@@ -1,7 +1,9 @@
-import org.example.Lexer
-import org.example.TokenMapper
+import interpreter.Interpreter
+import org.example.lexer.Lexer
+import org.example.lexer.TokenMapper
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import parser.Parser
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 
@@ -20,11 +22,11 @@ class ProgramTest {
         val lexer = Lexer(tokenMapper)
         val tokens = lexer.execute(input)
 
-        // Step 2: Parser
+        // Step 2: parser.Parser
         val parser = Parser()
         val astNodes = parser.execute(tokens) // Filter out null tokens if any
 
-        // Step 3: Interpreter
+        // Step 3: interpreter.Interpreter
         val interpreter = Interpreter()
 
         // Redirect output stream to capture print statements

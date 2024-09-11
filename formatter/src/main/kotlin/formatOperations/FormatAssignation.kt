@@ -1,10 +1,10 @@
 package formatOperations
 
-import Formatter
 import ast.ASTNode
 import ast.AssignationNode
 import formatOperations.commons.HandleSemicolon
 import formatOperations.commons.HandleSpace
+import formatter.Formatter
 
 class FormatAssignation : FormatOperation {
     private val handleSpace = HandleSpace()

@@ -1,8 +1,8 @@
 package formatOperations
 
-import Formatter
 import ast.ASTNode
 import ast.LiteralNode
+import formatter.Formatter
 import token.TokenType
 
 class FormatLiteral : FormatOperation {

@@ -1,5 +1,5 @@
-import org.example.Lexer
-import org.example.TokenMapper
+import org.example.lexer.Lexer
+import org.example.lexer.TokenMapper
 import org.junit.jupiter.api.Assertions.assertIterableEquals
 import org.junit.jupiter.api.Test
 import token.Token

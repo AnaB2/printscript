@@ -1,10 +1,10 @@
 package formatOperations
 
-import Formatter
 import ast.ASTNode
 import ast.DeclarationNode
 import ast.LiteralNode
 import formatOperations.commons.HandleSpace
+import formatter.Formatter
 import token.TokenType
 
 class FormatDeclaration : FormatOperation {

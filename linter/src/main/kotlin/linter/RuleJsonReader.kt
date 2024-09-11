@@ -1,3 +1,5 @@
+package linter
+
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import rules.CamelCaseRule
 import rules.InputOnlyRule

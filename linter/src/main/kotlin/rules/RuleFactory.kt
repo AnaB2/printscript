@@ -1,6 +1,6 @@
 package rules
 
-import LinterVersion
+import linter.LinterVersion
 
 class RuleFactory() {
     fun createRules(

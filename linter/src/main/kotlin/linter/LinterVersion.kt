@@ -1,3 +1,5 @@
+package linter
+
 enum class LinterVersion(val version: String) {
     VERSION_1_0("1.0"),
     VERSION_1_1("1.1"), // Agrega más versiones según sea necesario
