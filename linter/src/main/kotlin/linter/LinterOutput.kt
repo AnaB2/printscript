@@ -1,3 +1,5 @@
+package linter
+
 import token.TokenPosition
 
 class LinterOutput {

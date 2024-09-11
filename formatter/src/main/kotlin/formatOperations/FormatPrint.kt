@@ -1,8 +1,8 @@
 package formatOperations
 
-import Formatter
 import ast.ASTNode
 import ast.PrintNode
+import formatter.Formatter
 
 class FormatPrint : FormatOperation {
     override fun canHandle(astNode: ASTNode): Boolean {

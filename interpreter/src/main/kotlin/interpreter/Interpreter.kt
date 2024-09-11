@@ -1,3 +1,5 @@
+package interpreter
+
 import ast.ASTNode
 import ast.AssignationNode
 import ast.BinaryNode

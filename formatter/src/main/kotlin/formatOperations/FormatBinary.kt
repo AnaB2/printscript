@@ -1,9 +1,9 @@
 package formatOperations
 
-import Formatter
 import ast.ASTNode
 import ast.BinaryNode
 import formatOperations.commons.HandleSpace
+import formatter.Formatter
 
 class FormatBinary : FormatOperation {
     private val handleSpace: HandleSpace = HandleSpace()

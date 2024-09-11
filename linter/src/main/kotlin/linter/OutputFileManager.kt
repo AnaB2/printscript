@@ -1,3 +1,5 @@
+package linter
+
 import java.io.File
 
 class OutputFileManager {

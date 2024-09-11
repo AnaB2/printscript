@@ -1,7 +1,7 @@
 package formatOperations
 
-import Formatter
 import ast.ASTNode
+import formatter.Formatter
 
 // Interfaz que implementan los formateadores según la operación a formatear
 interface FormatOperation {

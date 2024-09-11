@@ -1,3 +1,5 @@
+package linter
+
 import ast.ASTNode
 import ast.Tokenizer
 import rules.Rule
