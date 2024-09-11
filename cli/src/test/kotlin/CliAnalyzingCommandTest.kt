@@ -1,3 +1,4 @@
+import cli.ParsingException
 import commands.AnalyzingCommand
 import java.io.File
 import kotlin.test.Test

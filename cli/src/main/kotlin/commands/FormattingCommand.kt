@@ -1,7 +1,8 @@
 package commands
 
-import FormatterBuilderPS
-import Parser
+import cli.handleError
+import cli.showProgress
+import cli.tokenize
 import formatOperations.FormatAssignation
 import formatOperations.FormatBinary
 import formatOperations.FormatBlock
@@ -10,9 +11,8 @@ import formatOperations.FormatDeclaration
 import formatOperations.FormatFunction
 import formatOperations.FormatLiteral
 import formatOperations.FormatPrint
-import handleError
-import showProgress
-import tokenize
+import formatter.FormatterBuilderPS
+import parser.Parser
 
 class FormattingCommand(private val source: String, private val version: String, private val args: List<String>) : Command {
     override fun execute() {

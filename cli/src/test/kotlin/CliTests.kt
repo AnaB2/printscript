@@ -1,3 +1,5 @@
+import cli.main
+import cli.showProgress
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import java.io.ByteArrayInputStream
