@@ -1,10 +1,10 @@
 package commands
 
-import Interpreter
-import Parser
-import handleError
-import showProgress
-import tokenize
+import cli.handleError
+import cli.showProgress
+import cli.tokenize
+import interpreter.Interpreter
+import parser.Parser
 
 class ExecutionCommand(private val source: String, private val version: String, private val isFile: Boolean) : Command {
     override fun execute() {

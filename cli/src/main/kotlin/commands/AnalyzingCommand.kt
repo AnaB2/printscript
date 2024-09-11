@@ -1,11 +1,11 @@
 package commands
 
-import Linter
-import LinterVersion
-import Parser
-import handleError
-import showProgress
-import tokenize
+import cli.handleError
+import cli.showProgress
+import cli.tokenize
+import linter.Linter
+import linter.LinterVersion
+import parser.Parser
 
 class AnalyzingCommand(private val source: String, private val version: String) : Command {
     override fun execute() {

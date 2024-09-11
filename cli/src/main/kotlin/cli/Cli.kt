@@ -1,9 +1,11 @@
+package cli
+
 import commands.AnalyzingCommand
 import commands.ExecutionCommand
 import commands.FormattingCommand
 import commands.ValidationCommand
-import org.example.Lexer
-import org.example.TokenMapper
+import org.example.lexer.Lexer
+import org.example.lexer.TokenMapper
 import token.Token
 import java.io.File
 

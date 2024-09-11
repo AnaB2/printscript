@@ -1,3 +1,4 @@
+import cli.ParsingException
 import commands.ValidationCommand
 import org.junit.jupiter.api.Test
 import java.io.File

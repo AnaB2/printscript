@@ -1,8 +1,8 @@
 package commands
 
-import Parser
-import ParsingException
-import tokenize
+import cli.ParsingException
+import cli.tokenize
+import parser.Parser
 
 class ValidationCommand(private val source: String, private val version: String) : Command {
     override fun execute() {

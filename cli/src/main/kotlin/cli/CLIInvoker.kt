@@ -1,3 +1,5 @@
+package cli
+
 import commands.Command
 
 class CLIInvoker {

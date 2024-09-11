@@ -5,6 +5,8 @@ import token.TokenType
 class TokenMapper(private val version: String) {
     private val strategyMap: MutableMap<TokenType, TokenClassifierStrategy> = mutableMapOf()
 
+    private val reservedKeywords = setOf("if", "else", "let", "const", "println", "true", "false") // Incluye true y false
+
     init {
         initializeStrategies()
     }
@@ -13,7 +15,10 @@ class TokenMapper(private val version: String) {
     private fun initializeStrategies() {
         when (version) {
             "1.0" -> initializeVersion10Strategies()
-            "1.1" -> initializeVersion11Strategies()
+            "1.1" -> {
+                initializeVersion10Strategies() // Primero inicializa la versión 1.0
+                initializeVersion11Strategies() // Luego extiende con 1.1
+            }
             else -> throw IllegalArgumentException("Unsupported version: $version")
         }
     }
@@ -34,7 +39,6 @@ class TokenMapper(private val version: String) {
     }
 
     private fun initializeVersion11Strategies() {
-        initializeStrategies()
         strategyMap[TokenType.CONDITIONAL] = RegexTokenClassifier("""\bif\b|\belse\b""".toRegex())
         strategyMap[TokenType.KEYWORD] = RegexTokenClassifier("""\blet\b|\bconst\b""".toRegex())
         strategyMap[TokenType.FUNCTION] = RegexTokenClassifier("println|readInput|readEnv".toRegex())
@@ -47,11 +51,25 @@ class TokenMapper(private val version: String) {
         if (input.isBlank()) {
             return TokenType.UNKNOWN
         }
+
+        // Maneja las palabras reservadas antes de aplicar las estrategias de clasificación
+        if (reservedKeywords.contains(input)) {
+            return when (input) {
+                "if", "else" -> TokenType.CONDITIONAL
+                "let", "const" -> TokenType.KEYWORD
+                "println" -> TokenType.FUNCTION
+                "true", "false" -> TokenType.BOOLEANLITERAL
+                else -> TokenType.UNKNOWN
+            }
+        }
+
+        // Verifica las estrategias para otros tipos
         for ((type, strategy) in strategyMap) {
             if (strategy.classify(input)) {
                 return type
             }
         }
+
         return TokenType.UNKNOWN
     }
 
