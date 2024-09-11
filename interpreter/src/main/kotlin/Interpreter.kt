@@ -176,9 +176,31 @@ class Interpreter {
     }
 
     private fun handleConditional(node: ConditionalNode): Any? {
+        // Evalúa la condición
+        val condition = evaluate(node.condition)
+
+        // Verifica que la condición se evalúe como un valor booleano
+        val conditionValue =
+            when (condition) {
+                is Boolean -> condition
+                else -> throw RuntimeException("Condition must evaluate to a boolean, but got: $condition")
+            }
+
+        // Si la condición es verdadera, ejecuta el bloque "then"
+        // Si es falsa, ejecuta el bloque "else" si existe
+        return if (conditionValue) {
+            evaluate(node.thenBlock)
+        } else {
+            node.elseBlock?.let { evaluate(it) } // Solo evalúa el bloque "else" si existe
+        }
+    }
+    /*
+     private fun handleConditional(node: ConditionalNode): Any? {
         val condition =
             evaluate(node.condition) as? Boolean
                 ?: throw RuntimeException("Condition must evaluate to a boolean")
         return if (condition) evaluate(node.thenBlock) else evaluate(node.elseBlock)
     }
+
+     */
 }

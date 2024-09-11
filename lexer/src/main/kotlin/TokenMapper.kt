@@ -5,6 +5,8 @@ import token.TokenType
 class TokenMapper(private val version: String) {
     private val strategyMap: MutableMap<TokenType, TokenClassifierStrategy> = mutableMapOf()
 
+    private val reservedKeywords = setOf("if", "else", "let", "const", "println") // Agrega más palabras reservadas según sea necesario
+
     init {
         initializeStrategies()
     }
@@ -49,11 +51,24 @@ class TokenMapper(private val version: String) {
         if (input.isBlank()) {
             return TokenType.UNKNOWN
         }
+
+        // Maneja las palabras reservadas antes de aplicar las estrategias de clasificación
+        if (reservedKeywords.contains(input)) {
+            return when (input) {
+                "if", "else" -> TokenType.CONDITIONAL
+                "let", "const" -> TokenType.KEYWORD
+                "println" -> TokenType.FUNCTION
+                else -> TokenType.UNKNOWN
+            }
+        }
+
+        // Verifica las estrategias para otros tipos
         for ((type, strategy) in strategyMap) {
             if (strategy.classify(input)) {
                 return type
             }
         }
+
         return TokenType.UNKNOWN
     }
 
