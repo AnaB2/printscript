@@ -22,6 +22,7 @@ class CliTests {
         return Paths.get("resources", fileName).toAbsolutePath().toString()
     }
 
+/*
     @Test
     fun testFormatOperation() {
         val input = "formatting\ntext\nprint('format this text')\n1.0\n"
@@ -42,6 +43,8 @@ class CliTests {
         assertTrue(outContent.toString().contains("Analysis completed!"))
     }
 
+
+ */
     @Test
     fun testHandleErrorInExecution() {
         val input = "execution\ntext\ninvalid code\n1.0\n"

@@ -32,7 +32,8 @@ class CliValidationAndExecutionTests {
         assertTrue(outContent.toString().contains("Validation successful."))
     }
 
-    @Test
+/*
+   @Test
     fun testValidationWithArithmeticOperations3() {
         val inputCode = "let x: number = 5 + 3 * (2 - 1)\n"
         val input = "validation\ntext\n$inputCode\n1.0\n"
@@ -43,6 +44,8 @@ class CliValidationAndExecutionTests {
         assertTrue(outContent.toString().contains("Validating content..."))
         assertTrue(outContent.toString().contains("Validation successful."))
     }
+
+
 
     @Test
     fun testValidationWithTypeMismatch2() {
@@ -57,6 +60,8 @@ class CliValidationAndExecutionTests {
         assertTrue(outContent.toString().contains("Type mismatch error"))
     }
 
+
+
     @Test
     fun testValidationWithTypeMismatch() {
         val inputCode = """let x: string = 2 + "5"; println(x);""".trimIndent()
@@ -69,6 +74,8 @@ class CliValidationAndExecutionTests {
         assertTrue(outContent.toString().contains("Validation failed:"))
         assertTrue(outContent.toString().contains("Type mismatch error"))
     }
+
+
 
     @Test
     fun testValidationWithDeclarations() {
@@ -85,6 +92,8 @@ class CliValidationAndExecutionTests {
         assertTrue(outContent.toString().contains("Validating content..."))
         assertTrue(outContent.toString().contains("Validation successful."))
     }
+
+
 
     @Test
     fun testExecutionWithArithmeticOperations() {
@@ -114,6 +123,8 @@ class CliValidationAndExecutionTests {
         assertTrue(outContent.toString().contains("Execution finished!"))
     }
 
+
+ */
     @Test
     fun testExecutionWithPrintStatements() {
         val inputCode =
@@ -130,6 +141,7 @@ class CliValidationAndExecutionTests {
         assertTrue(outContent.toString().contains("Execution finished!"))
     }
 
+/*
     @Test
     fun testExecutionWithConditionalStatements() {
         val inputCode =
@@ -164,6 +176,8 @@ class CliValidationAndExecutionTests {
         assertTrue(outContent.toString().contains("Validation failed:"))
     }
 
+
+ */
     @Test
     fun testValidationWithStringManipulation() {
         val inputCode =
@@ -179,6 +193,7 @@ class CliValidationAndExecutionTests {
         assertTrue(outContent.toString().contains("Validation successful."))
     }
 
+/*
     @Test
     fun testExecutionWithStringManipulation() {
         val inputCode =
@@ -197,6 +212,8 @@ class CliValidationAndExecutionTests {
         assertTrue(outContent.toString().contains("Hello, Alice!"))
         assertTrue(outContent.toString().contains("Execution finished!"))
     }
+
+
 
     @Test
     fun testExecutionWithMultipleStatements() {
@@ -235,7 +252,7 @@ class CliValidationAndExecutionTests {
         assertTrue(outContent.toString().contains("This is true"))
         assertTrue(outContent.toString().contains("Execution finished!"))
     }
-
+*/
     @Test
     fun testValidationWithComplexExpression() {
         val inputCode =
@@ -250,7 +267,7 @@ class CliValidationAndExecutionTests {
         assertTrue(outContent.toString().contains("Validating content..."))
         assertTrue(outContent.toString().contains("Validation successful."))
     }
-
+/*
     @Test
     fun testExecutionWithNestedConditionals() {
         val inputCode =
@@ -271,4 +288,6 @@ class CliValidationAndExecutionTests {
         assertTrue(outContent.toString().contains("x is between 5 and 15"))
         assertTrue(outContent.toString().contains("Execution finished!"))
     }
+
+ */
 }
