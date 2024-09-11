@@ -11,3 +11,5 @@ dependencies {
     implementation project(':linter')
 
 }
+group = 'printscript'
+version = '1.0.0-SNAPSHOT'
