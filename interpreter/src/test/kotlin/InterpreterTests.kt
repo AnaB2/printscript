@@ -56,6 +56,30 @@ class InterpreterTests {
     }
 
     @Test
+    fun `test addition of integer and text`() {
+        val left = LiteralNode("10", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("5", TokenType.STRINGLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "+", position, position) // Create a token for "+"
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter()
+
+        val result = interpreter.evaluate(node)
+        assertEquals("105", result)
+    }
+
+    @Test
+    fun `test addition of integer and text2`() {
+        val left = LiteralNode("10", TokenType.STRINGLITERAL, position)
+        val right = LiteralNode("5", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "+", position, position) // Create a token for "+"
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter()
+
+        val result = interpreter.evaluate(node)
+        assertEquals("105", result)
+    }
+
+    @Test
     fun `test string concatenation`() {
         val left = LiteralNode("Hello", TokenType.STRINGLITERAL, position)
         val right = LiteralNode("World", TokenType.STRINGLITERAL, position)
@@ -294,5 +318,127 @@ class InterpreterTests {
         val interpreter = Interpreter()
         interpreter.evaluate(node)
         assertEquals(42, interpreter.variables["x"])
+    }
+
+    @Test
+    fun `test programmatic script execution`() {
+        val interpreter = Interpreter()
+
+        // Asignación
+        val assignNode =
+            AssignationNode("x", LiteralNode("10", TokenType.NUMBERLITERAL, position), TokenType.ASSIGNATION, position)
+        interpreter.evaluate(assignNode)
+
+        // Suma
+        val additionNode =
+            BinaryNode(
+                LiteralNode("x", TokenType.IDENTIFIER, position),
+                LiteralNode("5", TokenType.NUMBERLITERAL, position),
+                Token(TokenType.OPERATOR, "+", position, position),
+                position,
+            )
+        val result = interpreter.evaluate(additionNode)
+
+        // Verificar
+        assertEquals(15, result)
+        assertEquals(10, interpreter.variables["x"]) // Verificar que 'x' sigue siendo 10
+    }
+
+    @Test
+    fun `test programmatic block execution`() {
+        val interpreter = Interpreter()
+
+        val expr1 =
+            AssignationNode("a", LiteralNode("5", TokenType.NUMBERLITERAL, position), TokenType.ASSIGNATION, position)
+        val expr2 =
+            AssignationNode("b", LiteralNode("10", TokenType.NUMBERLITERAL, position), TokenType.ASSIGNATION, position)
+        val sumNode =
+            BinaryNode(
+                LiteralNode("a", TokenType.IDENTIFIER, position),
+                LiteralNode("b", TokenType.IDENTIFIER, position),
+                Token(TokenType.OPERATOR, "+", position, position),
+                position,
+            )
+
+        val block = BlockNode(listOf(expr1, expr2, sumNode), position)
+        val result = interpreter.evaluate(block)
+
+        assertEquals(15, result)
+    }
+
+    @Test
+    fun `test programmatic function execution`() {
+        val interpreter = Interpreter()
+
+        // Definir una función ficticia
+        val functionBody =
+            BinaryNode(
+                LiteralNode("x", TokenType.IDENTIFIER, position),
+                LiteralNode("5", TokenType.NUMBERLITERAL, position),
+                Token(TokenType.OPERATOR, "+", position, position),
+                position,
+            )
+        val functionNode = FunctionNode(TokenType.FUNCTION, functionBody, position)
+
+        // Asignar un valor a x
+        interpreter.variables["x"] = 10
+
+        // Ejecutar la función
+        val result = interpreter.evaluate(functionNode)
+
+        // Verificar
+        assertEquals(15, result) // 10 + 5
+    }
+
+    @Test
+    fun `test programmatic conditional flow`() {
+        val interpreter = Interpreter()
+
+        // Definir una condición que siempre se cumple
+        val condition = LiteralNode("true", TokenType.BOOLEAN, position)
+        val thenBlock =
+            AssignationNode("x", LiteralNode("10", TokenType.NUMBERLITERAL, position), TokenType.ASSIGNATION, position)
+        val elseBlock =
+            AssignationNode("x", LiteralNode("20", TokenType.NUMBERLITERAL, position), TokenType.ASSIGNATION, position)
+        val conditionalNode = ConditionalNode(condition, thenBlock, elseBlock, position)
+        assertEquals(10, interpreter.evaluate(conditionalNode))
+    }
+
+    @Test
+    fun `test programmatic script with multiple statements`() {
+        val interpreter = Interpreter()
+
+        // Declarar varias variables
+        interpreter.evaluate(
+            AssignationNode(
+                "x",
+                LiteralNode("10", TokenType.NUMBERLITERAL, position),
+                TokenType.ASSIGNATION,
+                position,
+            ),
+        )
+        interpreter.evaluate(
+            AssignationNode(
+                "y",
+                LiteralNode("20", TokenType.NUMBERLITERAL, position),
+                TokenType.ASSIGNATION,
+                position,
+            ),
+        )
+
+        // Sumar y asignar a otra variable
+        val sumNode =
+            BinaryNode(
+                LiteralNode("x", TokenType.IDENTIFIER, position),
+                LiteralNode("y", TokenType.IDENTIFIER, position),
+                Token(TokenType.OPERATOR, "+", position, position),
+                position,
+            )
+        interpreter.evaluate(AssignationNode("z", sumNode, TokenType.ASSIGNATION, position))
+
+        // Verificar que las variables están correctamente asignadas
+        assertEquals(10, interpreter.variables["x"])
+        assertEquals(20, interpreter.variables["y"])
+        assertEquals(30, interpreter.variables["z"])
     }
 }
