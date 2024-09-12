@@ -3,7 +3,7 @@ package linter
 import token.TokenPosition
 
 class LinterOutput {
-    private var isCorrect: Boolean = true
+    var isCorrect: Boolean = true
     private var brokenRules: MutableList<String> = mutableListOf()
 
     fun addBrokenRule(brokenRule: BrokenRule) {

@@ -7,7 +7,7 @@ enum class LinterVersion(val version: String) {
 
     companion object {
         fun fromString(version: String): LinterVersion? {
-            return values().find { it.version == version }
+            return entries.find { it.version == version }
         }
     }
 }
