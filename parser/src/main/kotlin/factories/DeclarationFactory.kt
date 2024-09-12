@@ -28,6 +28,7 @@ class DeclarationFactory : ASTFactory {
 
         return DeclarationNode(
             declType = keywordToken.getType(),
+            declKeyword = keywordToken.value,
             id = identifierToken.value,
             valType = dataTypeToken.getType(),
             expr = exprNode,

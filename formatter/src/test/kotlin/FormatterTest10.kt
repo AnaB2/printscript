@@ -1,21 +1,13 @@
 import ast.ASTNode
-import formatOperations.FormatAssignation
-import formatOperations.FormatBinary
-import formatOperations.FormatBlock
-import formatOperations.FormatConditional
-import formatOperations.FormatDeclaration
-import formatOperations.FormatFunction
-import formatOperations.FormatLiteral
-import formatOperations.FormatPrint
 import formatter.FormatterBuilderPS
 import org.example.lexer.Lexer
 import org.example.lexer.TokenMapper
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import parser.Parser
 import token.Token
-import kotlin.test.Test
 
-class FormatterTest {
+class FormatterTest10 {
     private val yamlPath = "src/test/resources/rules.yaml"
     private val lexer = Lexer(TokenMapper("1.0"))
     private val parser = Parser()
@@ -23,16 +15,7 @@ class FormatterTest {
     private val formatter =
         FormatterBuilderPS().build(
             yamlPath,
-            listOf(
-                FormatAssignation(),
-                FormatBinary(),
-                FormatBlock(),
-                FormatConditional(),
-                FormatDeclaration(),
-                FormatFunction(),
-                FormatLiteral(),
-                FormatPrint(),
-            ),
+            "1.0",
         )
 
     // DECLARACIÓN
@@ -110,20 +93,4 @@ class FormatterTest {
         val formatted = formatter.format(ast)
         assertEquals("let x : number = 42;\nlet y : number = 10;\nprintln(x + y);", formatted)
     }
-
-    // CONDICIONAL
-
-//    @Test
-//    fun `test formatter with conditional expression`(){
-//        val input = "if (x>2) {println(x)}"
-//        val tokens : List<Token> = lexer.execute(input)
-//        val ast : List<ASTNode> = parser.execute(tokens)
-//        val formatted = formatter.format(ast)
-//        assertEquals("if (x > 2) {\nprintln(x);\n}", formatted)
-//    }
-
-//    @Test
-//    fun `test canHandle should return true for nodes`() {
-//
-//    }
 }

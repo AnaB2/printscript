@@ -1,19 +1,5 @@
-import ast.LiteralNode
-import ast.PrintNode
-import linter.Linter
-import linter.LinterVersion
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
-import token.TokenPosition
-import token.TokenType
-
-
 class LinterTests {
-
-//    @Test
+    //    @Test
 //    fun `test read json successfully load rules`() {
 //
 //        val linter = Linter(LinterVersion.VERSION_1_1)
