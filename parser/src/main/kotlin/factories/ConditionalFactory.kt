@@ -24,7 +24,7 @@ class ConditionalFactory : ASTFactory {
         return ConditionalNode(
             condition = conditionNode,
             thenBlock = thenBlock ?: NilNode,
-            elseBlock = elseBlock ?: NilNode,
+            elseBlock = elseBlock,
             position = conditionNode.position,
         )
     }

@@ -3,7 +3,7 @@ plugins {
     id 'maven-publish'
 }
 
-group = 'com.github.AnaB2'
+group = 'com.github.anab2'
 version = '1.0.0-SNAPSHOT'
 
 

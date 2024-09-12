@@ -7,7 +7,7 @@ plugins {
  * For more detailed information on multi-project builds, please refer to https://docs.gradle.org/8.5/userguide/building_swift_projects.html in the Gradle documentation.
  */
 
-rootProject.name = 'PrintScript'
+rootProject.name = 'printscript'
 include ':lexer'
 include ':parser'
 include ':interpreter'
