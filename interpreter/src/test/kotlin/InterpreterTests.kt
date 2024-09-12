@@ -24,7 +24,7 @@ class InterpreterTests {
     fun `test number literal evaluation`() {
         val node = LiteralNode("42", TokenType.NUMBERLITERAL, position)
         val interpreter = Interpreter()
-        val result = interpreter.evaluate(node)
+        val result = interpreter.execute(node)
         assertEquals(42, result)
     }
 
@@ -32,7 +32,7 @@ class InterpreterTests {
     fun `test string literal evaluation`() {
         val node = LiteralNode("Hello, world!", TokenType.STRINGLITERAL, position)
         val interpreter = Interpreter()
-        val result = interpreter.evaluate(node)
+        val result = interpreter.execute(node)
         assertEquals("Hello, world!", result)
     }
 
@@ -41,8 +41,8 @@ class InterpreterTests {
         val trueNode = LiteralNode("true", TokenType.BOOLEAN, position)
         val falseNode = LiteralNode("false", TokenType.BOOLEAN, position)
         val interpreter = Interpreter()
-        assertEquals(true, interpreter.evaluate(trueNode))
-        assertEquals(false, interpreter.evaluate(falseNode))
+        assertEquals(true, interpreter.execute(trueNode))
+        assertEquals(false, interpreter.execute(falseNode))
     }
 
     @Test
@@ -52,7 +52,7 @@ class InterpreterTests {
         val operatorToken = Token(TokenType.OPERATOR, "+", position, position) // Create a token for "+"
         val node = BinaryNode(left, right, operatorToken, position)
         val interpreter = Interpreter()
-        val result = interpreter.evaluate(node)
+        val result = interpreter.execute(node)
         assertEquals(15, result)
     }
 
@@ -64,7 +64,7 @@ class InterpreterTests {
         val node = BinaryNode(left, right, operatorToken, position)
         val interpreter = Interpreter()
 
-        val result = interpreter.evaluate(node)
+        val result = interpreter.execute(node)
         assertEquals("105", result)
     }
 
@@ -76,7 +76,7 @@ class InterpreterTests {
         val node = BinaryNode(left, right, operatorToken, position)
         val interpreter = Interpreter()
 
-        val result = interpreter.evaluate(node)
+        val result = interpreter.execute(node)
         assertEquals("105", result)
     }
 
@@ -87,7 +87,7 @@ class InterpreterTests {
         val operatorToken = Token(TokenType.OPERATOR, "+", position, position) // Create a token for "+"
         val node = BinaryNode(left, right, operatorToken, position)
         val interpreter = Interpreter()
-        val result = interpreter.evaluate(node)
+        val result = interpreter.execute(node)
         assertEquals("HelloWorld", result)
     }
 
@@ -98,7 +98,7 @@ class InterpreterTests {
         val operatorToken = Token(TokenType.OPERATOR, "-", position, position) // Create a token for "-"
         val node = BinaryNode(left, right, operatorToken, position)
         val interpreter = Interpreter()
-        val result = interpreter.evaluate(node)
+        val result = interpreter.execute(node)
         assertEquals(10, result)
     }
 
@@ -109,7 +109,7 @@ class InterpreterTests {
         val operatorToken = Token(TokenType.OPERATOR, "*", position, position) // Create a token for "*"
         val node = BinaryNode(left, right, operatorToken, position)
         val interpreter = Interpreter()
-        val result = interpreter.evaluate(node)
+        val result = interpreter.execute(node)
         assertEquals(12, result)
     }
 
@@ -120,7 +120,7 @@ class InterpreterTests {
         val operatorToken = Token(TokenType.OPERATOR, "/", position, position) // Create a token for "/"
         val node = BinaryNode(left, right, operatorToken, position)
         val interpreter = Interpreter()
-        val result = interpreter.evaluate(node)
+        val result = interpreter.execute(node)
         assertEquals(5, result)
     }
 
@@ -132,7 +132,7 @@ class InterpreterTests {
         val node = BinaryNode(left, right, operatorToken, position)
         val interpreter = Interpreter()
         assertThrows(RuntimeException::class.java) {
-            interpreter.evaluate(node)
+            interpreter.execute(node)
         }
     }
 
@@ -141,7 +141,7 @@ class InterpreterTests {
         val expression = LiteralNode("42", TokenType.NUMBERLITERAL, position)
         val node = AssignationNode("x", expression, TokenType.ASSIGNATION, position)
         val interpreter = Interpreter()
-        interpreter.evaluate(node)
+        interpreter.execute(node)
         assertEquals(42, interpreter.variables["x"])
     }
 
@@ -155,7 +155,7 @@ class InterpreterTests {
         val outputStream = ByteArrayOutputStream()
         System.setOut(PrintStream(outputStream))
 
-        interpreter.evaluate(node)
+        interpreter.execute(node)
         assertEquals("Hello, world!", outputStream.toString().trim())
     }
 
@@ -172,7 +172,7 @@ class InterpreterTests {
         val outputStream = ByteArrayOutputStream()
         System.setOut(PrintStream(outputStream))
 
-        interpreter.evaluate(block)
+        interpreter.execute(block)
         assertEquals("10", outputStream.toString().trim())
     }
 
@@ -188,7 +188,7 @@ class InterpreterTests {
         val outputStream = ByteArrayOutputStream()
         System.setOut(PrintStream(outputStream))
 
-        interpreter.evaluate(node)
+        interpreter.execute(node)
         assertEquals("Condition is true", outputStream.toString().trim())
     }
 
@@ -204,7 +204,7 @@ class InterpreterTests {
         val outputStream = ByteArrayOutputStream()
         System.setOut(PrintStream(outputStream))
 
-        interpreter.evaluate(node)
+        interpreter.execute(node)
         assertEquals("Condition is false", outputStream.toString().trim())
     }
 
@@ -214,7 +214,7 @@ class InterpreterTests {
         val interpreter = Interpreter()
 
         assertThrows(RuntimeException::class.java) {
-            interpreter.evaluate(node)
+            interpreter.execute(node)
         }
     }
 
@@ -226,7 +226,7 @@ class InterpreterTests {
         val node = BinaryNode(left, right, operatorToken, position)
         val interpreter = Interpreter()
 
-        val result = interpreter.evaluate(node)
+        val result = interpreter.execute(node)
 
         // Assuming the result is a Boolean, we expect "10 > 5" to be true
         assertEquals(true, result)
@@ -241,7 +241,7 @@ class InterpreterTests {
         val interpreter = Interpreter()
 
         assertThrows(RuntimeException::class.java) {
-            interpreter.evaluate(node)
+            interpreter.execute(node)
         }
     }
 
@@ -253,7 +253,7 @@ class InterpreterTests {
         val node = BinaryNode(left, right, operatorToken, position)
         val interpreter = Interpreter()
 
-        val result = interpreter.evaluate(node)
+        val result = interpreter.execute(node)
 
         // Assuming the result is a Boolean, we expect "5 < 10" to be true
         assertEquals(true, result)
@@ -268,7 +268,7 @@ class InterpreterTests {
         val interpreter = Interpreter()
 
         assertDoesNotThrow {
-            interpreter.evaluate(node)
+            interpreter.execute(node)
         }
     }
 
@@ -281,7 +281,7 @@ class InterpreterTests {
         val interpreter = Interpreter()
 
         assertThrows(RuntimeException::class.java) {
-            interpreter.evaluate(node)
+            interpreter.execute(node)
         }
     }
 
@@ -294,7 +294,7 @@ class InterpreterTests {
         val interpreter = Interpreter()
 
         assertThrows(RuntimeException::class.java) {
-            interpreter.evaluate(node)
+            interpreter.execute(node)
         }
     }
 
@@ -308,7 +308,7 @@ class InterpreterTests {
         val outputStream = ByteArrayOutputStream()
         System.setOut(PrintStream(outputStream))
 
-        interpreter.evaluate(node)
+        interpreter.execute(node)
         assertEquals("Hello, world!", outputStream.toString().trim())
     }
 
@@ -317,7 +317,7 @@ class InterpreterTests {
         val expression = LiteralNode("42", TokenType.NUMBERLITERAL, position)
         val node = DeclarationNode(TokenType.KEYWORD, "x", TokenType.DATA_TYPE, expression, position)
         val interpreter = Interpreter()
-        interpreter.evaluate(node)
+        interpreter.execute(node)
         assertEquals(42, interpreter.variables["x"])
     }
 
@@ -328,7 +328,7 @@ class InterpreterTests {
         // Asignación
         val assignNode =
             AssignationNode("x", LiteralNode("10", TokenType.NUMBERLITERAL, position), TokenType.ASSIGNATION, position)
-        interpreter.evaluate(assignNode)
+        interpreter.execute(assignNode)
 
         // Suma
         val additionNode =
@@ -338,7 +338,7 @@ class InterpreterTests {
                 Token(TokenType.OPERATOR, "+", position, position),
                 position,
             )
-        val result = interpreter.evaluate(additionNode)
+        val result = interpreter.execute(additionNode)
 
         // Verificar
         assertEquals(15, result)
@@ -362,7 +362,7 @@ class InterpreterTests {
             )
 
         val block = BlockNode(listOf(expr1, expr2, sumNode), position)
-        val result = interpreter.evaluate(block)
+        val result = interpreter.execute(block)
 
         assertEquals(15, result)
     }
@@ -385,7 +385,7 @@ class InterpreterTests {
         interpreter.variables["x"] = 10
 
         // Ejecutar la función
-        val result = interpreter.evaluate(functionNode)
+        val result = interpreter.execute(functionNode)
 
         // Verificar
         assertEquals(15, result) // 10 + 5
@@ -402,7 +402,7 @@ class InterpreterTests {
         val elseBlock =
             AssignationNode("x", LiteralNode("20", TokenType.NUMBERLITERAL, position), TokenType.ASSIGNATION, position)
         val conditionalNode = ConditionalNode(condition, thenBlock, elseBlock, position)
-        assertEquals(10, interpreter.evaluate(conditionalNode))
+        assertEquals(10, interpreter.execute(conditionalNode))
     }
 
     @Test
@@ -410,7 +410,7 @@ class InterpreterTests {
         val interpreter = Interpreter()
 
         // Declarar varias variables
-        interpreter.evaluate(
+        interpreter.execute(
             AssignationNode(
                 "x",
                 LiteralNode("10", TokenType.NUMBERLITERAL, position),
@@ -418,7 +418,7 @@ class InterpreterTests {
                 position,
             ),
         )
-        interpreter.evaluate(
+        interpreter.execute(
             AssignationNode(
                 "y",
                 LiteralNode("20", TokenType.NUMBERLITERAL, position),
@@ -435,7 +435,7 @@ class InterpreterTests {
                 Token(TokenType.OPERATOR, "+", position, position),
                 position,
             )
-        interpreter.evaluate(AssignationNode("z", sumNode, TokenType.ASSIGNATION, position))
+        interpreter.execute(AssignationNode("z", sumNode, TokenType.ASSIGNATION, position))
 
         // Verificar que las variables están correctamente asignadas
         assertEquals(10, interpreter.variables["x"])

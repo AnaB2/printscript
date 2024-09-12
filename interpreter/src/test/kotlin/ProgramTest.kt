@@ -35,7 +35,7 @@ class ProgramTest {
 
         // Evaluate each AST node
         for (node in astNodes) {
-            interpreter.evaluate(node)
+            interpreter.execute(node)
         }
 
         // Check the output

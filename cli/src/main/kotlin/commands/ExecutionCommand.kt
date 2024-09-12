@@ -18,7 +18,7 @@ class ExecutionCommand(private val source: String, private val version: String, 
 
             val interpreter = Interpreter()
             for (node in astNodes) {
-                interpreter.evaluate(node)
+                interpreter.execute(node)
             }
 
             println("Execution finished!")
