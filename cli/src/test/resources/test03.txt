@@ -1,2 +1,2 @@
-let mynumber : number = 10;
-println (mynumber);
+let my_number : number = 10;
+println (my_number);

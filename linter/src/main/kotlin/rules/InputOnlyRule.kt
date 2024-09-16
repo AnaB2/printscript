@@ -28,7 +28,7 @@ class InputOnlyRule(
     }
 
     private fun isReadInputType(token: Token): Boolean {
-        return token.getType() == TokenType.FUNCTION && token.value.lowercase() == "readinput"
+        return token.getType() == TokenType.FUNCTION && token.value.lowercase() == "inputonly"
     }
 
     private fun containsExpression(tokens: List<Token>): Boolean {
