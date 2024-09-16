@@ -35,7 +35,7 @@ class RuleFactory() {
                 "camelcase" -> rules.add(CamelCaseRule())
                 "snakecase" -> rules.add(SnakeCaseRule())
                 "printonly" -> rules.add(PrintOnlyRule())
-                "readinput" -> rules.add(InputOnlyRule())
+                "inputonly" -> rules.add(InputOnlyRule())
                 else -> {
                     throw IllegalArgumentException("Rule not available for this version")
                 }
