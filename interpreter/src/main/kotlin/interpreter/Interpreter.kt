@@ -66,7 +66,14 @@ class Interpreter {
         val leftValue = execute(node.left) ?: throw RuntimeException("Invalid left operand")
         val rightValue = execute(node.right) ?: throw RuntimeException("Invalid right operand")
 
-        val operator = node.operator.value // This should be the actual operator symbol like "+", "-", etc.
+        val operator = node.operator.value // Esto debería ser el símbolo del operador como "+", "-", etc.
+
+        // Verificar si alguno de los operandos es una cadena y se intenta realizar una operación aritmética
+        if (leftValue is String || rightValue is String) {
+            when (operator) {
+                "*", "/", "+", "-" -> throw RuntimeException("Invalid operation: cannot perform arithmetic with strings")
+            }
+        }
 
         return when (operator) {
             "+" -> handleAddition(leftValue, rightValue)
@@ -140,6 +147,9 @@ class Interpreter {
         leftValue: Any,
         rightValue: Any,
     ): Any? {
+        if (leftValue is String || rightValue is String) {
+            throw RuntimeException("Invalid operation: cannot multiply a string by a number")
+        }
         return when {
             leftValue is Int && rightValue is Int -> leftValue * rightValue
             leftValue is Float && rightValue is Float -> leftValue * rightValue
@@ -156,6 +166,9 @@ class Interpreter {
         leftValue: Any,
         rightValue: Any,
     ): Any? {
+        if (leftValue is String || rightValue is String) {
+            throw RuntimeException("Invalid operation: cannot multiply a string by a number")
+        }
         return when {
             leftValue is Int && rightValue is Int -> {
                 if (rightValue == 0) throw RuntimeException("Division by zero")
@@ -191,12 +204,36 @@ class Interpreter {
 
     private fun handleAssignment(node: AssignationNode): Any? {
         val value = execute(node.expression) ?: throw RuntimeException("Invalid assignment in Assignment")
+
+        // Verifica si el valor asignado es del tipo correcto
+        val expectedType =
+            when (val existingValue = variables[node.id]) {
+                is Int -> TokenType.NUMBERLITERAL
+                is String -> TokenType.STRINGLITERAL
+                else -> throw RuntimeException("Unknown type for variable ${node.id}")
+            }
+
+        if ((expectedType == TokenType.NUMBERLITERAL && value !is Int) ||
+            (expectedType == TokenType.STRINGLITERAL && value !is String)
+        ) {
+            throw RuntimeException("Invalid expression for type ${expectedType.name.toLowerCase()}")
+        }
+
         variables[node.id] = value
         return value
     }
 
     private fun handleDeclaration(node: DeclarationNode): Any? {
         val value = execute(node.expr) ?: throw RuntimeException("Invalid assignment in Declaration")
+
+        // Valida tipos antes de asignar
+        if (node.declType == TokenType.NUMBERLITERAL && value !is Int) {
+            throw RuntimeException("Invalid expression for type number")
+        }
+        if (node.declType == TokenType.STRINGLITERAL && value !is String) {
+            throw RuntimeException("Invalid expression for type string")
+        }
+
         variables[node.id] = value
         return value
     }

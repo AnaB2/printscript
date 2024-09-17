@@ -48,6 +48,9 @@ class TokenMapper(private val version: String) {
     }
 
     fun classify(input: String): TokenType {
+        if (version == "1.0" && input == "const") {
+            throw IllegalArgumentException("Const declarations are not allowed in version 1.0")
+        }
         if (input.isBlank()) {
             return TokenType.UNKNOWN
         }

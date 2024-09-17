@@ -442,4 +442,59 @@ class InterpreterTests {
         assertEquals(20, interpreter.variables["y"])
         assertEquals(30, interpreter.variables["z"])
     }
+
+    @Test
+    fun `test invalid expression for type`() {
+        val interpreter = Interpreter()
+
+        // Crear un nodo de asignación con tipo 'number' pero con una expresión no válida
+        val invalidExpressionNode =
+            AssignationNode(
+                id = "pi",
+                expression = LiteralNode("hola", TokenType.STRINGLITERAL, position),
+                valType = TokenType.ASSIGNATION,
+                position = position,
+            )
+
+        // Ejecutar y esperar una excepción
+        assertThrows(RuntimeException::class.java) {
+            interpreter.execute(invalidExpressionNode)
+        }
+    }
+
+    @Test
+    fun `test invalid arithmetic operation with strings`() {
+        val left = LiteralNode("hello", TokenType.STRINGLITERAL, position)
+        val right = LiteralNode("5", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "+", position, position) // Crear un token para "*"
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter()
+
+        // Ejecutar y esperar una excepción
+        val exception =
+            assertThrows(RuntimeException::class.java) {
+                interpreter.execute(node)
+            }
+
+        // Verificar que el mensaje de la excepción es el correcto
+        assert(exception.message?.contains("Invalid operation: cannot perform arithmetic with strings") == true)
+    }
+
+    @Test
+    fun `test invalid arithmetic operation with strings2`() {
+        val left = LiteralNode("hello", TokenType.STRINGLITERAL, position)
+        val right = LiteralNode("5", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "*", position, position) // Crear un token para "*"
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter()
+
+        // Ejecutar y esperar una excepción
+        val exception =
+            assertThrows(RuntimeException::class.java) {
+                interpreter.execute(node)
+            }
+
+        // Verificar que el mensaje de la excepción es el correcto
+        assert(exception.message?.contains("Invalid operation: cannot perform arithmetic with strings") == true)
+    }
 }
