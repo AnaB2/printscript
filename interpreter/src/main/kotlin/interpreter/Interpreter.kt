@@ -14,6 +14,7 @@ import token.TokenType
 
 class Interpreter {
     val variables = mutableMapOf<String, Any>()
+    private val printBuffer = StringBuilder()
 
     fun execute(node: ASTNode): Any? {
         return when (node) {
@@ -109,6 +110,12 @@ class Interpreter {
             leftValue is String && rightValue is String -> leftValue + rightValue
             leftValue is Int && rightValue is String -> (leftValue.toString() + rightValue)
             leftValue is String && rightValue is Int -> (leftValue + rightValue.toString())
+            leftValue is Float && rightValue is Float -> leftValue + rightValue
+            leftValue is Double && rightValue is Double -> leftValue + rightValue
+            leftValue is Int && rightValue is Float -> leftValue.toFloat() + rightValue
+            leftValue is Float && rightValue is Int -> leftValue + rightValue.toFloat()
+            leftValue is Int && rightValue is Double -> leftValue.toDouble() + rightValue
+            leftValue is Double && rightValue is Int -> leftValue + rightValue.toDouble()
             else -> throw RuntimeException("Unsupported operands for +")
         }
     }
@@ -117,10 +124,15 @@ class Interpreter {
         leftValue: Any,
         rightValue: Any,
     ): Any? {
-        return if (leftValue is Int && rightValue is Int) {
-            leftValue - rightValue
-        } else {
-            throw RuntimeException("Unsupported operands for -")
+        return when {
+            leftValue is Int && rightValue is Int -> leftValue - rightValue
+            leftValue is Float && rightValue is Float -> leftValue - rightValue
+            leftValue is Double && rightValue is Double -> leftValue - rightValue
+            leftValue is Int && rightValue is Float -> leftValue.toFloat() - rightValue
+            leftValue is Float && rightValue is Int -> leftValue - rightValue.toFloat()
+            leftValue is Int && rightValue is Double -> leftValue.toDouble() - rightValue
+            leftValue is Double && rightValue is Int -> leftValue - rightValue.toDouble()
+            else -> throw RuntimeException("Unsupported operands for -")
         }
     }
 
@@ -128,14 +140,15 @@ class Interpreter {
         leftValue: Any,
         rightValue: Any,
     ): Any? {
-        return if (leftValue is Int && rightValue is Int) {
-            leftValue * rightValue
-        } else if (leftValue is Float && rightValue is Float) {
-            leftValue * rightValue
-        } else if (leftValue is Double && rightValue is Double) {
-            leftValue * rightValue
-        } else {
-            throw RuntimeException("Unsupported operands for multiplication: $leftValue, $rightValue")
+        return when {
+            leftValue is Int && rightValue is Int -> leftValue * rightValue
+            leftValue is Float && rightValue is Float -> leftValue * rightValue
+            leftValue is Double && rightValue is Double -> leftValue * rightValue
+            leftValue is Int && rightValue is Float -> leftValue.toFloat() * rightValue
+            leftValue is Float && rightValue is Int -> leftValue * rightValue.toFloat()
+            leftValue is Int && rightValue is Double -> leftValue.toDouble() * rightValue
+            leftValue is Double && rightValue is Int -> leftValue * rightValue.toDouble()
+            else -> throw RuntimeException("Unsupported operands for *")
         }
     }
 
@@ -143,11 +156,36 @@ class Interpreter {
         leftValue: Any,
         rightValue: Any,
     ): Any? {
-        return if (leftValue is Int && rightValue is Int) {
-            if (rightValue == 0) throw RuntimeException("Division by zero")
-            leftValue / rightValue
-        } else {
-            throw RuntimeException("Unsupported operands for /")
+        return when {
+            leftValue is Int && rightValue is Int -> {
+                if (rightValue == 0) throw RuntimeException("Division by zero")
+                leftValue / rightValue
+            }
+            leftValue is Float && rightValue is Float -> {
+                if (rightValue == 0f) throw RuntimeException("Division by zero")
+                leftValue / rightValue
+            }
+            leftValue is Double && rightValue is Double -> {
+                if (rightValue == 0.0) throw RuntimeException("Division by zero")
+                leftValue / rightValue
+            }
+            leftValue is Int && rightValue is Float -> {
+                if (rightValue == 0f) throw RuntimeException("Division by zero")
+                leftValue.toFloat() / rightValue
+            }
+            leftValue is Float && rightValue is Int -> {
+                if (rightValue == 0) throw RuntimeException("Division by zero")
+                leftValue / rightValue.toFloat()
+            }
+            leftValue is Int && rightValue is Double -> {
+                if (rightValue == 0.0) throw RuntimeException("Division by zero")
+                leftValue.toDouble() / rightValue
+            }
+            leftValue is Double && rightValue is Int -> {
+                if (rightValue == 0) throw RuntimeException("Division by zero")
+                leftValue / rightValue.toDouble()
+            }
+            else -> throw RuntimeException("Unsupported operands for /")
         }
     }
 
@@ -165,8 +203,22 @@ class Interpreter {
 
     private fun handlePrint(node: PrintNode): Any? {
         val value = execute(node.expression)
-        println(value)
+
+        // Accumulate the output in a buffer
+        printBuffer.append(value).append("\n")
+
+        // Flush the buffer periodically (e.g., after every print)
+        flushOutput()
+
         return value
+    }
+
+    private fun flushOutput() {
+        // Write the content to the console (or any output stream)
+        print(printBuffer.toString())
+
+        // Clear the buffer after flushing
+        printBuffer.clear()
     }
 
     private fun handleBlock(node: BlockNode): Any? {
