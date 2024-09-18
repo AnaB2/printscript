@@ -44,9 +44,16 @@ class Interpreter {
 
     private fun handleLiteral(node: LiteralNode): Any? {
         return when (node.type) {
-            TokenType.NUMBERLITERAL ->
-                node.value.toIntOrNull()
-                    ?: throw RuntimeException("Invalid number literal: ${node.value}")
+            TokenType.NUMBERLITERAL -> {
+                when {
+                    node.value.contains('.') ->
+                        node.value.toDoubleOrNull()
+                            ?: throw RuntimeException("Invalid number literal: ${node.value}")
+                    else ->
+                        node.value.toIntOrNull()
+                            ?: throw RuntimeException("Invalid number literal: ${node.value}")
+                }
+            }
             TokenType.STRINGLITERAL -> node.value
             TokenType.BOOLEAN ->
                 when (node.value) {
@@ -167,7 +174,7 @@ class Interpreter {
         rightValue: Any,
     ): Any? {
         if (leftValue is String || rightValue is String) {
-            throw RuntimeException("Invalid operation: cannot multiply a string by a number")
+            throw RuntimeException("Invalid operation: cannot divide a string by a number")
         }
         return when {
             leftValue is Int && rightValue is Int -> {
@@ -240,22 +247,9 @@ class Interpreter {
 
     private fun handlePrint(node: PrintNode): Any? {
         val value = execute(node.expression)
-
-        // Accumulate the output in a buffer
-        printBuffer.append(value).append("\n")
-
-        // Flush the buffer periodically (e.g., after every print)
-        flushOutput()
-
+        // Asegúrate de que el valor se convierta a una cadena y añade un salto de línea
+        printBuffer.append(value.toString()).append("\n")
         return value
-    }
-
-    private fun flushOutput() {
-        // Write the content to the console (or any output stream)
-        print(printBuffer.toString())
-
-        // Clear the buffer after flushing
-        printBuffer.clear()
     }
 
     private fun handleBlock(node: BlockNode): Any? {

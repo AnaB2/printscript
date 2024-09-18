@@ -497,4 +497,14 @@ class InterpreterTests {
         // Verificar que el mensaje de la excepción es el correcto
         assert(exception.message?.contains("Invalid operation: cannot perform arithmetic with strings") == true)
     }
+
+    @Test
+    fun `test concatenation of StringNumber and Number`() {
+        val left = LiteralNode("2", TokenType.STRINGLITERAL, position)
+        val right = LiteralNode("5", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "+", position, position) // Create a token for "+"
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter()
+        assertEquals("25", interpreter.execute(node))
+    }
 }
