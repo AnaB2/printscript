@@ -44,16 +44,9 @@ class Interpreter {
 
     private fun handleLiteral(node: LiteralNode): Any? {
         return when (node.type) {
-            TokenType.NUMBERLITERAL -> {
-                when {
-                    node.value.contains('.') ->
-                        node.value.toDoubleOrNull()
-                            ?: throw RuntimeException("Invalid number literal: ${node.value}")
-                    else ->
-                        node.value.toIntOrNull()
-                            ?: throw RuntimeException("Invalid number literal: ${node.value}")
-                }
-            }
+            TokenType.NUMBERLITERAL ->
+                node.value.toIntOrNull()
+                    ?: throw RuntimeException("Invalid number literal: ${node.value}")
             TokenType.STRINGLITERAL -> node.value
             TokenType.BOOLEAN ->
                 when (node.value) {
@@ -75,10 +68,11 @@ class Interpreter {
 
         val operator = node.operator.value // Esto debería ser el símbolo del operador como "+", "-", etc.
 
-        // Verificar si alguno de los operandos es una cadena y se intenta realizar una operación aritmética
+        // Manejar la concatenación de cadenas
         if (leftValue is String || rightValue is String) {
-            when (operator) {
-                "*", "/", "+", "-" -> throw RuntimeException("Invalid operation: cannot perform arithmetic with strings")
+            return when (operator) {
+                "+" -> handleAddition(leftValue, rightValue)
+                else -> throw RuntimeException("Invalid operation: cannot perform $operator with strings")
             }
         }
 
@@ -174,7 +168,7 @@ class Interpreter {
         rightValue: Any,
     ): Any? {
         if (leftValue is String || rightValue is String) {
-            throw RuntimeException("Invalid operation: cannot divide a string by a number")
+            throw RuntimeException("Invalid operation: cannot multiply a string by a number")
         }
         return when {
             leftValue is Int && rightValue is Int -> {
@@ -212,20 +206,24 @@ class Interpreter {
     private fun handleAssignment(node: AssignationNode): Any? {
         val value = execute(node.expression) ?: throw RuntimeException("Invalid assignment in Assignment")
 
-        // Verifica si el valor asignado es del tipo correcto
-        val expectedType =
-            when (val existingValue = variables[node.id]) {
-                is Int -> TokenType.NUMBERLITERAL
-                is String -> TokenType.STRINGLITERAL
-                else -> throw RuntimeException("Unknown type for variable ${node.id}")
-            }
+        // Verifica si la variable ya está declarada
+        if (variables.containsKey(node.id)) {
+            // Si la variable ya existe, verifica si el valor asignado es del tipo correcto
+            val expectedType =
+                when (val existingValue = variables[node.id]) {
+                    is Int -> TokenType.NUMBERLITERAL
+                    is String -> TokenType.STRINGLITERAL
+                    else -> throw RuntimeException("Unknown type for variable ${node.id}")
+                }
 
-        if ((expectedType == TokenType.NUMBERLITERAL && value !is Int) ||
-            (expectedType == TokenType.STRINGLITERAL && value !is String)
-        ) {
-            throw RuntimeException("Invalid expression for type ${expectedType.name.toLowerCase()}")
+            if ((expectedType == TokenType.NUMBERLITERAL && value !is Int) ||
+                (expectedType == TokenType.STRINGLITERAL && value !is String)
+            ) {
+                throw RuntimeException("Invalid expression for type ${expectedType.name.toLowerCase()}")
+            }
         }
 
+        // Asigna el valor a la variable (si es nueva o si ya fue validada)
         variables[node.id] = value
         return value
     }
@@ -247,9 +245,19 @@ class Interpreter {
 
     private fun handlePrint(node: PrintNode): Any? {
         val value = execute(node.expression)
-        // Asegúrate de que el valor se convierta a una cadena y añade un salto de línea
+
+        // Asegúrate de que el valor se convierta a una cadena antes de acumularlo
         printBuffer.append(value.toString()).append("\n")
+
+        // Flushing el buffer para garantizar que se imprima el valor acumulado
+        flushOutput()
         return value
+    }
+
+    private fun flushOutput() {
+        // Imprimir el contenido del buffer y luego limpiarlo
+        println(printBuffer.toString())
+        printBuffer.setLength(0) // Limpiar el buffer
     }
 
     private fun handleBlock(node: BlockNode): Any? {

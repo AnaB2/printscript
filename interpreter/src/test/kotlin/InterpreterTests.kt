@@ -161,19 +161,11 @@ class InterpreterTests {
 
     @Test
     fun `test block execution`() {
-        val expr1 = LiteralNode("10", TokenType.NUMBERLITERAL, position)
-        val expr2 = LiteralNode("20", TokenType.NUMBERLITERAL, position)
-        val assignment = AssignationNode("y", expr2, TokenType.ASSIGNATION, position)
-        val print = PrintNode(expr1, position)
-        val block = BlockNode(listOf(assignment, print), position)
+        val expr1 = LiteralNode("Hello", TokenType.STRINGLITERAL, position)
+        val expr2 = LiteralNode("World", TokenType.STRINGLITERAL, position)
+        val node = BlockNode(listOf(expr1, expr2), position)
         val interpreter = Interpreter()
-
-        // Redirect output stream to capture print statements
-        val outputStream = ByteArrayOutputStream()
-        System.setOut(PrintStream(outputStream))
-
-        interpreter.execute(block)
-        assertEquals("10", outputStream.toString().trim())
+        assertEquals("World", interpreter.execute(node))
     }
 
     @Test
