@@ -2,7 +2,6 @@ package formatOperations
 
 import ast.ASTNode
 import ast.DeclarationNode
-import ast.LiteralNode
 import formatOperations.commons.HandleSpace
 import formatter.Formatter
 import token.TokenType
@@ -23,10 +22,25 @@ class FormatDeclaration(
     ): String {
         if (!canHandle(node)) error("Node isn't a DeclarationNode")
         val declarationNode = node as DeclarationNode
-        val declKeywordValue = allowedDeclarationKeyword(declarationNode.declKeyword) // let or const
+        val declKeywordValue =
+            if (allowedDeclarationKeyword(
+                    declarationNode.declValue,
+                )
+            ) {
+                declarationNode.declValue
+            } else {
+                throw UnsupportedOperationException(
+                    "Unsupported declaration type ${declarationNode.declValue}",
+                ) // let or const
+            }
         val id = declarationNode.id
-        val exprNode = declarationNode.expr as LiteralNode
-        val valType = defineValueType(exprNode.type) // boolean, string or number
+
+        val formatOperationsList = listOf(FormatLiteral(), FormatBinary())
+        val exprValue =
+            formatOperationsList.find { it -> it.canHandle(declarationNode.expr) }
+                ?.format(declarationNode.expr, formatter)
+
+        val valType = declarationNode.dataTypeValue // boolean, string or number
 
         // handle spaces
         val spaceBeforeColon = formatter.getRules()["spaceBeforeColon"] as Boolean
@@ -35,20 +49,14 @@ class FormatDeclaration(
 
         val equal = handleSpace.handleSpace("=", spaceAroundEquals, spaceAroundEquals)
         val colon = handleSpace.handleSpace(":", spaceBeforeColon, spaceAfterColon)
-        val exprValue = formatter.format(exprNode)
 
         return "$declKeywordValue $id$colon$valType$equal$exprValue"
     }
 
-    private fun allowedDeclarationKeyword(declKeyword: String): String {
-        if (allowedDeclarationKeywords.contains(
-                declKeyword,
-            )
-        ) {
-            return declKeyword
-        } else {
-            throw UnsupportedOperationException("Unsupported declaration type $declKeyword")
-        }
+    private fun allowedDeclarationKeyword(declKeyword: String): Boolean {
+        return allowedDeclarationKeywords.contains(
+            declKeyword,
+        )
     }
 
     private fun defineValueType(valueType: TokenType): String {
