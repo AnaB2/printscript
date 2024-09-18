@@ -10,6 +10,7 @@ repositories {
 }
 
 dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
     implementation 'org.codehaus.groovy:groovy-all:3.0.9' // Especificar la versión de Groovy
     implementation 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.10'
     implementation 'org.jlleitschuh.gradle:ktlint-gradle:12.1.0'

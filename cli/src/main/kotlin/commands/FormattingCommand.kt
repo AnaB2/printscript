@@ -3,14 +3,6 @@ package commands
 import cli.handleError
 import cli.showProgress
 import cli.tokenize
-import formatOperations.FormatAssignation
-import formatOperations.FormatBinary
-import formatOperations.FormatBlock
-import formatOperations.FormatConditional
-import formatOperations.FormatDeclaration
-import formatOperations.FormatFunction
-import formatOperations.FormatLiteral
-import formatOperations.FormatPrint
 import formatter.FormatterBuilderPS
 import parser.Parser
 
@@ -45,16 +37,7 @@ class FormattingCommand(private val source: String, private val version: String,
     private fun buildFormatter() =
         FormatterBuilderPS().build(
             "C:/Users/vgian/PrintScript/cli/src/test/resources/StandardRules.json",
-            listOf(
-                FormatAssignation(),
-                FormatBinary(),
-                FormatBlock(),
-                FormatConditional(),
-                FormatDeclaration(),
-                FormatFunction(),
-                FormatLiteral(),
-                FormatPrint(),
-            ),
+            "1.1",
         )
 
     // Print the changes between original and formatted code
