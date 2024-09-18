@@ -24,9 +24,10 @@ class DeclarationFactory : ASTFactory {
         val expressionTokens: List<Token>? = findExpressionTokens(initialPositionExpression, tokens)
 
         val expressionNode: ASTNode = if (expressionTokens == null) NilNode else findExpressionNode(expressionTokens)
-
         val dataTypeValue = dataTypeToken.value
-        // chequear si es correcto
+
+        // chequear consistencia entre tipo de dato y valor de la expresión
+        if (expressionTokens != null) checkConsistencyOfExpressionWithDataType(dataTypeValue, expressionTokens)
 
         return DeclarationNode(
             declType = keywordToken.getType(),
@@ -41,6 +42,38 @@ class DeclarationFactory : ASTFactory {
 
     override fun canHandle(tokens: List<Token>): Boolean {
         return tokens.any { it.getType() == TokenType.KEYWORD }
+    }
+
+    private fun checkConsistencyOfExpressionWithDataType(
+        dataTypeValue: String,
+        expressionTokens: List<Token>,
+    ) {
+        when (dataTypeValue) {
+            "number" ->
+                if (expressionTokens.any {
+                            it ->
+                        it.getType() == TokenType.BOOLEANLITERAL || it.getType() == TokenType.STRINGLITERAL
+                    }
+                ) {
+                    throw Exception("declared data type $dataTypeValue is inconsistent with the expression")
+                }
+            "string" ->
+                if (!expressionTokens.any {
+                            it ->
+                        it.getType()==TokenType.STRINGLITERAL
+                    }
+                ) {
+                    throw Exception("declared data type $dataTypeValue is inconsistent with the expression")
+                }
+            "boolean" ->
+                if (expressionTokens.any {
+                            it ->
+                        it.getType() == TokenType.NUMBERLITERAL || it.getType() == TokenType.STRINGLITERAL
+                    }
+                ) {
+                    throw Exception("declared data type $dataTypeValue is inconsistent with the expression")
+                }
+        }
     }
 
     private fun findExpressionTokens(
