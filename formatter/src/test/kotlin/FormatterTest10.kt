@@ -83,14 +83,14 @@ class FormatterTest10 {
     @Test
     fun `test formatter with assignation, declaration and println`() {
         val input = """
-            let x:number=42;
-            let y:number=10;
+            let x:number=40+1;
+            let y:number=10+1;
             println(x+y);
             """
         val tokens = lexer.execute(input)
         val ast = parser.execute(tokens)
 
         val formatted = formatter.format(ast)
-        assertEquals("let x : number = 42;\nlet y : number = 10;\nprintln(x + y);", formatted)
+        assertEquals("let x : number = 40 + 1;\nlet y : number = 10 + 1;\nprintln(x + y);", formatted)
     }
 }

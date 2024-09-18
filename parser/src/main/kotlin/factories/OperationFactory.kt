@@ -10,8 +10,11 @@ class OperationFactory {
         if (tokens.size == 1) {
             return createLiteralNode(tokens[0])
         }
+        if (tokens.first().value == "(" && tokens.last().value == ")") {
+            return createAST(tokens.subList(1, tokens.size - 1))
+        }
         for (token in tokens) {
-            if (isAdditionOrSubtraction(token)) {
+            if (isMultiplicationOrDivision(token)) {
                 return BinaryNode(
                     left = createAST(tokens.subList(0, tokens.indexOf(token))),
                     right = createAST(tokens.subList(tokens.indexOf(token) + 1, tokens.size)),
@@ -21,7 +24,7 @@ class OperationFactory {
             }
         }
         for (token in tokens) {
-            if (isMultiplicationOrDivision(token)) {
+            if (isAdditionOrSubtraction(token)) {
                 return BinaryNode(
                     left = createAST(tokens.subList(0, tokens.indexOf(token))),
                     right = createAST(tokens.subList(tokens.indexOf(token) + 1, tokens.size)),
