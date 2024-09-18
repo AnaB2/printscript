@@ -8,6 +8,7 @@ import org.example.lexer.Lexer
 import org.example.lexer.TokenMapper
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import parser.Parser
 import token.Token
 import token.TokenPosition
@@ -185,5 +186,32 @@ class ParserTests {
         } else if (expressionNode is LiteralNode) {
             assertEquals("x", expressionNode.value)
         }
+    }
+
+    @Test
+    fun `test parser with lexer input, data type inconsistent with the expression`() {
+        val input1 =
+            """
+            let x:number = "hola"
+            """.trimIndent()
+
+        val input2 =
+            """
+            let x:string = 1
+            """.trimIndent()
+
+        val tokenMapper = TokenMapper("1.0")
+        val lexer = Lexer(tokenMapper)
+
+        val tokens1 = lexer.execute(input1)
+        val tokens2 =
+            lexer.execute(
+                input2,
+            )
+        val parser = Parser()
+
+        // Assert that a specific exception is thrown
+        assertThrows<Exception> { parser.execute(tokens1) }
+        assertThrows<Exception> { parser.execute(tokens2) }
     }
 }
