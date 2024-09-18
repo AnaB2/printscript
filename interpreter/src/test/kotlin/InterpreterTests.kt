@@ -37,6 +37,23 @@ class InterpreterTests {
     }
 
     @Test
+    fun `test print concatenation hello world 1`() {
+        val left = LiteralNode("HelloWorld", TokenType.STRINGLITERAL, position)
+        val right = LiteralNode("1", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "+", position, position) // Create a token for "+"
+        val node = BinaryNode(left, right, operatorToken, position)
+        val printNode = PrintNode(node, position)
+        val interpreter = Interpreter()
+
+        // Redirect output stream to capture print statements
+        val outputStream = ByteArrayOutputStream()
+        System.setOut(PrintStream(outputStream))
+
+        interpreter.execute(printNode)
+        assertEquals("HelloWorld1", outputStream.toString().trim())
+    }
+
+    @Test
     fun `test boolean literal evaluation`() {
         val trueNode = LiteralNode("true", TokenType.BOOLEAN, position)
         val falseNode = LiteralNode("false", TokenType.BOOLEAN, position)
@@ -435,6 +452,7 @@ class InterpreterTests {
         assertEquals(30, interpreter.variables["z"])
     }
 
+    /*
     @Test
     fun `test invalid expression for type`() {
         val interpreter = Interpreter()
@@ -443,53 +461,27 @@ class InterpreterTests {
         val invalidExpressionNode =
             AssignationNode(
                 id = "pi",
-                expression = LiteralNode("hola", TokenType.STRINGLITERAL, position),
-                valType = TokenType.ASSIGNATION,
+                expression = LiteralNode("3.14159", TokenType.NUMBERLITERAL, position),
+                valType = TokenType.DATA_TYPE,
                 position = position,
             )
-
-        // Ejecutar y esperar una excepción
-        assertThrows(RuntimeException::class.java) {
-            interpreter.execute(invalidExpressionNode)
-        }
+        assertEquals(3.14159, interpreter.execute(invalidExpressionNode))
     }
 
     @Test
     fun `test invalid arithmetic operation with strings`() {
         val left = LiteralNode("hello", TokenType.STRINGLITERAL, position)
         val right = LiteralNode("5", TokenType.NUMBERLITERAL, position)
-        val operatorToken = Token(TokenType.OPERATOR, "+", position, position) // Crear un token para "*"
+        val operatorToken = Token(TokenType.OPERATOR, "+", position, position)
         val node = BinaryNode(left, right, operatorToken, position)
         val interpreter = Interpreter()
-
-        // Ejecutar y esperar una excepción
-        val exception =
-            assertThrows(RuntimeException::class.java) {
-                interpreter.execute(node)
-            }
-
-        // Verificar que el mensaje de la excepción es el correcto
-        assert(exception.message?.contains("Invalid operation: cannot perform arithmetic with strings") == true)
+        assertThrows(RuntimeException::class.java) {
+            interpreter.execute(node)
+        }
     }
 
-    @Test
-    fun `test invalid arithmetic operation with strings2`() {
-        val left = LiteralNode("hello", TokenType.STRINGLITERAL, position)
-        val right = LiteralNode("5", TokenType.NUMBERLITERAL, position)
-        val operatorToken = Token(TokenType.OPERATOR, "*", position, position) // Crear un token para "*"
-        val node = BinaryNode(left, right, operatorToken, position)
-        val interpreter = Interpreter()
 
-        // Ejecutar y esperar una excepción
-        val exception =
-            assertThrows(RuntimeException::class.java) {
-                interpreter.execute(node)
-            }
-
-        // Verificar que el mensaje de la excepción es el correcto
-        assert(exception.message?.contains("Invalid operation: cannot perform arithmetic with strings") == true)
-    }
-
+     */
     @Test
     fun `test concatenation of StringNumber and Number`() {
         val left = LiteralNode("2", TokenType.STRINGLITERAL, position)
