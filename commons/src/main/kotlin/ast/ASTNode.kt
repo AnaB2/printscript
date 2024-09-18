@@ -28,9 +28,10 @@ data class PrintNode(
 
 data class DeclarationNode(
     val declType: TokenType,
-    val declKeyword: String,
+    val declValue: String,
     val id: String,
-    val valType: TokenType,
+    val dataType: TokenType,
+    val dataTypeValue: String,
     val expr: ASTNode,
     override val position: TokenPosition,
 ) : ASTNode()

@@ -315,7 +315,7 @@ class InterpreterTests {
     @Test
     fun `test declaration node`() {
         val expression = LiteralNode("42", TokenType.NUMBERLITERAL, position)
-        val node = DeclarationNode(TokenType.KEYWORD, "let", "x", TokenType.DATA_TYPE, expression, position)
+        val node = DeclarationNode(TokenType.KEYWORD, "let", "x", TokenType.DATA_TYPE, "number", expression, position)
         val interpreter = Interpreter()
         interpreter.execute(node)
         assertEquals(42, interpreter.variables["x"])
