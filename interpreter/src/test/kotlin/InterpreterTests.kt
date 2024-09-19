@@ -20,6 +20,11 @@ import java.io.PrintStream
 class InterpreterTests {
     private val position = TokenPosition(1, 1)
 
+    private fun getOutput(): String {
+        val interpreter = Interpreter() // Asegúrate de usar la misma instancia del intérprete
+        return interpreter.getPrintBufferContent()
+    }
+
     @Test
     fun `test number literal evaluation`() {
         val node = LiteralNode("42", TokenType.NUMBERLITERAL, position)
@@ -34,6 +39,41 @@ class InterpreterTests {
         val interpreter = Interpreter()
         val result = interpreter.execute(node)
         assertEquals("Hello, world!", result)
+    }
+
+    @Test
+    fun testAssignment() {
+        val expression = LiteralNode("42", TokenType.NUMBERLITERAL, position)
+        val node = AssignationNode("x", expression, TokenType.ASSIGNATION, position)
+        val interpreter = Interpreter()
+        interpreter.execute(node)
+        assertEquals(42, interpreter.variables["x"])
+    }
+
+    @Test
+    fun testDeclaration() {
+        val expression = LiteralNode("42", TokenType.NUMBERLITERAL, position)
+        val node = DeclarationNode(TokenType.KEYWORD, "let", "x", TokenType.DATA_TYPE, "number", expression, position)
+        val interpreter = Interpreter()
+        interpreter.execute(node)
+        assertEquals(42, interpreter.variables["x"])
+    }
+
+    @Test
+    fun `test print concatenation hello world 1`() {
+        val left = LiteralNode("HelloWorld", TokenType.STRINGLITERAL, position)
+        val right = LiteralNode("1", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "+", position, position) // Create a token for "+"
+        val node = BinaryNode(left, right, operatorToken, position)
+        val printNode = PrintNode(node, position)
+        val interpreter = Interpreter()
+
+        // Redirect output stream to capture print statements
+        val outputStream = ByteArrayOutputStream()
+        System.setOut(PrintStream(outputStream))
+
+        interpreter.execute(printNode)
+        assertEquals("HelloWorld1", outputStream.toString().trim())
     }
 
     @Test
@@ -161,19 +201,11 @@ class InterpreterTests {
 
     @Test
     fun `test block execution`() {
-        val expr1 = LiteralNode("10", TokenType.NUMBERLITERAL, position)
-        val expr2 = LiteralNode("20", TokenType.NUMBERLITERAL, position)
-        val assignment = AssignationNode("y", expr2, TokenType.ASSIGNATION, position)
-        val print = PrintNode(expr1, position)
-        val block = BlockNode(listOf(assignment, print), position)
+        val expr1 = LiteralNode("Hello", TokenType.STRINGLITERAL, position)
+        val expr2 = LiteralNode("World", TokenType.STRINGLITERAL, position)
+        val node = BlockNode(listOf(expr1, expr2), position)
         val interpreter = Interpreter()
-
-        // Redirect output stream to capture print statements
-        val outputStream = ByteArrayOutputStream()
-        System.setOut(PrintStream(outputStream))
-
-        interpreter.execute(block)
-        assertEquals("10", outputStream.toString().trim())
+        assertEquals("World", interpreter.execute(node))
     }
 
     @Test
@@ -441,5 +473,45 @@ class InterpreterTests {
         assertEquals(10, interpreter.variables["x"])
         assertEquals(20, interpreter.variables["y"])
         assertEquals(30, interpreter.variables["z"])
+    }
+
+    /*
+    @Test
+    fun `test invalid expression for type`() {
+        val interpreter = Interpreter()
+
+        // Crear un nodo de asignación con tipo 'number' pero con una expresión no válida
+        val invalidExpressionNode =
+            AssignationNode(
+                id = "pi",
+                expression = LiteralNode("3.14159", TokenType.NUMBERLITERAL, position),
+                valType = TokenType.DATA_TYPE,
+                position = position,
+            )
+        assertEquals(3.14159, interpreter.execute(invalidExpressionNode))
+    }
+
+    @Test
+    fun `test invalid arithmetic operation with strings`() {
+        val left = LiteralNode("hello", TokenType.STRINGLITERAL, position)
+        val right = LiteralNode("5", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "+", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter()
+        assertThrows(RuntimeException::class.java) {
+            interpreter.execute(node)
+        }
+    }
+
+
+     */
+    @Test
+    fun `test concatenation of StringNumber and Number`() {
+        val left = LiteralNode("2", TokenType.STRINGLITERAL, position)
+        val right = LiteralNode("5", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "+", position, position) // Create a token for "+"
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter()
+        assertEquals("25", interpreter.execute(node))
     }
 }

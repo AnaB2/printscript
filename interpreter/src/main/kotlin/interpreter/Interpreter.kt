@@ -66,8 +66,17 @@ class Interpreter {
         val leftValue = execute(node.left) ?: throw RuntimeException("Invalid left operand")
         val rightValue = execute(node.right) ?: throw RuntimeException("Invalid right operand")
 
-        val operator = node.operator.value // This should be the actual operator symbol like "+", "-", etc.
+        val operator = node.operator.value
 
+        // Manejo de la concatenación de cadenas
+        if (leftValue is String || rightValue is String) {
+            return when (operator) {
+                "+" -> handleAddition(leftValue, rightValue) // Manejo de concatenación
+                else -> throw RuntimeException("Invalid operation: cannot perform $operator with strings")
+            }
+        }
+
+        // Manejo de operaciones aritméticas
         return when (operator) {
             "+" -> handleAddition(leftValue, rightValue)
             "-" -> handleSubtraction(leftValue, rightValue)
@@ -76,28 +85,6 @@ class Interpreter {
             ">" -> handleGreaterThan(leftValue, rightValue)
             "<" -> handleLessThan(leftValue, rightValue)
             else -> throw RuntimeException("Unsupported operator: $operator")
-        }
-    }
-
-    private fun handleGreaterThan(
-        leftValue: Any,
-        rightValue: Any,
-    ): Any? {
-        return if (leftValue is Int && rightValue is Int) {
-            leftValue > rightValue
-        } else {
-            throw RuntimeException("Unsupported operands for >")
-        }
-    }
-
-    private fun handleLessThan(
-        leftValue: Any,
-        rightValue: Any,
-    ): Any? {
-        return if (leftValue is Int && rightValue is Int) {
-            leftValue < rightValue
-        } else {
-            throw RuntimeException("Unsupported operands for <")
         }
     }
 
@@ -140,6 +127,9 @@ class Interpreter {
         leftValue: Any,
         rightValue: Any,
     ): Any? {
+        if (leftValue is String || rightValue is String) {
+            throw RuntimeException("Invalid operation: cannot multiply a string by a number")
+        }
         return when {
             leftValue is Int && rightValue is Int -> leftValue * rightValue
             leftValue is Float && rightValue is Float -> leftValue * rightValue
@@ -156,6 +146,9 @@ class Interpreter {
         leftValue: Any,
         rightValue: Any,
     ): Any? {
+        if (leftValue is String || rightValue is String) {
+            throw RuntimeException("Invalid operation: cannot divide a string by a number")
+        }
         return when {
             leftValue is Int && rightValue is Int -> {
                 if (rightValue == 0) throw RuntimeException("Division by zero")
@@ -189,36 +182,96 @@ class Interpreter {
         }
     }
 
+    private fun handleGreaterThan(
+        leftValue: Any,
+        rightValue: Any,
+    ): Any? {
+        return if (leftValue is Int && rightValue is Int) {
+            leftValue > rightValue
+        } else {
+            throw RuntimeException("Unsupported operands for >")
+        }
+    }
+
+    private fun handleLessThan(
+        leftValue: Any,
+        rightValue: Any,
+    ): Any? {
+        return if (leftValue is Int && rightValue is Int) {
+            leftValue < rightValue
+        } else {
+            throw RuntimeException("Unsupported operands for <")
+        }
+    }
+
     private fun handleAssignment(node: AssignationNode): Any? {
+        println("Manejando asignación: ${node.id} = ${node.expression}")
+
         val value = execute(node.expression) ?: throw RuntimeException("Invalid assignment in Assignment")
+        println("Valor después de ejecutar la expresión: $value")
+
+        // Verifica si la variable ya está declarada
+        if (variables.containsKey(node.id)) {
+            // Si la variable ya existe, verifica si el valor asignado es del tipo correcto
+            val expectedType =
+                when (variables[node.id]) {
+                    is Int -> TokenType.NUMBERLITERAL
+                    is String -> TokenType.STRINGLITERAL
+                    else -> throw RuntimeException("Unknown type for variable ${node.id}")
+                }
+
+            if ((expectedType == TokenType.NUMBERLITERAL && value !is Int) ||
+                (expectedType == TokenType.STRINGLITERAL && value !is String)
+            ) {
+                throw RuntimeException("Invalid expression for type ${expectedType.name.lowercase()}")
+            }
+        }
+
+        // Actualiza el valor de la variable
         variables[node.id] = value
         return value
     }
 
     private fun handleDeclaration(node: DeclarationNode): Any? {
-        val value = execute(node.expr) ?: throw RuntimeException("Invalid assignment in Declaration")
+        // Si expr es NilNode, asignar un valor por defecto basado en el tipo de la declaración
+        val value =
+            if (node.expr is NilNode) {
+                when (node.dataTypeValue) { // Aquí usamos dataTypeValue para chequear el tipo de dato, no declType
+                    "number" -> 0 // Valor por defecto para números
+                    "string" -> "" // Valor por defecto para strings
+                    else -> throw RuntimeException("Tipo de dato desconocido: ${node.dataTypeValue}")
+                }
+            } else {
+                // Si hay una expresión válida, ejecutarla
+                execute(node.expr) ?: throw RuntimeException("Invalid expression in DeclarationNode")
+            }
+
+        // Validar que el valor coincida con el tipo de dato declarado
+        if (node.dataTypeValue == "number" && value !is Int) {
+            throw RuntimeException("Invalid expression for type number")
+        }
+        if (node.dataTypeValue == "string" && value !is String) {
+            throw RuntimeException("Invalid expression for type string")
+        }
+
+        // Si el identificador no es nulo, asignar el valor a la variable
         variables[node.id] = value
         return value
     }
 
     private fun handlePrint(node: PrintNode): Any? {
-        val value = execute(node.expression)
-
-        // Accumulate the output in a buffer
-        printBuffer.append(value).append("\n")
-
-        // Flush the buffer periodically (e.g., after every print)
-        flushOutput()
-
+        val value = execute(node.expression) ?: throw RuntimeException("Invalid expression in PrintNode")
+        printBuffer.setLength(0) // Limpia el buffer antes de agregar el nuevo resultado
+        printBuffer.append(value.toString())
+        flushOutput() // Imprime y limpia el buffer
         return value
     }
 
     private fun flushOutput() {
-        // Write the content to the console (or any output stream)
-        print(printBuffer.toString())
-
-        // Clear the buffer after flushing
-        printBuffer.clear()
+        if (printBuffer.isNotEmpty()) {
+            println(printBuffer.toString()) // Imprime el contenido del buffer
+            printBuffer.setLength(0) // Limpia el buffer después de imprimir
+        }
     }
 
     private fun handleBlock(node: BlockNode): Any? {
@@ -234,6 +287,10 @@ class Interpreter {
             execute(node.condition) as? Boolean
                 ?: throw RuntimeException("Condition must evaluate to a boolean")
         return if (condition) execute(node.thenBlock) else execute(node.elseBlock)
+    }
+
+    fun getPrintBufferContent(): String {
+        return printBuffer.toString()
     }
 
     /*

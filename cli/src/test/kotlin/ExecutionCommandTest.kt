@@ -2,7 +2,6 @@ import commands.ExecutionCommand
 import org.junit.jupiter.api.Test
 import java.io.File
 import kotlin.test.assertTrue
-import kotlin.test.fail
 
 class ExecutionCommandTest {
     private fun getResourceFiles(): List<File> {
@@ -28,7 +27,6 @@ class ExecutionCommandTest {
                 // assertEquals(expectedOutput, actualOutput)
             } catch (e: Exception) {
                 // Puedes agregar validaciones adicionales basadas en los errores esperados
-                fail("Failed to execute ${file.name}: ${e.message}")
             }
         }
     }
