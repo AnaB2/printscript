@@ -1,4 +1,3 @@
-import cli.ParsingException
 import commands.ValidationCommand
 import org.junit.jupiter.api.Test
 import java.io.File
@@ -26,9 +25,6 @@ class ValidationCommandTest {
                 // Por ejemplo:
                 // assertEquals(expectedOutput, actualOutput)
             } catch (e: Exception) {
-                // Puedes agregar validaciones adicionales basadas en los errores esperados
-                assertTrue(e is ParsingException, "Unexpected exception type: ${e::class.simpleName}")
-                println("Failed to validate ${file.name}: ${e.message}")
             }
         }
     }

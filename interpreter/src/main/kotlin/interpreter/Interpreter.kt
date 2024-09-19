@@ -214,7 +214,7 @@ class Interpreter {
         if (variables.containsKey(node.id)) {
             // Si la variable ya existe, verifica si el valor asignado es del tipo correcto
             val expectedType =
-                when (val existingValue = variables[node.id]) {
+                when (variables[node.id]) {
                     is Int -> TokenType.NUMBERLITERAL
                     is String -> TokenType.STRINGLITERAL
                     else -> throw RuntimeException("Unknown type for variable ${node.id}")
@@ -223,12 +223,11 @@ class Interpreter {
             if ((expectedType == TokenType.NUMBERLITERAL && value !is Int) ||
                 (expectedType == TokenType.STRINGLITERAL && value !is String)
             ) {
-                throw RuntimeException("Invalid expression for type ${expectedType.name.toLowerCase()}")
+                throw RuntimeException("Invalid expression for type ${expectedType.name.lowercase()}")
             }
         }
 
-        // Asigna el valor a la variable (si es nueva o si ya fue validada)
-        println("Asignando valor a ${node.id}: $value")
+        // Actualiza el valor de la variable
         variables[node.id] = value
         return value
     }
