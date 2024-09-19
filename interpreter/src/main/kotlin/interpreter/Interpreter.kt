@@ -205,7 +205,10 @@ class Interpreter {
     }
 
     private fun handleAssignment(node: AssignationNode): Any? {
+        println("Manejando asignación: ${node.id} = ${node.expression}")
+
         val value = execute(node.expression) ?: throw RuntimeException("Invalid assignment in Assignment")
+        println("Valor después de ejecutar la expresión: $value")
 
         // Verifica si la variable ya está declarada
         if (variables.containsKey(node.id)) {
@@ -225,41 +228,51 @@ class Interpreter {
         }
 
         // Asigna el valor a la variable (si es nueva o si ya fue validada)
+        println("Asignando valor a ${node.id}: $value")
         variables[node.id] = value
         return value
     }
 
     private fun handleDeclaration(node: DeclarationNode): Any? {
-        val value = execute(node.expr) ?: throw RuntimeException("Invalid assignment in Declaration")
+        // Si expr es NilNode, asignar un valor por defecto basado en el tipo de la declaración
+        val value =
+            if (node.expr is NilNode) {
+                when (node.dataTypeValue) { // Aquí usamos dataTypeValue para chequear el tipo de dato, no declType
+                    "number" -> 0 // Valor por defecto para números
+                    "string" -> "" // Valor por defecto para strings
+                    else -> throw RuntimeException("Tipo de dato desconocido: ${node.dataTypeValue}")
+                }
+            } else {
+                // Si hay una expresión válida, ejecutarla
+                execute(node.expr) ?: throw RuntimeException("Invalid expression in DeclarationNode")
+            }
 
-        // Valida tipos antes de asignar
-        if (node.declType == TokenType.NUMBERLITERAL && value !is Int) {
+        // Validar que el valor coincida con el tipo de dato declarado
+        if (node.dataTypeValue == "number" && value !is Int) {
             throw RuntimeException("Invalid expression for type number")
         }
-        if (node.declType == TokenType.STRINGLITERAL && value !is String) {
+        if (node.dataTypeValue == "string" && value !is String) {
             throw RuntimeException("Invalid expression for type string")
         }
 
+        // Si el identificador no es nulo, asignar el valor a la variable
         variables[node.id] = value
         return value
     }
 
     private fun handlePrint(node: PrintNode): Any? {
         val value = execute(node.expression) ?: throw RuntimeException("Invalid expression in PrintNode")
-        val output = value.toString()
-
-        // Limpia el buffer y añade el nuevo resultado
-        printBuffer.setLength(0)
-        printBuffer.append(output)
-
-        // Imprime el contenido del buffer y luego lo limpia
-        flushOutput()
-        return value // Retorna el valor impreso
+        printBuffer.setLength(0) // Limpia el buffer antes de agregar el nuevo resultado
+        printBuffer.append(value.toString())
+        flushOutput() // Imprime y limpia el buffer
+        return value
     }
 
     private fun flushOutput() {
-        println(printBuffer.toString()) // Esto imprime el buffer
-        printBuffer.setLength(0) // Limpia el buffer después de imprimir
+        if (printBuffer.isNotEmpty()) {
+            println(printBuffer.toString()) // Imprime el contenido del buffer
+            printBuffer.setLength(0) // Limpia el buffer después de imprimir
+        }
     }
 
     private fun handleBlock(node: BlockNode): Any? {
@@ -275,6 +288,10 @@ class Interpreter {
             execute(node.condition) as? Boolean
                 ?: throw RuntimeException("Condition must evaluate to a boolean")
         return if (condition) execute(node.thenBlock) else execute(node.elseBlock)
+    }
+
+    fun getPrintBufferContent(): String {
+        return printBuffer.toString()
     }
 
     /*

@@ -20,6 +20,11 @@ import java.io.PrintStream
 class InterpreterTests {
     private val position = TokenPosition(1, 1)
 
+    private fun getOutput(): String {
+        val interpreter = Interpreter() // Asegúrate de usar la misma instancia del intérprete
+        return interpreter.getPrintBufferContent()
+    }
+
     @Test
     fun `test number literal evaluation`() {
         val node = LiteralNode("42", TokenType.NUMBERLITERAL, position)
@@ -34,6 +39,24 @@ class InterpreterTests {
         val interpreter = Interpreter()
         val result = interpreter.execute(node)
         assertEquals("Hello, world!", result)
+    }
+
+    @Test
+    fun testAssignment() {
+        val expression = LiteralNode("42", TokenType.NUMBERLITERAL, position)
+        val node = AssignationNode("x", expression, TokenType.ASSIGNATION, position)
+        val interpreter = Interpreter()
+        interpreter.execute(node)
+        assertEquals(42, interpreter.variables["x"])
+    }
+
+    @Test
+    fun testDeclaration() {
+        val expression = LiteralNode("42", TokenType.NUMBERLITERAL, position)
+        val node = DeclarationNode(TokenType.KEYWORD, "let", "x", TokenType.DATA_TYPE, "number", expression, position)
+        val interpreter = Interpreter()
+        interpreter.execute(node)
+        assertEquals(42, interpreter.variables["x"])
     }
 
     @Test
