@@ -13,7 +13,9 @@ class FormatBlock : FormatOperation {
         node: ASTNode,
         formatter: Formatter,
     ): String {
-        if (!canHandle(node)) error("Node isn't a BlockNode") else node as BlockNode
-        return formatter.format(node.nodes)
+        val blockNode = if (!canHandle(node)) error("Node isn't a BlockNode") else node as BlockNode
+        val lines: List<String> = blockNode.nodes.map { it -> "${formatter.format(it)};" }
+        val str = "\n".repeat(1)
+        return lines.joinToString(str)
     }
 }

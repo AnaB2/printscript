@@ -4,11 +4,10 @@ import ast.ASTNode
 import ast.DeclarationNode
 import formatOperations.commons.HandleSpace
 import formatter.Formatter
-import token.TokenType
 
 class FormatDeclaration(
     private val allowedDeclarationKeywords: List<String>,
-    private val allowedValueTypes: Map<TokenType, String>,
+    private val allowedDataTypes: List<String>,
 ) : FormatOperation {
     private val handleSpace: HandleSpace = HandleSpace()
 
@@ -40,7 +39,14 @@ class FormatDeclaration(
             formatOperationsList.find { it -> it.canHandle(declarationNode.expr) }
                 ?.format(declarationNode.expr, formatter)
 
-        val valType = declarationNode.dataTypeValue // boolean, string or number
+        val dataType =
+            if (allowedDataType(declarationNode.dataTypeValue)) {
+                declarationNode.dataTypeValue
+            } else {
+                throw UnsupportedOperationException(
+                    "Unsupported data type ${declarationNode.dataTypeValue}",
+                )
+            } // boolean, string or number
 
         // handle spaces
         val spaceBeforeColon = formatter.getRules()["spaceBeforeColon"] as Boolean
@@ -50,7 +56,7 @@ class FormatDeclaration(
         val equal = handleSpace.handleSpace("=", spaceAroundEquals, spaceAroundEquals)
         val colon = handleSpace.handleSpace(":", spaceBeforeColon, spaceAfterColon)
 
-        return "$declKeywordValue $id$colon$valType$equal$exprValue"
+        return "$declKeywordValue $id$colon$dataType$equal$exprValue"
     }
 
     private fun allowedDeclarationKeyword(declKeyword: String): Boolean {
@@ -59,14 +65,9 @@ class FormatDeclaration(
         )
     }
 
-    private fun defineValueType(valueType: TokenType): String {
-        if (allowedValueTypes.containsKey(
-                valueType,
-            )
-        ) {
-            return allowedValueTypes[valueType] as String
-        } else {
-            throw UnsupportedOperationException("Unsupported value type $valueType")
-        }
+    private fun allowedDataType(dataType: String): Boolean {
+        return allowedDataTypes.contains(
+            dataType,
+        )
     }
 }
