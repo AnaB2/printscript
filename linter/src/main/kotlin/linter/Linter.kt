@@ -14,29 +14,21 @@ class Linter(private var version: LinterVersion) {
     private val validator = RuleValidator()
     private val fileManager = OutputFileManager()
 
-    fun getVersion(): LinterVersion {
-        return version
-    }
-
-    fun readJson(rulesPath: String) {
-        val jsonRules = jsonReader.getRulesFromJson(rulesPath)
+    fun readJson(jsonContent: String) {
+        val jsonRules = jsonReader.getRulesFromJson(jsonContent)
         rules = ruleFactory.createRules(jsonRules, version)
     }
 
     fun check(trees: List<ASTNode>): LinterOutput {
         val tokens = tokenizer.parseToTokens(trees)
         val brokenRules = validator.checkRule(rules, tokens)
-        val scaOutput = LinterOutput()
+        val linterOutput = LinterOutput()
         if (brokenRules.isNotEmpty()) {
             for (brokenRule in brokenRules) {
-                scaOutput.addBrokenRule(brokenRule)
+                linterOutput.addBrokenRule(brokenRule)
             }
         }
-        return scaOutput
-    }
-
-    fun getRules(): List<Rule> {
-        return rules
+        return linterOutput
     }
 
     fun writeToFile(

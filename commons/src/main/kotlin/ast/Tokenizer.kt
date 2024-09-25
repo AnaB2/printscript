@@ -7,9 +7,9 @@ class Tokenizer {
     fun parseToTokens(astNodes: List<ASTNode>): List<List<Token>> {
         val tokens = mutableListOf<List<Token>>()
         for (node in astNodes) {
-            tokens.add(
-                extractTokensFromAST(node),
-            )
+            val extractedTokens = extractTokensFromAST(node)
+            println("Tokens from AST Node: $extractedTokens") // Debugging output
+            tokens.add(extractedTokens)
         }
         return tokens
     }
@@ -71,32 +71,14 @@ class Tokenizer {
                 )
             }
             is DeclarationNode -> {
-                val token =
-                    Token(
-                        type = TokenType.DECLARATOR,
-                        value = node.id,
-                        initialPosition = node.position,
-                        finalPosition = node.position,
-                    )
-                tokens.add(token)
-                traverseAST(
-                    node.expr,
-                    tokens,
-                )
+                // Change from DECLARATOR to IDENTIFIER
+                tokens.add(Token(TokenType.IDENTIFIER, node.id, node.position, node.position))
+                traverseAST(node.expr, tokens)
             }
             is AssignationNode -> {
-                val token =
-                    Token(
-                        type = TokenType.ASSIGNATION,
-                        value = node.id,
-                        initialPosition = node.position,
-                        finalPosition = node.position,
-                    )
-                tokens.add(token)
-                traverseAST(
-                    node.expression,
-                    tokens,
-                )
+                // Change from DECLARATOR to IDENTIFIER
+                tokens.add(Token(TokenType.IDENTIFIER, node.id, node.position, node.position))
+                traverseAST(node.expression, tokens)
             }
             is BlockNode -> {
                 node.nodes.forEach {

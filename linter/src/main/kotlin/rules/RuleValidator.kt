@@ -10,7 +10,9 @@ class RuleValidator {
     ): List<BrokenRule> {
         val brokenRules = mutableListOf<BrokenRule>()
         for (rule in rules) {
+            println("Checking rule: ${rule.getRuleName()}") // Debugging output
             val violations = rule.applyRule(tokens)
+            println("Violations found: $violations") // Debugging output
             brokenRules.addAll(violations)
         }
         return brokenRules
