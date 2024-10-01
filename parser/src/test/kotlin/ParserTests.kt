@@ -4,7 +4,7 @@ import ast.BinaryNode
 import ast.DeclarationNode
 import ast.LiteralNode
 import ast.PrintNode
-import org.example.lexer.Lexer
+import lexer.Lexer
 import org.example.lexer.TokenMapper
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

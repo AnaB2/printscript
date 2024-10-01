@@ -2,27 +2,37 @@ package commands
 
 import cli.ParsingException
 import cli.tokenize
+import interpreter.Printer
 import parser.Parser
 
 class ValidationCommand(private val source: String, private val version: String) : Command {
     override fun execute() {
         println("Validating content...")
+
+        // Definir el Printer como en ExecutionCommand
+        val printer: Printer =
+            object : Printer {
+                override fun print(message: String) {
+                    println(message)
+                }
+            }
+
         val tokens = tokenize(source, version)
 
         val parser = Parser()
         try {
             val astNodes = parser.execute(tokens)
-            println("Validation successful.")
+            printer.print("Validation successful.")
 
             // Ejemplo de uso de astNodes: imprimir el AST para depuración
-            println("AST Nodes:")
+            printer.print("AST Nodes:")
             astNodes.forEach { node ->
-                println(node) // Asume que el método toString() está bien implementado en ASTNode
+                printer.print(node.toString()) // Asume que el método toString() está bien implementado en ASTNode
             }
         } catch (e: Exception) {
-            println("Validation failed: ${e.message}")
+            printer.print("Validation failed: ${e.message}")
             if (e is ParsingException) {
-                println("Error at line ${e.line}, column ${e.column}")
+                printer.print("Error at line ${e.line}, column ${e.column}")
             }
         }
     }
