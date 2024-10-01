@@ -8,7 +8,7 @@ import parser.Parser
 import token.Token
 
 class FormatterTest10 {
-    private val yamlPath = "src/test/resources/rules.yaml"
+    private val yamlPath = "src/test/resources/rules10.yaml"
     private val lexer = Lexer(TokenMapper("1.0"))
     private val parser = Parser()
 

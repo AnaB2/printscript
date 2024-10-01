@@ -8,7 +8,7 @@ import parser.Parser
 import token.Token
 
 class FormatterTest11 {
-    private val yamlPath = "src/test/resources/rules.yaml"
+    private val yamlPath = "src/test/resources/rules11.yaml"
     private val lexer = Lexer(TokenMapper("1.1"))
     private val parser = Parser()
 
@@ -31,18 +31,14 @@ class FormatterTest11 {
 
     // CONDICIONAL
 
-//    @Test
-//    fun `test formatter with conditional expression`(){
-//        val input = "if (x>2) {println(\"yes\")} else {println(\"no\")}"
-//        val tokens : List<Token> = lexer.execute(input)
-//        val ast : List<ASTNode> = parser.execute(tokens)
-//        val formatted = formatter.format(ast)
-//        assertEquals("if (x > 2) {" +
-//                "   println(\"yes\");" +
-//                "} else {" +
-//                "   println(\"no\")" +
-//                "}", formatted)
-//    }
+    @Test
+    fun `test formatter with conditional expression`() {
+        val input = "if (x) {println(\"yes\")} else {println(\"no\")}"
+        val tokens: List<Token> = lexer.execute(input)
+        val ast: List<ASTNode> = parser.execute(tokens)
+        val formatted = formatter.format(ast)
+        assertEquals("if (x) {\n   println(\"yes\");\n} else {\n   println(\"no\");\n}", formatted)
+    }
 
     @Test
     fun `test canHandle should return true for nodes`() {

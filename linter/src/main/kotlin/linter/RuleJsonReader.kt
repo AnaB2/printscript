@@ -1,5 +1,6 @@
 package linter
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import rules.CamelCaseRule
 import rules.InputOnlyRule
@@ -8,30 +9,45 @@ import rules.Rule
 import rules.SnakeCaseRule
 import java.io.File
 
-data class FormattingRules(
-    val identifier: String,
-    val enablePrintOnly: Boolean,
-    val enableInputOnly: Boolean,
-)
+// Definición de reglas de formato
+class FormattingRules {
+    @JsonProperty("identifier_format")
+    var identifier: String? = null
 
+    @JsonProperty("enable_print_only")
+    var isEnablePrintOnly: Boolean = false
+
+    @JsonProperty("enable_input_only")
+    var isEnableInputOnly: Boolean = false
+}
+
+// Clase para leer y obtener reglas desde JSON
 class RuleJsonReader {
-    fun getRulesFromJson(path: String): List<Rule> {
-        val mapper = jacksonObjectMapper()
+    // Método para leer reglas desde un archivo JSON
+    fun getRulesFromFile(path: String): List<Rule> {
         val file = File(path)
-        val formattingRules = mapper.readValue(file, FormattingRules::class.java)
+        return getRulesFromJson(file.readText()) // Lee el contenido del archivo y pasa al método que procesa el contenido
+    }
+
+    // Método para leer reglas desde un contenido JSON en formato String
+    fun getRulesFromJson(jsonContent: String): List<Rule> {
+        val mapper = jacksonObjectMapper()
+        val formattingRules = mapper.readValue(jsonContent, FormattingRules::class.java)
         val rules = mutableListOf<Rule>()
 
-        when (formattingRules.identifier.lowercase()) {
+        // Normalize and trim the identifier to handle variations like "camel case" or "snake case"
+        when (formattingRules.identifier?.replace(" ", "")?.lowercase()) {
             "camelcase" -> rules.add(CamelCaseRule())
             "snakecase" -> rules.add(SnakeCaseRule())
         }
 
-        if (formattingRules.enablePrintOnly) {
+        if (formattingRules.isEnablePrintOnly) {
             rules.add(PrintOnlyRule())
         }
-        if (formattingRules.enableInputOnly) {
+        if (formattingRules.isEnableInputOnly) {
             rules.add(InputOnlyRule())
         }
+
         return rules
     }
 }

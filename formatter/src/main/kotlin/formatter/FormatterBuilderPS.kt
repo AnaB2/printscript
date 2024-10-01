@@ -5,11 +5,10 @@ import formatOperations.FormatBinary
 import formatOperations.FormatBlock
 import formatOperations.FormatConditional
 import formatOperations.FormatDeclaration
-import formatOperations.FormatFunction
 import formatOperations.FormatLiteral
 import formatOperations.FormatOperation
 import formatOperations.FormatPrint
-import token.TokenType
+import rules.RulesReader
 
 class FormatterBuilderPS : FormatterBuilder {
     override fun build(
@@ -29,15 +28,23 @@ class FormatterBuilderPS : FormatterBuilder {
                 FormatAssignation(),
                 FormatBinary(),
                 FormatBlock(),
-                FormatFunction(),
                 FormatLiteral(),
                 FormatPrint(),
                 FormatDeclaration(
                     getAllowedDeclarationKeywords("1.0"),
-                    getAllowedValueTypes("1.0"),
+                    getAllowedDataTypes("1.0"),
                 ),
             )
-        return FormatterPS(rulesPath, formatOperations)
+        val rulesReader =
+            RulesReader(
+                mapOf(
+                    "spaceBeforeColon" to Boolean::class,
+                    "spaceAfterColon" to Boolean::class,
+                    "spaceAroundEquals" to Boolean::class,
+                    "lineBreak" to Int::class,
+                ),
+            )
+        return FormatterPS(rulesReader, rulesPath, formatOperations)
     }
 
     private fun formatter11(rulesPath: String): Formatter {
@@ -46,16 +53,25 @@ class FormatterBuilderPS : FormatterBuilder {
                 FormatAssignation(),
                 FormatBinary(),
                 FormatBlock(),
-                FormatFunction(),
                 FormatLiteral(),
                 FormatPrint(),
                 FormatDeclaration(
                     getAllowedDeclarationKeywords("1.1"),
-                    getAllowedValueTypes("1.1"),
+                    getAllowedDataTypes("1.1"),
                 ),
                 FormatConditional(),
             )
-        return FormatterPS(rulesPath, formatOperations)
+        val rulesReader =
+            RulesReader(
+                mapOf(
+                    "spaceBeforeColon" to Boolean::class,
+                    "spaceAfterColon" to Boolean::class,
+                    "spaceAroundEquals" to Boolean::class,
+                    "lineBreak" to Int::class,
+                    "conditionalIndentation" to Int::class,
+                ),
+            )
+        return FormatterPS(rulesReader, rulesPath, formatOperations)
     }
 
     private fun getAllowedDeclarationKeywords(version: String): List<String> {
@@ -66,19 +82,12 @@ class FormatterBuilderPS : FormatterBuilder {
         }
     }
 
-    private fun getAllowedValueTypes(version: String): Map<TokenType, String> {
+    private fun getAllowedDataTypes(version: String): List<String> {
         return when (version) {
             "1.0" ->
-                mapOf(
-                    TokenType.NUMBERLITERAL to "number",
-                    TokenType.STRINGLITERAL to "string",
-                )
+                listOf("number", "string")
             "1.1" ->
-                mapOf(
-                    TokenType.NUMBERLITERAL to "number",
-                    TokenType.STRINGLITERAL to "string",
-                    TokenType.BOOLEANLITERAL to "boolean",
-                )
+                listOf("number", "string", "boolean")
             else -> throw IllegalArgumentException("unsupported version")
         }
     }

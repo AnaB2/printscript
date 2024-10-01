@@ -14,6 +14,7 @@ class CamelCaseRule(
             for (token in row) {
                 if (isIdentifierType()(token) && !isCamelCase(token)) {
                     brokenRules.add(BrokenRule(errorMessage, token.getPosition()))
+                    println("Violation Found: ${token.value} at ${token.getPosition()}")
                 }
             }
         }

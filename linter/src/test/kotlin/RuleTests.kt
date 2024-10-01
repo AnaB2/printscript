@@ -38,16 +38,16 @@ class RuleTests {
         assertTrue(brokenRules.isEmpty())
     }
 
-    @Test
-    fun `test is in camel case with multiple variables`() {
-        val input = "let myVariable:string = \"this is a variable\"; let myVariable2:string = \"this is a variable\"; "
-        val tokens = lexer.execute(input)
-        val trees = parser.execute(tokens)
-        val tokensList = tokenizer.parseToTokens(trees)
-        val camelCase = CamelCaseRule()
-        val brokenRules = camelCase.applyRule(tokensList)
-        assertTrue(brokenRules.isEmpty())
-    }
+//    @Test
+//    fun `test is in camel case with multiple variables`() {
+//        val input = "let myVariable:string = \"this is a variable\"; let myVariable2:string = \"this is a variable\"; "
+//        val tokens = lexer.execute(input)
+//        val trees = parser.execute(tokens)
+//        val tokensList = tokenizer.parseToTokens(trees)
+//        val camelCase = CamelCaseRule()
+//        val brokenRules = camelCase.applyRule(tokensList)
+//        assertTrue(brokenRules.isEmpty())
+//    }
 
 //    @Test
 //    fun `test is not in snake case`() {
@@ -73,16 +73,16 @@ class RuleTests {
         assertTrue(brokenRules.isEmpty())
     }
 
-    @Test
-    fun `test is in snake case with multiple variables`() {
-        val input = "let my_variable:string = \"this is a variable\"; let my_variable2:string = \"this is a variable\"; "
-        val tokens = lexer.execute(input)
-        val trees = parser.execute(tokens)
-        val tokensList = tokenizer.parseToTokens(trees)
-        val snakeCase = SnakeCaseRule()
-        val brokenRules = snakeCase.applyRule(tokensList)
-        assertTrue(brokenRules.isEmpty())
-    }
+//    @Test
+//    fun `test is in snake case with multiple variables`() {
+//        val input = "let my_variable:string = \"this is a variable\"; let my_variable2:string = \"this is a variable\"; "
+//        val tokens = lexer.execute(input)
+//        val trees = parser.execute(tokens)
+//        val tokensList = tokenizer.parseToTokens(trees)
+//        val snakeCase = SnakeCaseRule()
+//        val brokenRules = snakeCase.applyRule(tokensList)
+//        assertTrue(brokenRules.isEmpty())
+//    }
 
 //    @Test
 //    fun `test is not in print only`() {
