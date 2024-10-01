@@ -1,5 +1,5 @@
 import ast.Tokenizer
-import org.example.lexer.Lexer
+import lexer.Lexer
 import org.example.lexer.TokenMapper
 import parser.Parser
 import rules.CamelCaseRule

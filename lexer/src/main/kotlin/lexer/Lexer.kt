@@ -1,5 +1,7 @@
-package org.example.lexer
+package lexer
 
+import org.example.lexer.PatternMatcher
+import org.example.lexer.TokenMapper
 import token.Token
 import token.TokenPosition
 import token.TokenType
