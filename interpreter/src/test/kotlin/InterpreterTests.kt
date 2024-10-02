@@ -80,8 +80,8 @@ class InterpreterTests {
 
     @Test
     fun `test boolean literal evaluation`() {
-        val trueNode = LiteralNode("true", TokenType.BOOLEAN, position)
-        val falseNode = LiteralNode("false", TokenType.BOOLEAN, position)
+        val trueNode = LiteralNode("true", TokenType.BOOLEANLITERAL, position)
+        val falseNode = LiteralNode("false", TokenType.BOOLEANLITERAL, position)
         val interpreter = Interpreter(printer)
         assertEquals(true, interpreter.execute(trueNode))
         assertEquals(false, interpreter.execute(falseNode))
@@ -212,7 +212,7 @@ class InterpreterTests {
 
     @Test
     fun `test conditional node true`() {
-        val condition = LiteralNode("true", TokenType.BOOLEAN, position)
+        val condition = LiteralNode("true", TokenType.BOOLEANLITERAL, position)
         val thenBlock = PrintNode(LiteralNode("Condition is true", TokenType.STRINGLITERAL, position), position)
         val elseBlock = PrintNode(LiteralNode("Condition is false", TokenType.STRINGLITERAL, position), position)
         val node = ConditionalNode(condition, thenBlock, elseBlock, position)
@@ -228,7 +228,7 @@ class InterpreterTests {
 
     @Test
     fun `test conditional node false`() {
-        val condition = LiteralNode("false", TokenType.BOOLEAN, position)
+        val condition = LiteralNode("false", TokenType.BOOLEANLITERAL, position)
         val thenBlock = PrintNode(LiteralNode("Condition is true", TokenType.STRINGLITERAL, position), position)
         val elseBlock = PrintNode(LiteralNode("Condition is false", TokenType.STRINGLITERAL, position), position)
         val node = ConditionalNode(condition, thenBlock, elseBlock, position)
@@ -430,7 +430,7 @@ class InterpreterTests {
         val interpreter = Interpreter(printer)
 
         // Definir una condición que siempre se cumple
-        val condition = LiteralNode("true", TokenType.BOOLEAN, position)
+        val condition = LiteralNode("true", TokenType.BOOLEANLITERAL, position)
         val thenBlock =
             AssignationNode("x", LiteralNode("10", TokenType.NUMBERLITERAL, position), TokenType.ASSIGNATION, position)
         val elseBlock =

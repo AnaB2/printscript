@@ -49,7 +49,7 @@ class Interpreter(private val printer: Printer) {
                     ?: throw RuntimeException("Invalid number literal: ${node.value}")
             }
             TokenType.STRINGLITERAL -> node.value
-            TokenType.BOOLEAN ->
+            TokenType.BOOLEANLITERAL ->
                 when (node.value) {
                     "true" -> true
                     "false" -> false

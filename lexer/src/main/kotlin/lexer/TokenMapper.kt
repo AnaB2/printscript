@@ -5,7 +5,8 @@ import token.TokenType
 class TokenMapper(private val version: String) {
     private val strategyMap: MutableMap<TokenType, TokenClassifierStrategy> = mutableMapOf()
 
-    private val reservedKeywords = setOf("if", "else", "let", "const", "println", "true", "false") // Incluye true y false
+    // Actualiza las palabras reservadas, eliminando numberResult y stringResult
+    private val reservedKeywords = setOf("if", "else", "let", "const", "println", "true", "false")
 
     init {
         initializeStrategies()
@@ -42,7 +43,7 @@ class TokenMapper(private val version: String) {
         strategyMap[TokenType.CONDITIONAL] = RegexTokenClassifier("""\bif\b|\belse\b""".toRegex())
         strategyMap[TokenType.KEYWORD] = RegexTokenClassifier("""\blet\b|\bconst\b""".toRegex())
         strategyMap[TokenType.FUNCTION] = RegexTokenClassifier("println|readInput|readEnv".toRegex())
-        strategyMap[TokenType.DATA_TYPE] = RegexTokenClassifier("(string|number|boolean)".toRegex())
+        strategyMap[TokenType.DATA_TYPE] = RegexTokenClassifier("(\\bstring\\b|\\bnumber\\b|\\bboolean\\b)".toRegex())
         strategyMap[TokenType.BOOLEANLITERAL] = RegexTokenClassifier("(true|false)".toRegex())
         strategyMap[TokenType.PUNCTUATOR] = RegexTokenClassifier("""[{}()\[\],;.]""".toRegex())
     }
@@ -71,6 +72,11 @@ class TokenMapper(private val version: String) {
             if (strategy.classify(input)) {
                 return type
             }
+        }
+
+        // Si el input es numberResult o stringResult, clasifícalos como IDENTIFIER
+        if (input == "numberResult" || input == "stringResult") {
+            return TokenType.IDENTIFIER
         }
 
         return TokenType.UNKNOWN
