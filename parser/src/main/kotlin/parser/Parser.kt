@@ -38,10 +38,13 @@ class Parser {
     private fun getSameLineTokens(tokenList: List<Token>): List<List<Token>> {
         val rows = mutableListOf<List<Token>>()
         var singleRow = mutableListOf<Token>()
+        var llaves = 0
         for (token in tokenList) {
-            if (token.value != ";" && token.value != "\n") {
+            if (token.value == "{") llaves++
+            if (token.value == "}") llaves--
+            if ((token.value != ";" && token.value != "\n")) {
                 singleRow.add(token)
-            } else {
+            } else if (!((token.value=="\n" || token.value==";") && llaves>0)) {
                 rows.add(singleRow)
                 singleRow = mutableListOf()
             }
