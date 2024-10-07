@@ -31,8 +31,9 @@ class InterpreterTests {
     private val position = TokenPosition(1, 1)
 
     @Test
-    fun `test tck`(){
-        val text = "const booleanValue: boolean = true;\n" +
+    fun `test tck`() {
+        val text =
+            "const booleanValue: boolean = true;\n" +
                 "if(booleanValue) {\n" +
                 "    println(\"if statement working correctly\");\n" +
                 "}\n" +
@@ -40,10 +41,11 @@ class InterpreterTests {
         val tokens = Lexer(TokenMapper("1.1")).execute(text)
         val nodes = Parser().execute(tokens)
         val interpreter = Interpreter(printer)
-        val node = BlockNode(
-            nodes,
-            nodes[0].position
-        )
+        val node =
+            BlockNode(
+                nodes,
+                nodes[0].position,
+            )
 
         // Redirect output stream to capture print statements
         val outputStream = ByteArrayOutputStream()
