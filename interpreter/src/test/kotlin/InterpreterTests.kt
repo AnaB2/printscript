@@ -424,6 +424,29 @@ class InterpreterTests {
         // Verificar
         assertEquals(15, result) // 10 + 5
     }
+    /*
+    @Test
+    fun `test readEnv function`() {
+        // Configurar el entorno para que devuelva un valor específico
+        val envVariable = "BEST_FOOTBALL_CLUB"
+        System.setProperty(envVariable, "Barcelona") // Configura la variable de entorno para la prueba
+
+        val interpreter = Interpreter(printer)
+
+        // Crear el nodo de función readEnv
+        val readEnvNode = FunctionNode(TokenType.FUNCTION, LiteralNode(envVariable, TokenType.STRINGLITERAL, position), position)
+
+        // Ejecutar la función readEnv
+        val result = interpreter.execute(readEnvNode)
+
+        // Verificar que el resultado sea el valor de la variable de entorno
+        assertEquals("Barcelona", result)
+
+        // Limpiar la variable de entorno después de la prueba
+        System.clearProperty(envVariable)
+    }
+
+     */
 
     @Test
     fun `test programmatic conditional flow`() {
