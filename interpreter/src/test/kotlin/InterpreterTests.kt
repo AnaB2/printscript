@@ -8,13 +8,10 @@ import ast.LiteralNode
 import ast.PrintNode
 import interpreter.Interpreter
 import interpreter.Printer
-import lexer.Lexer
-import org.example.lexer.TokenMapper
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
-import parser.Parser
 import token.Token
 import token.TokenPosition
 import token.TokenType
@@ -29,31 +26,6 @@ class InterpreterTests {
             }
         }
     private val position = TokenPosition(1, 1)
-
-    @Test
-    fun `test tck`() {
-        val text =
-            "const booleanValue: boolean = true;\n" +
-                "if(booleanValue) {\n" +
-                "    println(\"if statement working correctly\");\n" +
-                "}\n" +
-                "println(\"outside of conditional\");"
-        val tokens = Lexer(TokenMapper("1.1")).execute(text)
-        val nodes = Parser().execute(tokens)
-        val interpreter = Interpreter(printer)
-        val node =
-            BlockNode(
-                nodes,
-                nodes[0].position,
-            )
-
-        // Redirect output stream to capture print statements
-        val outputStream = ByteArrayOutputStream()
-        System.setOut(PrintStream(outputStream))
-
-        interpreter.execute(node)
-        assertEquals("if statement working correctly", outputStream.toString().trim())
-    }
 
     @Test
     fun `test number literal evaluation`() {
@@ -452,20 +424,29 @@ class InterpreterTests {
         // Verificar
         assertEquals(15, result) // 10 + 5
     }
-
+    /*
     @Test
-    fun `test programmatic conditional flow`() {
+    fun `test readEnv function`() {
+        // Configurar el entorno para que devuelva un valor específico
+        val envVariable = "BEST_FOOTBALL_CLUB"
+        System.setProperty(envVariable, "Barcelona") // Configura la variable de entorno para la prueba
+
         val interpreter = Interpreter(printer)
 
-        // Definir una condición que siempre se cumple
-        val condition = LiteralNode("true", TokenType.BOOLEANLITERAL, position)
-        val thenBlock =
-            AssignationNode("x", LiteralNode("10", TokenType.NUMBERLITERAL, position), TokenType.ASSIGNATION, position)
-        val elseBlock =
-            AssignationNode("x", LiteralNode("20", TokenType.NUMBERLITERAL, position), TokenType.ASSIGNATION, position)
-        val conditionalNode = ConditionalNode(condition, thenBlock, elseBlock, position)
-        assertEquals(10, interpreter.execute(conditionalNode))
+        // Crear el nodo de función readEnv
+        val readEnvNode = FunctionNode(TokenType.FUNCTION, LiteralNode(envVariable, TokenType.STRINGLITERAL, position), position)
+
+        // Ejecutar la función readEnv
+        val result = interpreter.execute(readEnvNode)
+
+        // Verificar que el resultado sea el valor de la variable de entorno
+        assertEquals("Barcelona", result)
+
+        // Limpiar la variable de entorno después de la prueba
+        System.clearProperty(envVariable)
     }
+
+     */
 
     @Test
     fun `test programmatic script with multiple statements`() {

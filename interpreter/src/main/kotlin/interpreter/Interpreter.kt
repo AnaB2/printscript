@@ -257,19 +257,36 @@ class Interpreter(private val printer: Printer) {
         this.printer.print(value.toString())
     }
 
+    // Manejo del bloque
     private fun handleBlock(node: BlockNode): Any? {
         var result: Any? = null
         for (blockNode in node.nodes) {
-            result = execute(blockNode)
+            result = execute(blockNode) // Ejecutar cada nodo secuencialmente
         }
         return result
     }
 
+    // Manejo de condicional
     private fun handleConditional(node: ConditionalNode): Any? {
-        val condition =
-            execute(node.condition) as? Boolean
-                ?: throw RuntimeException("Condition must evaluate to a boolean")
-        return if (condition) execute(node.thenBlock) else execute(node.elseBlock)
+        // Evaluar la condición
+        val condition = execute(node.condition)
+
+        // Asegurarte de que la condición es un booleano
+        if (condition !is Boolean) {
+            throw RuntimeException("Condition must evaluate to a boolean")
+        }
+
+        // Ejecutar el bloque "then" si la condición es verdadera
+        if (condition) {
+            execute(node.thenBlock) // Ejecutar el bloque "then"
+        } else {
+            // Si hay un bloque "else", ejecutarlo
+            node.elseBlock?.let {
+                execute(it) // Ejecutar el bloque "else"
+            }
+        }
+        // Asegurarte de que el flujo continúa
+        return Unit // O simplemente puedes no retornar nada
     }
 
     /*

@@ -51,7 +51,7 @@ data class BlockNode(
 data class ConditionalNode(
     val condition: LiteralNode,
     val thenBlock: ASTNode,
-    val elseBlock: ASTNode,
+    val elseBlock: ASTNode? = null,
     override val position: TokenPosition,
 ) : ASTNode()
 
