@@ -11,7 +11,8 @@ import token.TokenType
 
 class ConditionalFactory : ASTFactory {
     override fun createAST(tokens: List<Token>): ASTNode {
-        val startCondition = tokens.indexOfFirst { it -> it.value == "(" } + 1
+        // Encontrar la condición
+        val startCondition = tokens.indexOfFirst { it.value == "(" } + 1
         val conditionToken = tokens[startCondition]
         val conditionNode =
             LiteralNode(
@@ -19,13 +20,22 @@ class ConditionalFactory : ASTFactory {
                 type = conditionToken.getType(),
                 position = conditionToken.getPosition(),
             )
+
+        // Procesar el bloque 'then' del 'if'
         val thenBlock = parseBlock(tokens, "if")
-        val elseBlock = parseBlock(tokens, "else") ?: NilNode
+
+        // Procesar el bloque 'else', si existe
+        val elseBlock =
+            if (tokens.any { it.value == "else" }) {
+                parseBlock(tokens, "else")
+            } else {
+                NilNode // Si no hay 'else', devolver un 'NilNode'
+            }
 
         return ConditionalNode(
             condition = conditionNode,
             thenBlock = thenBlock ?: NilNode,
-            elseBlock = elseBlock,
+            elseBlock = elseBlock ?: NilNode,
             position = conditionNode.position,
         )
     }
@@ -34,11 +44,20 @@ class ConditionalFactory : ASTFactory {
         allTokens: List<Token>,
         blockType: String,
     ): ASTNode? {
-        val index = allTokens.indexOfFirst { it -> it.value == blockType }
+        val index = allTokens.indexOfFirst { it.value == blockType }
         if (index < 0) return null
         val tokens = allTokens.drop(index)
-        val startBlock = tokens.indexOfFirst { it -> it.getType() == TokenType.PUNCTUATOR && it.value == "{" }
-        val endBlock = tokens.indexOfFirst { it -> it.getType() == TokenType.PUNCTUATOR && it.value == "}" }
+
+        // Buscar el bloque que empieza con "{" y termina con "}"
+        val startBlock = tokens.indexOfFirst { it.getType() == TokenType.PUNCTUATOR && it.value == "{" }
+        val endBlock = tokens.indexOfFirst { it.getType() == TokenType.PUNCTUATOR && it.value == "}" }
+
+        // Verificar que haya delimitadores del bloque
+        if (startBlock < 0 || endBlock < 0 || endBlock <= startBlock) {
+            throw RuntimeException("Error parsing block: missing or unbalanced braces")
+        }
+
+        // Procesar los tokens del bloque
         return BlockNode(
             nodes = Parser().execute(tokens.subList(startBlock + 1, endBlock)),
             position = tokens[startBlock + 1].getPosition(),

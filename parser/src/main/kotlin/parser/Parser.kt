@@ -39,22 +39,59 @@ class Parser {
         val rows = mutableListOf<List<Token>>()
         var singleRow = mutableListOf<Token>()
         var llaves = 0
-        for (token in tokenList) {
-            if (token.value == "{") llaves++
-            if (token.value == "}") llaves--
-            if ((token.value != ";" && token.value != "\n")) {
+        var expectingElse = false
+
+        for (i in tokenList.indices) {
+            val token = tokenList[i]
+
+            // Open a block
+            if (token.value == "{") {
+                llaves++
                 singleRow.add(token)
-            } else if (!((token.value=="\n" || token.value==";") && llaves>0)) {
-                rows.add(singleRow)
+            } else if (token.value == "}") {
+                llaves--
+                singleRow.add(token)
+
+                // If we're closing a block and not inside another block
+                if (llaves == 0) {
+                    // Check if the next token is 'else'
+                    if (i + 1 < tokenList.size && tokenList[i + 1].value == "else") {
+                        expectingElse = true
+                    } else {
+                        // Add current row because no 'else' follows
+                        rows.add(singleRow)
+                        singleRow = mutableListOf()
+                        expectingElse = false
+                    }
+                }
+            } else if (token.value == "if") {
+                if (singleRow.isNotEmpty()) {
+                    rows.add(singleRow)
+                }
                 singleRow = mutableListOf()
+                singleRow.add(token)
+                expectingElse = true
+            } else if (token.value == "else" && expectingElse) {
+                singleRow.add(token)
+                expectingElse = false
+            } else if ((token.value == ";" || token.value == "\n") && llaves == 0) {
+                if (singleRow.isNotEmpty()) {
+                    rows.add(singleRow)
+                    singleRow = mutableListOf()
+                }
+            } else {
+                singleRow.add(token)
             }
         }
+
         if (singleRow.isNotEmpty()) {
-            rows.add(singleRow) // Agregar la última línea si no está vacía
+            rows.add(singleRow)
         }
+
         if (rows.isEmpty()) {
-            throw Exception("Error: Not valid code.")
+            throw Exception("Error: No valid code.")
         }
+
         return rows
     }
 }

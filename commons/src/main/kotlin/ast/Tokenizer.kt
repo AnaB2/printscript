@@ -97,27 +97,20 @@ class Tokenizer {
                         finalPosition = node.position,
                     )
                 tokens.add(ifToken)
-                traverseAST(
-                    node.condition,
-                    tokens,
-                )
-                traverseAST(
-                    node.thenBlock,
-                    tokens,
-                )
-                if (node.elseBlock != NilNode) {
+                traverseAST(node.condition, tokens)
+                traverseAST(node.thenBlock, tokens)
+
+                // Handle elseBlock if it is not null
+                node.elseBlock?.let {
                     val elseToken =
                         Token(
                             type = TokenType.CONDITIONAL,
                             value = "else",
-                            initialPosition = node.elseBlock.position,
-                            finalPosition = node.elseBlock.position,
+                            initialPosition = it.position,
+                            finalPosition = it.position,
                         )
                     tokens.add(elseToken)
-                    traverseAST(
-                        node.elseBlock,
-                        tokens,
-                    )
+                    traverseAST(it, tokens)
                 }
             }
             is FunctionNode -> {
