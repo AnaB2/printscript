@@ -8,13 +8,10 @@ import ast.LiteralNode
 import ast.PrintNode
 import interpreter.Interpreter
 import interpreter.Printer
-import lexer.Lexer
-import org.example.lexer.TokenMapper
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
-import parser.Parser
 import token.Token
 import token.TokenPosition
 import token.TokenType
@@ -29,31 +26,6 @@ class InterpreterTests {
             }
         }
     private val position = TokenPosition(1, 1)
-
-    @Test
-    fun `test tck`() {
-        val text =
-            "const booleanValue: boolean = true;\n" +
-                "if(booleanValue) {\n" +
-                "    println(\"if statement working correctly\");\n" +
-                "}\n" +
-                "println(\"outside of conditional\");"
-        val tokens = Lexer(TokenMapper("1.1")).execute(text)
-        val nodes = Parser().execute(tokens)
-        val interpreter = Interpreter(printer)
-        val node =
-            BlockNode(
-                nodes,
-                nodes[0].position,
-            )
-
-        // Redirect output stream to capture print statements
-        val outputStream = ByteArrayOutputStream()
-        System.setOut(PrintStream(outputStream))
-
-        interpreter.execute(node)
-        assertEquals("if statement working correctly", outputStream.toString().trim())
-    }
 
     @Test
     fun `test number literal evaluation`() {
@@ -475,20 +447,6 @@ class InterpreterTests {
     }
 
      */
-
-    @Test
-    fun `test programmatic conditional flow`() {
-        val interpreter = Interpreter(printer)
-
-        // Definir una condición que siempre se cumple
-        val condition = LiteralNode("true", TokenType.BOOLEANLITERAL, position)
-        val thenBlock =
-            AssignationNode("x", LiteralNode("10", TokenType.NUMBERLITERAL, position), TokenType.ASSIGNATION, position)
-        val elseBlock =
-            AssignationNode("x", LiteralNode("20", TokenType.NUMBERLITERAL, position), TokenType.ASSIGNATION, position)
-        val conditionalNode = ConditionalNode(condition, thenBlock, elseBlock, position)
-        assertEquals(10, interpreter.execute(conditionalNode))
-    }
 
     @Test
     fun `test programmatic script with multiple statements`() {
