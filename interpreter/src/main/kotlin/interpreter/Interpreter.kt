@@ -31,13 +31,13 @@ class Interpreter(private val printer: Printer) {
     }
 
     private fun handleFunction(node: FunctionNode): Any? {
-        return when (node.function) {
+        return when (node.type) {
             TokenType.FUNCTION -> {
                 val value = execute(node.expression)
                 println(value)
                 value
             }
-            else -> throw RuntimeException("Unsupported function: ${node.function}")
+            else -> throw RuntimeException("Unsupported function: ${node.type}")
         }
     }
 

@@ -56,7 +56,7 @@ data class ConditionalNode(
 ) : ASTNode()
 
 data class FunctionNode(
-    val tokenType: TokenType,
+    val type: TokenType,
     val functionName: String,
     val expression: ASTNode,
     override val position: TokenPosition,

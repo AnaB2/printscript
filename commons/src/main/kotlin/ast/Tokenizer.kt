@@ -117,7 +117,7 @@ class Tokenizer {
                 val token =
                     Token(
                         type = TokenType.FUNCTION,
-                        value = node.function.name.lowercase(),
+                        value = node.functionName.lowercase(),
                         initialPosition = node.position,
                         finalPosition = node.position,
                     )

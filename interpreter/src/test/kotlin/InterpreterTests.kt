@@ -335,7 +335,7 @@ class InterpreterTests {
     @Test
     fun `test function node`() {
         val expression = LiteralNode("Hello, world!", TokenType.STRINGLITERAL, position)
-        val node = FunctionNode(TokenType.FUNCTION, expression, position)
+        val node = FunctionNode(TokenType.FUNCTION, "println", expression, position)
         val interpreter = Interpreter(printer)
 
         // Redirect output stream to capture print statements
@@ -413,7 +413,7 @@ class InterpreterTests {
                 Token(TokenType.OPERATOR, "+", position, position),
                 position,
             )
-        val functionNode = FunctionNode(TokenType.FUNCTION, functionBody, position)
+        val functionNode = FunctionNode(TokenType.FUNCTION, "println", functionBody, position)
 
         // Asignar un valor a x
         interpreter.variables["x"] = 10

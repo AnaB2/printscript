@@ -20,7 +20,7 @@ class FunctionFactory : ASTFactory {
             )
 
         return FunctionNode(
-            tokenType = functionToken.getType(),
+            type = functionToken.getType(),
             functionName = functionToken.value,
             expression = expressionNode,
             position = functionToken.getPosition(),
