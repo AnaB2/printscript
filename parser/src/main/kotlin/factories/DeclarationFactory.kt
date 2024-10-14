@@ -97,7 +97,11 @@ class DeclarationFactory : ASTFactory {
                 expressionTokens[0],
             )
         } else {
-            OperationFactory().createAST(expressionTokens)
+            if (FunctionFactory().canHandle(expressionTokens)) {
+                FunctionFactory().createAST(expressionTokens)
+            } else {
+                OperationFactory().createAST(expressionTokens)
+            }
         }
     }
 

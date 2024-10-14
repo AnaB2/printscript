@@ -12,7 +12,7 @@ import ast.NilNode
 import ast.PrintNode
 import token.TokenType
 
-class Interpreter(private val printer: Printer) {
+class Interpreter(private val printer: Printer, private val reader: Reader) {
     val variables: MutableMap<String, Any?> = mutableMapOf()
 
     fun execute(node: ASTNode): Any? {
@@ -31,13 +31,63 @@ class Interpreter(private val printer: Printer) {
     }
 
     private fun handleFunction(node: FunctionNode): Any? {
-        return when (node.function) {
+        return when (node.type) {
             TokenType.FUNCTION -> {
-                val value = execute(node.expression)
-                println(value)
-                value
+                when (node.functionName) {
+                    "readInput" -> handleReadInput(node)
+                    "readEnv" -> handleReadEnv(node)
+                    else -> {
+                        val value = execute(node.expression)
+                        println(value)
+                        value
+                    }
+                }
             }
-            else -> throw RuntimeException("Unsupported function: ${node.function}")
+            else -> throw RuntimeException("Unsupported function: ${node.type}")
+        }
+    }
+
+    private fun handleReadInput(node: FunctionNode): Any? {
+        val argument: LiteralNode =
+            if (node.expression is LiteralNode) {
+                node.expression as LiteralNode
+            } else {
+                throw RuntimeException(
+                    "readInput necesita solo un argumento",
+                )
+            }
+        val message =
+            execute(argument) as? String
+                ?: throw RuntimeException("El argumento de readInput debe ser String")
+
+        printer.print(argument.value) // imprime argumento de readInput
+        val userInput = reader.input(message) // guarda lo ingresado por usuario
+        return convertInput(userInput)
+    }
+
+    private fun handleReadEnv(node: FunctionNode): Any? {
+        val argument: LiteralNode =
+            if (node.expression is LiteralNode) {
+                node.expression as LiteralNode
+            } else {
+                throw RuntimeException(
+                    "readEnv necesita solo un argumento",
+                )
+            }
+        val varName =
+            execute(argument) as? String
+                ?: throw RuntimeException("El argumento de readEnv debe ser String")
+
+        return System.getenv(varName) ?: throw RuntimeException("La variable de entorno '$varName' no está definida")
+    }
+
+    private fun convertInput(input: String): Any? {
+        return when {
+            input.equals("true", ignoreCase = true) -> true
+            input.equals("false", ignoreCase = true) -> false
+            input.toIntOrNull() != null -> input.toInt()
+            input.toDoubleOrNull() != null -> input.toDouble()
+            else -> input // Devuelve la entrada como cadena si no se convierte
         }
     }
 

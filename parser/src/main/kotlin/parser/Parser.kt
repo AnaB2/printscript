@@ -5,6 +5,7 @@ import factories.ASTFactory
 import factories.AssignationFactory
 import factories.ConditionalFactory
 import factories.DeclarationFactory
+import factories.FunctionFactory
 import factories.PrintlnFactory
 import token.Token
 
@@ -15,6 +16,7 @@ class Parser {
             PrintlnFactory(),
             DeclarationFactory(),
             AssignationFactory(),
+            FunctionFactory(),
         )
 
     fun execute(tokens: List<Token>): List<ASTNode> {

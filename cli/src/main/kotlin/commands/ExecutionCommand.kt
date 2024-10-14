@@ -5,7 +5,9 @@ import cli.showProgress
 import cli.tokenize
 import interpreter.Interpreter
 import interpreter.Printer
+import interpreter.Reader
 import parser.Parser
+import java.util.Scanner
 
 class ExecutionCommand(private val source: String, private val version: String, private val isFile: Boolean) : Command {
     override fun execute() {
@@ -22,7 +24,14 @@ class ExecutionCommand(private val source: String, private val version: String, 
                         println(message)
                     }
                 }
-            val interpreter = Interpreter(printer)
+            val reader: Reader =
+                object : Reader {
+                    override fun input(message: String): String {
+                        val scanner = Scanner(System.`in`)
+                        return scanner.nextLine()
+                    }
+                }
+            val interpreter = Interpreter(printer, reader)
             for (node in astNodes) {
                 interpreter.execute(node)
             }
