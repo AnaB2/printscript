@@ -78,7 +78,7 @@ class Interpreter(private val printer: Printer, private val reader: Reader) {
             execute(argument) as? String
                 ?: throw RuntimeException("El argumento de readEnv debe ser String")
 
-        return variables[varName] ?: throw RuntimeException("La variable de entorno '$varName' no está definida")
+        return System.getenv(varName) ?: throw RuntimeException("La variable de entorno '$varName' no está definida")
     }
 
     private fun convertInput(input: String): Any? {
