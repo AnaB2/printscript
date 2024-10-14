@@ -43,56 +43,62 @@ class Parser {
         var llaves = 0
         var expectingElse = false
 
+        fun addRowToRows(
+            row: List<Token>,
+            lastToken: Token,
+        ) {
+            if (lastToken.value != ";" || lastToken.value != "}") error("las sentencias deben finalizar con \";\" o \"}\"")
+            rows.add(row)
+        }
+
         for (i in tokenList.indices) {
             val token = tokenList[i]
-
             // Open a block
-            if (token.value == "{") {
-                llaves++
-                singleRow.add(token)
-            } else if (token.value == "}") {
-                llaves--
-                singleRow.add(token)
 
-                // If we're closing a block and not inside another block
-                if (llaves == 0) {
-                    // Check if the next token is 'else'
-                    if (i + 1 < tokenList.size && tokenList[i + 1].value == "else") {
-                        expectingElse = true
-                    } else {
-                        // Add current row because no 'else' follows
-                        rows.add(singleRow)
-                        singleRow = mutableListOf()
-                        expectingElse = false
+            when (token.value) {
+                "{" -> {
+                    llaves++
+                    singleRow.add(token)
+                }
+
+                "}" -> {
+                    llaves--
+                    singleRow.add(token)
+                    if (llaves == 0) {
+                        if (i + 1 < tokenList.size && tokenList[i + 1].value == "else") {
+                            expectingElse = true
+                        } else {
+                            addRowToRows(singleRow, token)
+                            singleRow = mutableListOf()
+                            expectingElse = false
+                        }
                     }
                 }
-            } else if (token.value == "if") {
-                if (singleRow.isNotEmpty()) {
-                    rows.add(singleRow)
+                "if" -> {
+                    if (singleRow.isNotEmpty()) addRowToRows(singleRow, token)
+                    singleRow.add(token)
+                    expectingElse = true
                 }
-                singleRow = mutableListOf()
-                singleRow.add(token)
-                expectingElse = true
-            } else if (token.value == "else" && expectingElse) {
-                singleRow.add(token)
-                expectingElse = false
-            } else if ((token.value == ";" || token.value == "\n") && llaves == 0) {
-                if (singleRow.isNotEmpty()) {
-                    rows.add(singleRow)
-                    singleRow = mutableListOf()
-                }
-            } else {
-                singleRow.add(token)
+                "else" ->
+                    if (expectingElse) {
+                        singleRow.add(token)
+                        expectingElse = false
+                    } else {
+                        continue
+                    }
+                ";" ->
+                    if (llaves == 0 && singleRow.isNotEmpty()) {
+                        addRowToRows(singleRow, token)
+                        singleRow = mutableListOf()
+                    } else {
+                        continue
+                    }
+                else -> singleRow.add(token)
             }
         }
 
-        if (singleRow.isNotEmpty()) {
-            rows.add(singleRow)
-        }
-
-        if (rows.isEmpty()) {
-            throw Exception("Error: No valid code.")
-        }
+        if (singleRow.isNotEmpty()) addRowToRows(singleRow, singleRow.last())
+        if (rows.isEmpty()) throw Exception("Error: No valid code.")
 
         return rows
     }
