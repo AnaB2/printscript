@@ -60,13 +60,8 @@ class Interpreter(private val printer: Printer, private val reader: Reader) {
             execute(argument) as? String
                 ?: throw RuntimeException("El argumento de readInput debe ser String")
 
-        // Imprimir el mensaje de solicitud
-        println(argument)
-
-        // Leer la entrada del usuario
-        val userInput = reader.input(message)
-
-        // Intentar convertir la entrada al tipo esperado
+        printer.print(argument.value) // imprime argumento de readInput
+        val userInput = reader.input(message) // guarda lo ingresado por usuario
         return convertInput(userInput)
     }
 
