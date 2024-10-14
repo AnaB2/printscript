@@ -14,6 +14,7 @@ import token.TokenType
 
 class Interpreter(private val printer: Printer, private val reader: Reader) {
     val variables: MutableMap<String, Any?> = mutableMapOf()
+    val tiposDeVariables: MutableMap<String, String> = mutableMapOf()
 
     fun execute(node: ASTNode): Any? {
         return when (node) {
@@ -255,6 +256,9 @@ class Interpreter(private val printer: Printer, private val reader: Reader) {
 
         // Verifica si la variable ya está declarada y su tipo
         if (variables.containsKey(node.id)) {
+            if (tiposDeVariables[node.id] == "const") {
+                throw RuntimeException("No es posible reasignar una variable de tipo ${tiposDeVariables[node.id]}")
+            }
             val expectedType =
                 when (variables[node.id]) {
                     is Int -> TokenType.NUMBERLITERAL
@@ -297,6 +301,7 @@ class Interpreter(private val printer: Printer, private val reader: Reader) {
         // Solo guardar la variable si el valor no es Unit
         if (value != Unit) {
             variables[node.id] = value
+            tiposDeVariables[node.id] = node.declValue
         }
 
         return value
