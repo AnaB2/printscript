@@ -8,14 +8,15 @@ import token.TokenType
 
 class FunctionFactory : ASTFactory {
     override fun createAST(tokens: List<Token>): ASTNode {
-        val functionToken = tokens.find { it.getType() == TokenType.FUNCTION }!!
-        val expressionToken = tokens.last()
+        val indexFunctionToken = tokens.indexOfFirst { it -> it.getType() == TokenType.FUNCTION }
+        val functionToken = tokens.get(indexFunctionToken)
+        val expressionToken = tokens.subList(indexFunctionToken + 2, tokens.size - 1)
 
         val expressionNode =
             LiteralNode(
-                value = expressionToken.value,
-                type = expressionToken.getType(),
-                position = expressionToken.getPosition(),
+                value = expressionToken.first().value,
+                type = expressionToken.first().getType(),
+                position = expressionToken.first().getPosition(),
             )
 
         return FunctionNode(
