@@ -59,7 +59,7 @@ class ConditionalFactory : ASTFactory {
 
         // Procesar los tokens del bloque
         return BlockNode(
-            nodes = Parser().execute(tokens.subList(startBlock + 1, endBlock)),
+            nodes = Parser().execute(tokens.subList(startBlock + 1, endBlock + 1)),
             position = tokens[startBlock + 1].getPosition(),
         )
     }
