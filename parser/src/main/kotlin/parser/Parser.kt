@@ -47,7 +47,11 @@ class Parser {
             row: List<Token>,
             lastToken: Token,
         ) {
-            if (lastToken.value != ";" && lastToken.value != "}") throw Exception("las sentencias deben finalizar con \";\" o \"}\"")
+            if (lastToken.value != ";" && lastToken.value != "}" && lastToken.value != "{") {
+                throw Exception(
+                    "las sentencias deben finalizar con \";\" o \"}\"",
+                )
+            }
             rows.add(row)
         }
 
