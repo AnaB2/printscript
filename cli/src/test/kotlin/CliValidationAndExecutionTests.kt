@@ -22,7 +22,7 @@ class CliValidationAndExecutionTests {
     fun testValidationWithArithmeticOperations() {
         val inputCode =
             """
-            let x: number = 5 + 3 * (2 - 1)
+            let x: number = 5 + 3 * (2 - 1);
             """.trimIndent()
         val input = "validation\ntext\n$inputCode\n1.0\n"
         System.setIn(ByteArrayInputStream(input.toByteArray()))
@@ -130,7 +130,7 @@ class CliValidationAndExecutionTests {
     fun testExecutionWithPrintStatements() {
         val inputCode =
             """
-            println('Hello, World!')
+            println('Hello, World!');
             """.trimIndent()
         val input = "execution\ntext\n$inputCode\n1.0\n"
         System.setIn(ByteArrayInputStream(input.toByteArray()))
@@ -183,7 +183,7 @@ class CliValidationAndExecutionTests {
     fun testValidationWithStringManipulation() {
         val inputCode =
             """
-            let message: string = 'Hello' + ', ' + 'world!'
+            let message: string = 'Hello' + ', ' + 'world!';
             """.trimIndent()
         val input = "validation\ntext\n$inputCode\n1.0\n"
         System.setIn(ByteArrayInputStream(input.toByteArray()))
@@ -258,7 +258,7 @@ class CliValidationAndExecutionTests {
     fun testValidationWithComplexExpression() {
         val inputCode =
             """
-            let result: number = (10 + 5) * (3 - 2) / 5
+            let result: number = (10 + 5) * (3 - 2) / 5;
             """.trimIndent()
         val input = "validation\ntext\n$inputCode\n1.0\n"
         System.setIn(ByteArrayInputStream(input.toByteArray()))

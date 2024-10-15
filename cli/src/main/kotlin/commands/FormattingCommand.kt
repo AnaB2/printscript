@@ -2,10 +2,8 @@ package commands
 
 import cli.handleError
 import cli.showProgress
-import cli.tokenize
 import formatter.FormatterBuilderPS
 import interpreter.Printer
-import parser.Parser
 
 class FormattingCommand(private val source: String, private val version: String, private val args: List<String>) : Command {
     override fun execute() {
@@ -13,9 +11,7 @@ class FormattingCommand(private val source: String, private val version: String,
             println("Formatting...")
             showProgress()
 
-            val tokens = tokenize(source, version)
-            val astNodes = Parser().execute(tokens)
-            val formattedCode = buildFormatter().format(astNodes)
+            val formattedCode = buildFormatter().format(source)
 
             // Definir el Printer como en ExecutionCommand
             val printer: Printer =

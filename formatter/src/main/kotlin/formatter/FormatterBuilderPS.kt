@@ -8,6 +8,9 @@ import formatOperations.FormatDeclaration
 import formatOperations.FormatLiteral
 import formatOperations.FormatOperation
 import formatOperations.FormatPrint
+import lexer.Lexer
+import org.example.lexer.TokenMapper
+import parser.Parser
 import rules.RulesReader
 
 class FormatterBuilderPS : FormatterBuilder {
@@ -44,7 +47,9 @@ class FormatterBuilderPS : FormatterBuilder {
                     "lineBreak" to Int::class,
                 ),
             )
-        return FormatterPS(rulesReader, rulesPath, formatOperations)
+        val lexer = Lexer(TokenMapper("1.0"))
+        val parser = Parser()
+        return FormatterPS(rulesReader, rulesPath, formatOperations, lexer, parser)
     }
 
     private fun formatter11(rulesPath: String): Formatter {
@@ -71,7 +76,9 @@ class FormatterBuilderPS : FormatterBuilder {
                     "conditionalIndentation" to Int::class,
                 ),
             )
-        return FormatterPS(rulesReader, rulesPath, formatOperations)
+        val lexer = Lexer(TokenMapper("1.1"))
+        val parser = Parser()
+        return FormatterPS(rulesReader, rulesPath, formatOperations, lexer, parser)
     }
 
     private fun getAllowedDeclarationKeywords(version: String): List<String> {
