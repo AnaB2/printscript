@@ -3,7 +3,7 @@ package formatter
 import ast.ASTNode
 
 interface Formatter {
-    fun format(astNodes: List<ASTNode>): String
+    fun format(input: String): String
 
     fun format(astNode: ASTNode): String
 
