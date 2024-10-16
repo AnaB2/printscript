@@ -7,8 +7,8 @@ class RulesReader(
     private val requiredRules: Map<String, KClass<*>>,
 ) {
     fun readFile(path: String): Map<String, Any> {
-        val yaml: String = File(path).readText() // transforma el contenido a String
-        val rulesMap: Map<String, Any> = Yaml().load(yaml) // convierte contenido a Map<String, Any>
+        val json: String = File(path).readText() // lee el contenido del archivo
+        val rulesMap = Yaml().load(json) as Map<String, Any> // convierte el contenido a un mapa
 
         // chequea que se encuentren las configuraciones requeridas
         checkRules(rulesMap, requiredRules)

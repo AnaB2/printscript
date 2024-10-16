@@ -13,7 +13,7 @@ import org.example.lexer.TokenMapper
 import parser.Parser
 import rules.RulesReader
 
-class FormatterBuilderPS : FormatterBuilder {
+open class FormatterBuilderPS : FormatterBuilder {
     override fun build(
         rulesPath: String,
         version: String,

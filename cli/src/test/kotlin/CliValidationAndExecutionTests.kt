@@ -268,6 +268,7 @@ class CliValidationAndExecutionTests {
         assertTrue(outContent.toString().contains("Validating content..."))
         assertTrue(outContent.toString().contains("Validation successful."))
     }
+
 /*
     @Test
     fun testExecutionWithNestedConditionals() {
