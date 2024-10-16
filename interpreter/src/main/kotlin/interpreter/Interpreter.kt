@@ -82,7 +82,7 @@ class Interpreter(private val printer: Printer, private val reader: Reader) {
         return System.getenv(varName) ?: throw RuntimeException("La variable de entorno '$varName' no está definida")
     }
 
-    private fun convertInput(input: String): Any? {
+    fun convertInput(input: String): Any? {
         return when {
             input.equals("true", ignoreCase = true) -> true
             input.equals("false", ignoreCase = true) -> false

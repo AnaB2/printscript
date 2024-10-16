@@ -5,6 +5,7 @@ import ast.ConditionalNode
 import ast.DeclarationNode
 import ast.FunctionNode
 import ast.LiteralNode
+import ast.NilNode
 import ast.PrintNode
 import interpreter.Interpreter
 import interpreter.Printer
@@ -12,6 +13,7 @@ import interpreter.Reader
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import token.Token
 import token.TokenPosition
@@ -19,6 +21,7 @@ import token.TokenType
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import java.util.Scanner
+import kotlin.test.assertNull
 
 class InterpreterTests {
     private val printer: Printer =
@@ -533,5 +536,589 @@ class InterpreterTests {
         val node = BinaryNode(left, right, operatorToken, position)
         val interpreter = Interpreter(printer, reader)
         assertEquals("25", interpreter.execute(node))
+    }
+
+    @Test
+    fun `test handleReadEnv with undefined environment variable`() {
+        val interpreter = Interpreter(printer, reader)
+        val envVariable = "BEST_FOOTBALL_CLUB"
+        val node = FunctionNode(TokenType.FUNCTION, "readEnv", LiteralNode(envVariable, TokenType.STRINGLITERAL, position), position)
+        assertThrows(RuntimeException::class.java) {
+            interpreter.execute(node)
+        }
+    }
+
+    @Test
+    fun `test convertInput with boolean true`() {
+        val interpreter = Interpreter(printer, reader)
+        val result = interpreter.convertInput("true")
+        assertEquals(true, result)
+    }
+
+    @Test
+    fun `test convertInput with integer`() {
+        val interpreter = Interpreter(printer, reader)
+        val result = interpreter.convertInput("123")
+        assertEquals(123, result)
+    }
+
+    @Test
+    fun `test convertInput with double`() {
+        val interpreter = Interpreter(printer, reader)
+        val result = interpreter.convertInput("123.45")
+        assertEquals(123.45, result)
+    }
+
+    @Test
+    fun `test convertInput with string`() {
+        val interpreter = Interpreter(printer, reader)
+        val result = interpreter.convertInput("hello")
+        assertEquals("hello", result)
+    }
+
+    @Test
+    fun `test addition of two integers`() {
+        val left = LiteralNode("10", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("5", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "+", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        val result = interpreter.execute(node)
+        assertEquals(15, result)
+    }
+
+    @Test
+    fun `test addition of two strings`() {
+        val left = LiteralNode("Hello", TokenType.STRINGLITERAL, position)
+        val right = LiteralNode(" World", TokenType.STRINGLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "+", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        val result = interpreter.execute(node)
+        assertEquals("Hello World", result)
+    }
+
+    @Test
+    fun `test addition of integer and string`() {
+        val left = LiteralNode("10", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode(" apples", TokenType.STRINGLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "+", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        val result = interpreter.execute(node)
+        assertEquals("10 apples", result)
+    }
+
+    @Test
+    fun `test addition of string and integer`() {
+        val left = LiteralNode("Count: ", TokenType.STRINGLITERAL, position)
+        val right = LiteralNode("5", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "+", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        val result = interpreter.execute(node)
+        assertEquals("Count: 5", result)
+    }
+
+    @Test
+    fun `test addition of two doubles`() {
+        val left = LiteralNode("3.14", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("2.71", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "+", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        val result = interpreter.execute(node)
+        assertEquals(5.85, result)
+    }
+
+    @Test
+    fun `test subtraction of two integers`() {
+        val left = LiteralNode("10", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("5", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "-", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        val result = interpreter.execute(node)
+        assertEquals(5, result)
+    }
+
+    @Test
+    fun `test subtraction of two floats`() {
+        val left = LiteralNode("10.5", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("5.2", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "-", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        val result = interpreter.execute(node)
+        assertEquals(5.3, result)
+    }
+
+    @Test
+    fun `test subtraction of int and float`() {
+        val left = LiteralNode("10", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("2.5", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "-", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        val result = interpreter.execute(node)
+        assertEquals(7.5, result)
+    }
+
+    @Test
+    fun `test subtraction of float and int`() {
+        val left = LiteralNode("10.5", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("5", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "-", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        val result = interpreter.execute(node)
+        assertEquals(5.5, result)
+    }
+
+    @Test
+    fun `test subtraction of two doubles`() {
+        val left = LiteralNode("10.75", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("3.25", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "-", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        val result = interpreter.execute(node)
+        assertEquals(7.5, result)
+    }
+
+    @Test
+    fun `test multiplication of two integers`() {
+        val left = LiteralNode("6", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("7", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "*", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        val result = interpreter.execute(node)
+        assertEquals(42, result)
+    }
+
+    @Test
+    fun `test multiplication of two floats`() {
+        val left = LiteralNode("2.5", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("3.5", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "*", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        val result = interpreter.execute(node)
+        assertEquals(8.75, result)
+    }
+
+    @Test
+    fun `test multiplication of integer and float`() {
+        val left = LiteralNode("4", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("2.5", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "*", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        val result = interpreter.execute(node)
+        assertEquals(10.0, result)
+    }
+
+    @Test
+    fun `test multiplication of float and integer`() {
+        val left = LiteralNode("2.5", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("4", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "*", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        val result = interpreter.execute(node)
+        assertEquals(10.0, result)
+    }
+
+    @Test
+    fun `test multiplication of two doubles`() {
+        val left = LiteralNode("3.5", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("2.0", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "*", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        val result = interpreter.execute(node)
+        assertEquals(7.0, result)
+    }
+
+    @Test
+    fun `test multiplication of integer and double`() {
+        val left = LiteralNode("4", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("2.5", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "*", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        val result = interpreter.execute(node)
+        assertEquals(10.0, result)
+    }
+
+    @Test
+    fun `test multiplication of double and integer`() {
+        val left = LiteralNode("2.5", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("4", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "*", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        val result = interpreter.execute(node)
+        assertEquals(10.0, result)
+    }
+
+    @Test
+    fun `test multiplication of string with integer throws exception`() {
+        val left = LiteralNode("Hello", TokenType.STRINGLITERAL, position)
+        val right = LiteralNode("4", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "*", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        assertThrows(RuntimeException::class.java) {
+            interpreter.execute(node)
+        }
+    }
+
+    @Test
+    fun `test multiplication of integer with string throws exception`() {
+        val left = LiteralNode("4", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("Hello", TokenType.STRINGLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "*", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        assertThrows(RuntimeException::class.java) {
+            interpreter.execute(node)
+        }
+    }
+
+    @Test
+    fun `test division of two integers`() {
+        val left = LiteralNode("10", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("2", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "/", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        val result = interpreter.execute(node)
+        assertEquals(5, result)
+    }
+
+    @Test
+    fun `test division of two floats`() {
+        val left = LiteralNode("7.5", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("2.5", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "/", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        val result = interpreter.execute(node)
+        assertEquals(3.0, result)
+    }
+
+    @Test
+    fun `test division of integer by float`() {
+        val left = LiteralNode("10", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("4.0", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "/", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        val result = interpreter.execute(node)
+        assertEquals(2.5, result)
+    }
+
+    @Test
+    fun `test division of float by integer`() {
+        val left = LiteralNode("7.5", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("3", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "/", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        val result = interpreter.execute(node)
+        assertEquals(2.5, result)
+    }
+
+    @Test
+    fun `test division of two doubles`() {
+        val left = LiteralNode("9.0", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("3.0", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "/", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        val result = interpreter.execute(node)
+        assertEquals(3.0, result)
+    }
+
+    @Test
+    fun `test division of integer by double`() {
+        val left = LiteralNode("10", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("4.0", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "/", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        val result = interpreter.execute(node)
+        assertEquals(2.5, result)
+    }
+
+    @Test
+    fun `test division of double by integer`() {
+        val left = LiteralNode("10.0", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("2", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "/", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        val result = interpreter.execute(node)
+        assertEquals(5.0, result)
+    }
+
+    @Test
+    fun `test division by zero throws exception`() {
+        val left = LiteralNode("10", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("0", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "/", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        assertThrows(RuntimeException::class.java) {
+            interpreter.execute(node)
+        }
+    }
+
+    @Test
+    fun `test division of string with number throws exception`() {
+        val left = LiteralNode("Hello", TokenType.STRINGLITERAL, position)
+        val right = LiteralNode("5", TokenType.NUMBERLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "/", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        assertThrows(RuntimeException::class.java) {
+            interpreter.execute(node)
+        }
+    }
+
+    @Test
+    fun `test division of number with string throws exception`() {
+        val left = LiteralNode("5", TokenType.NUMBERLITERAL, position)
+        val right = LiteralNode("Hello", TokenType.STRINGLITERAL, position)
+        val operatorToken = Token(TokenType.OPERATOR, "/", position, position)
+        val node = BinaryNode(left, right, operatorToken, position)
+        val interpreter = Interpreter(printer, reader)
+
+        assertThrows(RuntimeException::class.java) {
+            interpreter.execute(node)
+        }
+    }
+
+    @Test
+    fun `test assignment of integer variable`() {
+        val expression = LiteralNode("10", TokenType.NUMBERLITERAL, position)
+        val node = AssignationNode("x", expression, TokenType.NUMBERLITERAL, position) // Ahora incluye valType
+        val interpreter = Interpreter(printer, reader)
+
+        val result = interpreter.execute(node)
+
+        assertEquals(10, interpreter.variables["x"])
+        assertEquals(10, result)
+    }
+
+    @Test
+    fun `test assignment of string variable`() {
+        val expression = LiteralNode("Hello", TokenType.STRINGLITERAL, position)
+        val node = AssignationNode("greeting", expression, TokenType.STRINGLITERAL, position) // Ahora incluye valType
+        val interpreter = Interpreter(printer, reader)
+
+        val result = interpreter.execute(node)
+
+        assertEquals("Hello", interpreter.variables["greeting"])
+        assertEquals("Hello", result)
+    }
+
+    @Test
+    fun `test reassignment of variable with same type`() {
+        val interpreter = Interpreter(printer, reader)
+
+        // Primera asignación
+        val initialExpression = LiteralNode("42", TokenType.NUMBERLITERAL, position)
+        val initialNode = AssignationNode("numberVar", initialExpression, TokenType.NUMBERLITERAL, position)
+        interpreter.execute(initialNode)
+
+        // Reasignación con el mismo tipo
+        val newExpression = LiteralNode("100", TokenType.NUMBERLITERAL, position)
+        val newNode = AssignationNode("numberVar", newExpression, TokenType.NUMBERLITERAL, position)
+        val result = interpreter.execute(newNode)
+
+        assertEquals(100, interpreter.variables["numberVar"])
+        assertEquals(100, result)
+    }
+
+    @Test
+    fun `test reassignment of variable with different type throws exception`() {
+        val interpreter = Interpreter(printer, reader)
+
+        // Asignación inicial de entero
+        val initialExpression = LiteralNode("42", TokenType.NUMBERLITERAL, position)
+        val initialNode = AssignationNode("varTest", initialExpression, TokenType.NUMBERLITERAL, position)
+        interpreter.execute(initialNode)
+
+        // Intento de reasignar con un string
+        val newExpression = LiteralNode("New Value", TokenType.STRINGLITERAL, position)
+        val newNode = AssignationNode("varTest", newExpression, TokenType.STRINGLITERAL, position)
+
+        val exception =
+            assertThrows(RuntimeException::class.java) {
+                interpreter.execute(newNode)
+            }
+        assertEquals("Invalid expression for type numberliteral", exception.message)
+    }
+
+    @Test
+    fun `test assignment to const variable throws exception`() {
+        val interpreter = Interpreter(printer, reader)
+
+        // Asignación inicial de una constante
+        val initialExpression = LiteralNode("FixedValue", TokenType.STRINGLITERAL, position)
+        interpreter.variables["constVar"] = "FixedValue"
+        interpreter.tiposDeVariables["constVar"] = "const"
+
+        // Intento de reasignar una constante
+        val newExpression = LiteralNode("New Value", TokenType.STRINGLITERAL, position)
+        val newNode = AssignationNode("constVar", newExpression, TokenType.STRINGLITERAL, position)
+
+        val exception =
+            assertThrows(RuntimeException::class.java) {
+                interpreter.execute(newNode)
+            }
+        assertEquals("No es posible reasignar una variable de tipo const", exception.message)
+    }
+
+    @Test
+    fun `test variable assignment prints debug information`() {
+        val expression = LiteralNode("30", TokenType.NUMBERLITERAL, position)
+        val node = AssignationNode("debugVar", expression, TokenType.NUMBERLITERAL, position)
+        val interpreter = Interpreter(printer, reader)
+
+        val outputStream = ByteArrayOutputStream()
+        System.setOut(PrintStream(outputStream))
+
+        val result = interpreter.execute(node)
+
+        val output = outputStream.toString().trim()
+
+        assertTrue(output.contains("Asignando a la variable 'debugVar' el valor 30"))
+        assertTrue(output.contains("Valor asignado a 'debugVar' es ahora 30"))
+        assertEquals(30, result)
+    }
+
+    @Test
+    fun `test valid readInput with string argument`() {
+        val expression = LiteralNode("Enter your name: ", TokenType.STRINGLITERAL, position)
+        val node = FunctionNode(TokenType.FUNCTION, "readInput", expression, position) // Modificado aquí
+
+        // Simulamos la interacción con el reader
+        val interpreter =
+            Interpreter(
+                printer,
+                object : Reader {
+                    override fun input(message: String): String {
+                        return "John Doe"
+                    }
+                },
+            )
+
+        val result = interpreter.execute(node)
+
+        assertEquals("John Doe", result) // Verifica que la entrada del usuario sea retornada correctamente
+    }
+
+    @Test
+    fun `test readInput throws exception for non-string argument`() {
+        val expression = LiteralNode("42", TokenType.NUMBERLITERAL, position)
+        val node = FunctionNode(TokenType.FUNCTION, "readInput", expression, position) // Modificado aquí
+        val interpreter = Interpreter(printer, reader)
+
+        val exception =
+            assertThrows(RuntimeException::class.java) {
+                interpreter.execute(node)
+            }
+
+        assertEquals("El argumento de readInput debe ser String", exception.message)
+    }
+
+    @Test
+    fun `test readInput throws exception for multiple arguments`() {
+        val expression =
+            BinaryNode(
+                LiteralNode("Enter your age: ", TokenType.STRINGLITERAL, position),
+                LiteralNode("5", TokenType.NUMBERLITERAL, position),
+                Token(TokenType.OPERATOR, "+", position, position),
+                position,
+            )
+        val node = FunctionNode(TokenType.FUNCTION, "readInput", expression, position) // Modificado aquí
+        val interpreter = Interpreter(printer, reader)
+
+        val exception =
+            assertThrows(RuntimeException::class.java) {
+                interpreter.execute(node)
+            }
+
+        assertEquals("readInput necesita solo un argumento", exception.message)
+    }
+
+    @Test
+    fun `test readInput prints the argument message`() {
+        val expression = LiteralNode("Enter a value: ", TokenType.STRINGLITERAL, position)
+        val node = FunctionNode(TokenType.FUNCTION, "readInput", expression, position) // Modificado aquí
+
+        val outputStream = ByteArrayOutputStream()
+        System.setOut(PrintStream(outputStream))
+
+        // Simulamos la interacción con el reader
+        val interpreter =
+            Interpreter(
+                printer,
+                object : Reader {
+                    override fun input(message: String): String {
+                        return "User input"
+                    }
+                },
+            )
+
+        interpreter.execute(node)
+
+        val output = outputStream.toString().trim()
+        assertTrue(output.contains("Enter a value:")) // Verifica que el mensaje se imprime
+    }
+
+    @Test
+    fun `test NilNode returns null`() {
+        // Crea un NilNode
+        val nilNode = NilNode
+
+        // Instancia el intérprete
+        val interpreter = Interpreter(printer, reader)
+
+        // Ejecuta el NilNode y verifica que el resultado es null
+        val result = interpreter.execute(nilNode)
+        assertNull(result, "NilNode should return null")
     }
 }
