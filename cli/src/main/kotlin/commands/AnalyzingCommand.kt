@@ -3,10 +3,10 @@ package commands
 import cli.handleError
 import cli.showProgress
 import cli.tokenize
-import interpreter.Printer
 import linter.Linter
 import linter.LinterVersion
 import parser.Parser
+import java.io.File
 
 class AnalyzingCommand(private val source: String, private val version: String) : Command {
     override fun execute() {
@@ -22,39 +22,37 @@ class AnalyzingCommand(private val source: String, private val version: String) 
                     ?: throw IllegalArgumentException("Invalid linter version: $version")
 
             val linter = Linter(linterVersion)
-            linter.readJson("C:\\Users\\vgian\\PrintScript\\cli\\src\\test\\resources\\LinterRules.json")
 
+            // Usar un path absoluto
+            val absolutePath = "C:\\Users\\vgian\\PrintScript\\cli\\src\\test\\resources\\LinterRules.json"
+            val jsonString = File(absolutePath).readText()
+            linter.readJson(jsonString) // Llama al método con el String
+
+            // Obtener el resultado del linter
             val linterOutput = linter.check(astNodes)
 
-            // Definir el Printer como en ExecutionCommand
-            val printer: Printer =
-                object : Printer {
-                    override fun print(message: String) {
-                        println(message)
-                    }
-                }
+            // Mostrar el código original
+            println("Original Source Code:\n$source\n")
 
-            // Usar el Printer para las salidas
-            printer.print("Original Source Code:\n$source")
-
+            // Comprobar si se aplicaron reglas y mostrar resultados
             val brokenRules = linterOutput.getBrokenRules()
             if (brokenRules.isEmpty()) {
-                printer.print("No issues found. The code adheres to the rules.")
+                println("No issues found. The code adheres to the rules.")
             } else {
-                printer.print("Issues found:")
+                println("Issues found:")
                 brokenRules.forEach { rule ->
-                    printer.print("RuleDescription: ${rule.ruleDescription}")
-                    printer.print("ErrorPosition: ${rule.errorPosition}")
-                    printer.print("")
+                    // Indicar que no cumple con la regla
+                    println("No cumple con la regla: ${rule.ruleDescription} en la posición de error: ${rule.errorPosition}")
                 }
             }
 
+            // Generar y guardar los informes
             val txtReport = linter.createTxtContent(brokenRules)
             val htmlReport = linter.createHtmlContent(brokenRules)
             linter.writeToFile(txtReport, "analysis_report.txt")
             linter.writeToFile(htmlReport, "analysis_report.html")
 
-            printer.print("Analysis completed!")
+            println("Analysis completed!")
         } catch (e: Exception) {
             handleError(e, source)
         }

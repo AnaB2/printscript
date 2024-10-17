@@ -2,5 +2,6 @@
 "spaceBeforeColon": true,
 "spaceAfterColon": true,
 "spaceAroundEquals": true,
-"lineBreak": 1
+"lineBreak": 1,
+  "conditionalIndentation": 4
 }

@@ -5,7 +5,7 @@ import cli.showProgress
 import formatter.FormatterBuilderPS
 import interpreter.Printer
 
-class FormattingCommand(private val source: String, private val version: String, private val args: List<String>) : Command {
+open class FormattingCommand(private val source: String, private val version: String, private val args: List<String>) : Command {
     override fun execute() {
         try {
             println("Formatting...")
