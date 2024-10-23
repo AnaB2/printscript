@@ -2,7 +2,7 @@ import interpreter.Interpreter
 import interpreter.Printer
 import interpreter.Reader
 import lexer.Lexer
-import org.example.lexer.TokenMapper
+import lexer.TokenMapper
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import parser.Parser

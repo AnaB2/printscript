@@ -16,17 +16,14 @@ class ExecutionCommandTest {
 
         resourceFiles.forEach { file ->
             val source = file.readText()
-            val version = "1.0" // Puedes ajustar la versión según sea necesario
-            val isFileSource = true // Si estás probando con archivos, este valor será `true`
+            val version = "1.0"
+            val isFileSource = true
 
             try {
                 val command = ExecutionCommand(source, version, isFileSource)
                 command.execute()
-                // Puedes agregar aserciones adicionales basadas en el resultado esperado
-                // Por ejemplo:
                 // assertEquals(expectedOutput, actualOutput)
             } catch (e: Exception) {
-                // Puedes agregar validaciones adicionales basadas en los errores esperados
             }
         }
     }

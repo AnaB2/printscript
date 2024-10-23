@@ -1,6 +1,6 @@
 import formatter.FormatterBuilderPS
 import lexer.Lexer
-import org.example.lexer.TokenMapper
+import lexer.TokenMapper
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import parser.Parser
@@ -16,8 +16,6 @@ class FormatterTest10 {
             "1.0",
         )
 
-    // DECLARACIÓN
-
     @Test
     fun `test formatter with simple numeric declaration expression`() {
         val input = "let x:number=2"
@@ -31,8 +29,6 @@ class FormatterTest10 {
         val formatted = formatter.format(input)
         assertEquals("let x : string = \"hola\";", formatted)
     }
-
-    // ASIGNACIÓN
 
     @Test
     fun `test formatter with simple numeric assignation expression`() {
@@ -48,8 +44,6 @@ class FormatterTest10 {
         assertEquals("x = \"hola\";", formatted)
     }
 
-    // PRINTLN
-
     @Test
     fun `test formatter with simple print expression`() {
         val input = "println(x)"
@@ -63,8 +57,6 @@ class FormatterTest10 {
         val formatted = formatter.format(input)
         assertEquals("println(x + 2 - y * 1000);", formatted)
     }
-
-    // EXPRESIONES COMPLEJAS
 
     @Test
     fun `test formatter with assignation, declaration and println`() {

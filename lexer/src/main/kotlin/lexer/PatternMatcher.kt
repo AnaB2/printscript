@@ -1,4 +1,4 @@
-package org.example.lexer
+package lexer
 
 import token.TokenType
 import java.util.regex.Pattern

@@ -1,4 +1,4 @@
-package org.example.lexer
+package lexer
 
 interface TokenClassifierStrategy {
     fun classify(tokenValue: String): Boolean

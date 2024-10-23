@@ -15,6 +15,5 @@ class FormatFunction : FormatOperation {
     ): String {
         if (!canHandle(node)) error("Node isn't a FunctionNode") else node as FunctionNode
         return formatter.format(node.expression)
-        // TIENE NOMBRE????
     }
 }

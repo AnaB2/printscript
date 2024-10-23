@@ -32,17 +32,16 @@ class FormatterPS : Formatter {
         val tokensWithSemicolon: List<Token> = addSemicolonForEachStatement(tokens)
         val astNodes: List<ASTNode> = parser.execute(tokensWithSemicolon)
 
-        val formatedNodes: List<String> = astNodes.map { node -> formatNode(node) } // formatear cada nodo
+        val formatedNodes: List<String> = astNodes.map { node -> formatNode(node) }
 
         val formatedNodesWithSemicolon =
             formatedNodes.map {
                     line ->
                 if (!line.contains("if")) handleSemicolon.handleSemicolon(line) else line
-            } // manejar punto y coma de cada linea
+            }
 
-        // añade saltos de línea y devuelve String
         val numberOfLineBreak = rulesReader.readFile(rulesPath)["lineBreak"] as Int
-        val result = handleLineBreak.handleLineBreak(formatedNodesWithSemicolon, numberOfLineBreak) // manejar saltos de linea
+        val result = handleLineBreak.handleLineBreak(formatedNodesWithSemicolon, numberOfLineBreak)
 
         return result
     }

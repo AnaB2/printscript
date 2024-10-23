@@ -9,7 +9,7 @@ import formatOperations.FormatLiteral
 import formatOperations.FormatOperation
 import formatOperations.FormatPrint
 import lexer.Lexer
-import org.example.lexer.TokenMapper
+import lexer.TokenMapper
 import parser.Parser
 import rules.RulesReader
 

@@ -31,29 +31,6 @@ class CliTests {
         return Paths.get("resources", fileName).toAbsolutePath().toString()
     }
 
-    /*
-    @Test
-    fun testFormatOperation() {
-        val input = "formatting\ntext\nprint('format this text')\n1.0\n"
-        System.setIn(ByteArrayInputStream(input.toByteArray()))
-
-        main()
-
-        assertTrue(outContent.toString().contains("Formatting completed!"))
-    }
-
-    @Test
-    fun testAnalyzeOperation() {
-        val input = "analyzing\ntext\nif (true) {}\n1.0\n"
-        System.setIn(ByteArrayInputStream(input.toByteArray()))
-
-        main()
-
-        assertTrue(outContent.toString().contains("Analysis completed!"))
-    }
-
-
-     */
     @Test
     fun testHandleErrorInExecution() {
         val input = "execution\ntext\ninvalid code\n1.0\n"
@@ -101,7 +78,6 @@ class CliTests {
         val version = "1.0"
         val validationCommand = ValidationCommand(source, version)
 
-        // Simular la ejecución y verificar que no hay errores
         validationCommand.execute()
     }
 }

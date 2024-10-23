@@ -30,7 +30,7 @@ class FormatDeclaration(
             } else {
                 throw UnsupportedOperationException(
                     "Unsupported declaration type ${declarationNode.declValue}",
-                ) // let or const
+                )
             }
         val id = declarationNode.id
 
@@ -46,9 +46,8 @@ class FormatDeclaration(
                 throw UnsupportedOperationException(
                     "Unsupported data type ${declarationNode.dataTypeValue}",
                 )
-            } // boolean, string or number
+            }
 
-        // handle spaces
         val spaceBeforeColon = formatter.getRules()["spaceBeforeColon"] as Boolean
         val spaceAfterColon = formatter.getRules()["spaceAfterColon"] as Boolean
         val spaceAroundEquals = formatter.getRules()["spaceAroundEquals"] as Boolean
