@@ -71,12 +71,10 @@ class Tokenizer {
                 )
             }
             is DeclarationNode -> {
-                // Change from DECLARATOR to IDENTIFIER
                 tokens.add(Token(TokenType.IDENTIFIER, node.id, node.position, node.position))
                 traverseAST(node.expr, tokens)
             }
             is AssignationNode -> {
-                // Change from DECLARATOR to IDENTIFIER
                 tokens.add(Token(TokenType.IDENTIFIER, node.id, node.position, node.position))
                 traverseAST(node.expression, tokens)
             }
