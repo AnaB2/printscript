@@ -4,7 +4,7 @@ import ast.ASTNode
 import ast.FunctionNode
 import formatter.Formatter
 
-class FormattingFunction : FormattingOperation {
+class FunctionFormatter : FormattingOperation {
     override fun canHandle(astNode: ASTNode): Boolean {
         return astNode is FunctionNode
     }

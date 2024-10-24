@@ -1,13 +1,13 @@
 package formatter
 
-import formatOperations.FormattingAssignation
-import formatOperations.FormattingBinary
-import formatOperations.FormattingBlock
-import formatOperations.FormattingConditional
-import formatOperations.FormattingDeclaration
-import formatOperations.FormattingLiteral
+import formatOperations.AssignationFormatter
+import formatOperations.BinaryFormatter
+import formatOperations.BlockFormatter
+import formatOperations.ConditionalFormatter
+import formatOperations.DeclarationFormatter
 import formatOperations.FormattingOperation
-import formatOperations.FormattingPrint
+import formatOperations.LiteralFormatter
+import formatOperations.PrintFormatter
 import lexer.Lexer
 import lexer.TokenMapper
 import parser.Parser
@@ -28,12 +28,12 @@ open class FormatterBuilderPS : FormatterBuilder {
     private fun formatter10(rulesPath: String): Formatter {
         val formattingOperations: List<FormattingOperation> =
             listOf(
-                FormattingAssignation(),
-                FormattingBinary(),
-                FormattingBlock(),
-                FormattingLiteral(),
-                FormattingPrint(),
-                FormattingDeclaration(
+                AssignationFormatter(),
+                BinaryFormatter(),
+                BlockFormatter(),
+                LiteralFormatter(),
+                PrintFormatter(),
+                DeclarationFormatter(
                     getAllowedDeclarationKeywords("1.0"),
                     getAllowedDataTypes("1.0"),
                 ),
@@ -55,16 +55,16 @@ open class FormatterBuilderPS : FormatterBuilder {
     private fun formatter11(rulesPath: String): Formatter {
         val formattingOperations: List<FormattingOperation> =
             listOf(
-                FormattingAssignation(),
-                FormattingBinary(),
-                FormattingBlock(),
-                FormattingLiteral(),
-                FormattingPrint(),
-                FormattingDeclaration(
+                AssignationFormatter(),
+                BinaryFormatter(),
+                BlockFormatter(),
+                LiteralFormatter(),
+                PrintFormatter(),
+                DeclarationFormatter(
                     getAllowedDeclarationKeywords("1.1"),
                     getAllowedDataTypes("1.1"),
                 ),
-                FormattingConditional(),
+                ConditionalFormatter(),
             )
         val rulesReader =
             RulesReader(

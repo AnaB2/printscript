@@ -5,7 +5,7 @@ import ast.LiteralNode
 import formatter.Formatter
 import token.TokenType
 
-class FormattingLiteral : FormattingOperation {
+class LiteralFormatter : FormattingOperation {
     override fun canHandle(astNode: ASTNode): Boolean {
         return astNode is LiteralNode
     }

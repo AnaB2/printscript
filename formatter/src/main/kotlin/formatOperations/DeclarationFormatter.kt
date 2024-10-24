@@ -5,7 +5,7 @@ import ast.DeclarationNode
 import formatOperations.commons.HandleSpace
 import formatter.Formatter
 
-class FormattingDeclaration(
+class DeclarationFormatter(
     private val allowedDeclarationKeywords: List<String>,
     private val allowedDataTypes: List<String>,
 ) : FormattingOperation {
@@ -34,7 +34,7 @@ class FormattingDeclaration(
             }
         val id = declarationNode.id
 
-        val formatOperationsList = listOf(FormattingLiteral(), FormattingBinary())
+        val formatOperationsList = listOf(LiteralFormatter(), BinaryFormatter())
         val exprValue =
             formatOperationsList.find { it -> it.canHandle(declarationNode.expr) }
                 ?.format(declarationNode.expr, formatter)

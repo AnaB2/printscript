@@ -5,7 +5,7 @@ import ast.BinaryNode
 import formatOperations.commons.HandleSpace
 import formatter.Formatter
 
-class FormattingBinary : FormattingOperation {
+class BinaryFormatter : FormattingOperation {
     private val handleSpace: HandleSpace = HandleSpace()
 
     override fun canHandle(astNode: ASTNode): Boolean {

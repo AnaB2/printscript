@@ -6,7 +6,7 @@ import ast.ConditionalNode
 import ast.NilNode
 import formatter.Formatter
 
-class FormattingConditional : FormattingOperation {
+class ConditionalFormatter : FormattingOperation {
     override fun canHandle(astNode: ASTNode): Boolean {
         return astNode is ConditionalNode
     }

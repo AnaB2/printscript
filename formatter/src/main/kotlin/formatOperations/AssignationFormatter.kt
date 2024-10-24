@@ -6,7 +6,7 @@ import formatOperations.commons.HandleSemicolon
 import formatOperations.commons.HandleSpace
 import formatter.Formatter
 
-class FormattingAssignation : FormattingOperation {
+class AssignationFormatter : FormattingOperation {
     private val handleSpace = HandleSpace()
     private val handleSemicolon = HandleSemicolon()
 

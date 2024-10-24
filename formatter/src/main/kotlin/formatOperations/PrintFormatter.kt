@@ -4,7 +4,7 @@ import ast.ASTNode
 import ast.PrintNode
 import formatter.Formatter
 
-class FormattingPrint : FormattingOperation {
+class PrintFormatter : FormattingOperation {
     override fun canHandle(astNode: ASTNode): Boolean {
         return astNode is PrintNode
     }
