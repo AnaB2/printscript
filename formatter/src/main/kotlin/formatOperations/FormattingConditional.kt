@@ -6,7 +6,7 @@ import ast.ConditionalNode
 import ast.NilNode
 import formatter.Formatter
 
-class FormatConditional : FormatOperation {
+class FormattingConditional : FormattingOperation {
     override fun canHandle(astNode: ASTNode): Boolean {
         return astNode is ConditionalNode
     }
@@ -34,8 +34,18 @@ class FormatConditional : FormatOperation {
         formatter: Formatter,
     ): String {
         val indentationConditional = formatter.getRules()["conditionalIndentation"] as Int
-        return list
-            .map { it -> "${" ".repeat(indentationConditional)}${formatter.format(it)};" }
-            .joinToString("\n")
+        val formattedNodes = list.map { it -> formatter.format(it) }
+        val result = formattedNodes.joinToString("\n")
+
+        var resultWithIndentation = ""
+        for (line in result.lines()) {
+            resultWithIndentation +=
+                if (line.isNotBlank()) {
+                    " ".repeat(indentationConditional) + line + ";\n"
+                } else {
+                    line + "\n"
+                }
+        }
+        return resultWithIndentation.trimEnd() // elimina salto de línea extra al final
     }
 }

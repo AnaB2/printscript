@@ -28,6 +28,12 @@ class RulesReader(
                     "El valor de la regla $keyRequired no es del tipo esperado",
                 )
             }
+            if (keyRequired == "lineBreakPrintln") {
+                val value = rulesMap[keyRequired] as Int
+                if (value < 0 || value > 2) {
+                    error("El valor de la regla $keyRequired debe estar entre 0 y 2")
+                }
+            }
         }
     }
 }

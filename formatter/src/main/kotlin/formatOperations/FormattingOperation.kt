@@ -3,7 +3,7 @@ package formatOperations
 import ast.ASTNode
 import formatter.Formatter
 
-interface FormatOperation {
+interface FormattingOperation {
     fun canHandle(astNode: ASTNode): Boolean
 
     fun format(

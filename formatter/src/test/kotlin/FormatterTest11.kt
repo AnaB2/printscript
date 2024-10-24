@@ -27,6 +27,18 @@ class FormatterTest11 {
     fun `test formatter with conditional expression`() {
         val input = "if (x) { println(\"yes\") } else { println(\"no\") }"
         val formatted = formatter.format(input)
-        assertEquals("if (x) {\n   println(\"yes\");\n} else {\n   println(\"no\");\n}", formatted)
+        assertEquals(
+            """if (x) {
+        |
+        |
+        |   println("yes");
+        |} else {
+        |
+        |
+        |   println("no");
+        |}
+            """.trimMargin(),
+            formatted,
+        )
     }
 }

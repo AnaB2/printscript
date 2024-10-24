@@ -1,13 +1,13 @@
 package formatter
 
-import formatOperations.FormatAssignation
-import formatOperations.FormatBinary
-import formatOperations.FormatBlock
-import formatOperations.FormatConditional
-import formatOperations.FormatDeclaration
-import formatOperations.FormatLiteral
-import formatOperations.FormatOperation
-import formatOperations.FormatPrint
+import formatOperations.FormattingAssignation
+import formatOperations.FormattingBinary
+import formatOperations.FormattingBlock
+import formatOperations.FormattingConditional
+import formatOperations.FormattingDeclaration
+import formatOperations.FormattingLiteral
+import formatOperations.FormattingOperation
+import formatOperations.FormattingPrint
 import lexer.Lexer
 import lexer.TokenMapper
 import parser.Parser
@@ -26,14 +26,14 @@ open class FormatterBuilderPS : FormatterBuilder {
     }
 
     private fun formatter10(rulesPath: String): Formatter {
-        val formatOperations: List<FormatOperation> =
+        val formattingOperations: List<FormattingOperation> =
             listOf(
-                FormatAssignation(),
-                FormatBinary(),
-                FormatBlock(),
-                FormatLiteral(),
-                FormatPrint(),
-                FormatDeclaration(
+                FormattingAssignation(),
+                FormattingBinary(),
+                FormattingBlock(),
+                FormattingLiteral(),
+                FormattingPrint(),
+                FormattingDeclaration(
                     getAllowedDeclarationKeywords("1.0"),
                     getAllowedDataTypes("1.0"),
                 ),
@@ -44,27 +44,27 @@ open class FormatterBuilderPS : FormatterBuilder {
                     "spaceBeforeColon" to Boolean::class,
                     "spaceAfterColon" to Boolean::class,
                     "spaceAroundEquals" to Boolean::class,
-                    "lineBreak" to Int::class,
+                    "lineBreakPrintln" to Int::class,
                 ),
             )
         val lexer = Lexer(TokenMapper("1.0"))
         val parser = Parser()
-        return FormatterPS(rulesReader, rulesPath, formatOperations, lexer, parser)
+        return FormatterPS(rulesReader, rulesPath, formattingOperations, lexer, parser)
     }
 
     private fun formatter11(rulesPath: String): Formatter {
-        val formatOperations: List<FormatOperation> =
+        val formattingOperations: List<FormattingOperation> =
             listOf(
-                FormatAssignation(),
-                FormatBinary(),
-                FormatBlock(),
-                FormatLiteral(),
-                FormatPrint(),
-                FormatDeclaration(
+                FormattingAssignation(),
+                FormattingBinary(),
+                FormattingBlock(),
+                FormattingLiteral(),
+                FormattingPrint(),
+                FormattingDeclaration(
                     getAllowedDeclarationKeywords("1.1"),
                     getAllowedDataTypes("1.1"),
                 ),
-                FormatConditional(),
+                FormattingConditional(),
             )
         val rulesReader =
             RulesReader(
@@ -72,13 +72,13 @@ open class FormatterBuilderPS : FormatterBuilder {
                     "spaceBeforeColon" to Boolean::class,
                     "spaceAfterColon" to Boolean::class,
                     "spaceAroundEquals" to Boolean::class,
-                    "lineBreak" to Int::class,
+                    "lineBreakPrintln" to Int::class,
                     "conditionalIndentation" to Int::class,
                 ),
             )
         val lexer = Lexer(TokenMapper("1.1"))
         val parser = Parser()
-        return FormatterPS(rulesReader, rulesPath, formatOperations, lexer, parser)
+        return FormatterPS(rulesReader, rulesPath, formattingOperations, lexer, parser)
     }
 
     private fun getAllowedDeclarationKeywords(version: String): List<String> {
