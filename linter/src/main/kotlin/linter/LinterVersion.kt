@@ -2,7 +2,7 @@ package linter
 
 enum class LinterVersion(val version: String) {
     VERSION_1_0("1.0"),
-    VERSION_1_1("1.1"), // Agrega más versiones según sea necesario
+    VERSION_1_1("1.1"),
     ;
 
     companion object {
@@ -11,5 +11,3 @@ enum class LinterVersion(val version: String) {
         }
     }
 }
-// Changed LinterVersion so it can work with de console input, so i
-// write 1.0 it goes to LinterVersion_1_0 and so on

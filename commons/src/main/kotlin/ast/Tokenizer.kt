@@ -8,7 +8,7 @@ class Tokenizer {
         val tokens = mutableListOf<List<Token>>()
         for (node in astNodes) {
             val extractedTokens = extractTokensFromAST(node)
-            println("Tokens from AST Node: $extractedTokens") // Debugging output
+            println("Tokens from AST Node: $extractedTokens")
             tokens.add(extractedTokens)
         }
         return tokens
@@ -71,12 +71,10 @@ class Tokenizer {
                 )
             }
             is DeclarationNode -> {
-                // Change from DECLARATOR to IDENTIFIER
                 tokens.add(Token(TokenType.IDENTIFIER, node.id, node.position, node.position))
                 traverseAST(node.expr, tokens)
             }
             is AssignationNode -> {
-                // Change from DECLARATOR to IDENTIFIER
                 tokens.add(Token(TokenType.IDENTIFIER, node.id, node.position, node.position))
                 traverseAST(node.expression, tokens)
             }
@@ -100,7 +98,6 @@ class Tokenizer {
                 traverseAST(node.condition, tokens)
                 traverseAST(node.thenBlock, tokens)
 
-                // Handle elseBlock if it is not null
                 node.elseBlock?.let {
                     val elseToken =
                         Token(
@@ -128,7 +125,6 @@ class Tokenizer {
                 )
             }
             is NilNode -> {
-                // Handle NilNode if necessary
             }
         }
     }

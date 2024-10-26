@@ -1,30 +1,27 @@
-package org.example.lexer
+package lexer
 
 import token.TokenType
 
 class TokenMapper(private val version: String) {
     private val strategyMap: MutableMap<TokenType, TokenClassifierStrategy> = mutableMapOf()
 
-    // Actualiza las palabras reservadas, eliminando numberResult y stringResult
     private val reservedKeywords = setOf("if", "else", "let", "const", "println", "true", "false")
 
     init {
         initializeStrategies()
     }
 
-    // Inicializa las estrategias en el mapa según la versión
     private fun initializeStrategies() {
         when (version) {
             "1.0" -> initializeVersion10Strategies()
             "1.1" -> {
-                initializeVersion10Strategies() // Primero inicializa la versión 1.0
-                initializeVersion11Strategies() // Luego extiende con 1.1
+                initializeVersion10Strategies()
+                initializeVersion11Strategies()
             }
             else -> throw IllegalArgumentException("Unsupported version: $version")
         }
     }
 
-    // Configura las estrategias para la versión 1.0
     private fun initializeVersion10Strategies() {
         strategyMap[TokenType.KEYWORD] = RegexTokenClassifier("""\blet\b""".toRegex())
         strategyMap[TokenType.FUNCTION] = RegexTokenClassifier("""\bprintln\b""".toRegex())
@@ -56,7 +53,6 @@ class TokenMapper(private val version: String) {
             return TokenType.UNKNOWN
         }
 
-        // Maneja las palabras reservadas antes de aplicar las estrategias de clasificación
         if (reservedKeywords.contains(input)) {
             return when (input) {
                 "if", "else" -> TokenType.CONDITIONAL
@@ -67,14 +63,12 @@ class TokenMapper(private val version: String) {
             }
         }
 
-        // Verifica las estrategias para otros tipos
         for ((type, strategy) in strategyMap) {
             if (strategy.classify(input)) {
                 return type
             }
         }
 
-        // Si el input es numberResult o stringResult, clasifícalos como IDENTIFIER
         if (input == "numberResult" || input == "stringResult") {
             return TokenType.IDENTIFIER
         }

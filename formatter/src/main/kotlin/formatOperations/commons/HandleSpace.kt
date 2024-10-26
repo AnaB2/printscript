@@ -6,7 +6,7 @@ class HandleSpace {
         spaceBefore: Boolean,
         spaceAfter: Boolean,
     ): String {
-        var result = tokenValue.trim() // elimina los espacios al inicio y al final
+        var result = tokenValue.trim()
         if (spaceBefore) {
             result = " " + result
         }

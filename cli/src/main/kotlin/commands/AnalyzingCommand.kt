@@ -6,7 +6,6 @@ import cli.tokenize
 import linter.Linter
 import linter.LinterVersion
 import parser.Parser
-import token.Token
 import java.io.File
 
 class AnalyzingCommand(private val source: String, private val version: String) : Command {
@@ -15,59 +14,44 @@ class AnalyzingCommand(private val source: String, private val version: String) 
             println("Analyzing...")
             showProgress()
 
-            // Tokenize the source
-            val tokens: List<Token> = tokenize(source, version)
-
-            // Print the tokens with their positions for debugging
-            println("Tokens:")
-            tokens.forEach { token ->
-                println("Token: ${token.value} at position: ${token.getPosition()}")
-            }
-
-            // Parse the tokens into AST nodes
+            val tokens = tokenize(source, version)
             val astNodes = Parser().execute(tokens)
 
-            // Get the correct linter version
             val linterVersion =
                 LinterVersion.values().find { it.version == version }
                     ?: throw IllegalArgumentException("Invalid linter version: $version")
 
             val linter = Linter(linterVersion)
 
-            // Use an absolute path for the linter rules JSON
+            // Usar un path absoluto
             val absolutePath = "C:\\Users\\vgian\\PrintScript\\cli\\src\\test\\resources\\LinterRules.json"
             val jsonString = File(absolutePath).readText()
-            linter.readJson(jsonString)
+            linter.readJson(jsonString) // Llama al método con el String
 
-            // Perform linter check
+            // Obtener el resultado del linter
             val linterOutput = linter.check(astNodes)
 
-            // Print original source code
+            // Mostrar el código original
             println("Original Source Code:\n$source\n")
 
-            // Check for broken rules
+            // Comprobar si se aplicaron reglas y mostrar resultados
             val brokenRules = linterOutput.getBrokenRules()
             if (brokenRules.isEmpty()) {
                 println("No issues found. The code adheres to the rules.")
             } else {
                 println("Issues found:")
                 brokenRules.forEach { rule ->
-                    println("Rule broken: ${rule.ruleDescription} at position: ${rule.errorPosition}")
+                    // Indicar que no cumple con la regla
+                    println("No cumple con la regla: ${rule.ruleDescription} en la posición de error: ${rule.errorPosition}")
                 }
             }
-            // Debug: Print the details of broken rules and their positions
-            println("Detailed broken rules:")
-            brokenRules.forEach { rule ->
-                println("Rule: ${rule.ruleDescription}")
-                println("Error Position: ${rule.errorPosition}")
-            }
-/*
-            // Generate and save the reports
+
+            // Generar y guardar los informes
             val txtReport = linter.createTxtContent(brokenRules)
             val htmlReport = linter.createHtmlContent(brokenRules)
             linter.writeToFile(txtReport, "analysis_report.txt")
             linter.writeToFile(htmlReport, "analysis_report.html")
- */
+
             println("Analysis completed!")
         } catch (e: Exception) {
             handleError(e, source)

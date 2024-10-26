@@ -1,7 +1,5 @@
 package lexer
 
-import org.example.lexer.PatternMatcher
-import org.example.lexer.TokenMapper
 import token.Token
 import token.TokenPosition
 import token.TokenType
@@ -61,7 +59,7 @@ class Lexer(private val classifier: TokenMapper) {
             TokenType.STRINGLITERAL -> {
                 matcher.group().substring(1, matcher.group().length - 1)
             }
-            else -> matcher.group() // For other token types
+            else -> matcher.group()
         }
     }
 }

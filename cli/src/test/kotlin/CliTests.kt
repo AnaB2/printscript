@@ -83,7 +83,6 @@ class CliTests {
         val version = "1.0"
         val validationCommand = ValidationCommand(source, version)
 
-        // Simular la ejecución y verificar que no hay errores
         validationCommand.execute()
     }
 

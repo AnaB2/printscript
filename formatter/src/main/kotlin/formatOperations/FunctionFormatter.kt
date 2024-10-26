@@ -4,7 +4,7 @@ import ast.ASTNode
 import ast.FunctionNode
 import formatter.Formatter
 
-class FormatFunction : FormatOperation {
+class FunctionFormatter : FormattingOperation {
     override fun canHandle(astNode: ASTNode): Boolean {
         return astNode is FunctionNode
     }
@@ -15,6 +15,5 @@ class FormatFunction : FormatOperation {
     ): String {
         if (!canHandle(node)) error("Node isn't a FunctionNode") else node as FunctionNode
         return formatter.format(node.expression)
-        // TIENE NOMBRE????
     }
 }

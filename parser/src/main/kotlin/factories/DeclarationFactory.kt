@@ -19,14 +19,12 @@ class DeclarationFactory : ASTFactory {
             tokens.find { it.getType() == TokenType.DATA_TYPE }
                 ?: throw IllegalArgumentException("Expected a DATA_TYPE or DATA_TYPE token but found none.")
 
-        // los tokens de la expresión estarán luego del token de asignación, creo LiteralNode o BinaryNode
         val initialPositionExpression = tokens.indexOfFirst { it -> it.value == "=" } + 1
         val expressionTokens: List<Token>? = findExpressionTokens(initialPositionExpression, tokens)
 
         val expressionNode: ASTNode = if (expressionTokens == null) NilNode else findExpressionNode(expressionTokens)
         val dataTypeValue = dataTypeToken.value
 
-        // chequear consistencia entre tipo de dato y valor de la expresión
         if (expressionTokens != null) checkConsistencyOfExpressionWithDataType(dataTypeValue, expressionTokens)
 
         return DeclarationNode(
@@ -87,7 +85,7 @@ class DeclarationFactory : ASTFactory {
                 tokens.size,
             )
         } else {
-            listOf(tokens.last()) // Assuming the last token is the expression
+            listOf(tokens.last())
         }
     }
 

@@ -5,10 +5,10 @@ import ast.DeclarationNode
 import formatOperations.commons.HandleSpace
 import formatter.Formatter
 
-class FormatDeclaration(
+class DeclarationFormatter(
     private val allowedDeclarationKeywords: List<String>,
     private val allowedDataTypes: List<String>,
-) : FormatOperation {
+) : FormattingOperation {
     private val handleSpace: HandleSpace = HandleSpace()
 
     override fun canHandle(astNode: ASTNode): Boolean {
@@ -30,11 +30,11 @@ class FormatDeclaration(
             } else {
                 throw UnsupportedOperationException(
                     "Unsupported declaration type ${declarationNode.declValue}",
-                ) // let or const
+                )
             }
         val id = declarationNode.id
 
-        val formatOperationsList = listOf(FormatLiteral(), FormatBinary())
+        val formatOperationsList = listOf(LiteralFormatter(), BinaryFormatter())
         val exprValue =
             formatOperationsList.find { it -> it.canHandle(declarationNode.expr) }
                 ?.format(declarationNode.expr, formatter)
@@ -46,9 +46,8 @@ class FormatDeclaration(
                 throw UnsupportedOperationException(
                     "Unsupported data type ${declarationNode.dataTypeValue}",
                 )
-            } // boolean, string or number
+            }
 
-        // handle spaces
         val spaceBeforeColon = formatter.getRules()["spaceBeforeColon"] as Boolean
         val spaceAfterColon = formatter.getRules()["spaceAfterColon"] as Boolean
         val spaceAroundEquals = formatter.getRules()["spaceAroundEquals"] as Boolean

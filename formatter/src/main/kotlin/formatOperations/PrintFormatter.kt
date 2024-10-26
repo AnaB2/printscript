@@ -4,7 +4,7 @@ import ast.ASTNode
 import ast.PrintNode
 import formatter.Formatter
 
-class FormatPrint : FormatOperation {
+class PrintFormatter : FormattingOperation {
     override fun canHandle(astNode: ASTNode): Boolean {
         return astNode is PrintNode
     }
@@ -16,6 +16,9 @@ class FormatPrint : FormatOperation {
         if (!canHandle(node)) error("Node isn't a PrintNode")
         val printNode = node as PrintNode
         val expression = formatter.format(printNode.expression)
-        return "println($expression)"
+
+        val lineBreak = formatter.getRules()["lineBreakPrintln"] as Int
+
+        return "${"\n".repeat(lineBreak)}println($expression)"
     }
 }

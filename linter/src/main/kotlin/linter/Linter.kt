@@ -45,4 +45,8 @@ class Linter(private var version: LinterVersion) {
     fun createHtmlContent(brokenRules: List<BrokenRule>): String {
         return fileManager.createHtmlReport(brokenRules)
     }
+
+    fun getRules(): List<Rule> {
+        return rules
+    }
 }

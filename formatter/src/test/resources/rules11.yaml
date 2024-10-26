@@ -2,5 +2,5 @@
 spaceBeforeColon: true # antes de :
 spaceAfterColon: true # después de :
 spaceAroundEquals: true # alrededor de =
-lineBreak: 1 # salto de línea /n
+lineBreakPrintln: 2 # salto de línea /n
 conditionalIndentation: 3

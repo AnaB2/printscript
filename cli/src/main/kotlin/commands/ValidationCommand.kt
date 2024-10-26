@@ -9,7 +9,6 @@ class ValidationCommand(private val source: String, private val version: String)
     override fun execute() {
         println("Validating content...")
 
-        // Definir el Printer como en ExecutionCommand
         val printer: Printer =
             object : Printer {
                 override fun print(message: String) {
@@ -24,10 +23,9 @@ class ValidationCommand(private val source: String, private val version: String)
             val astNodes = parser.execute(tokens)
             printer.print("Validation successful.")
 
-            // Ejemplo de uso de astNodes: imprimir el AST para depuración
             printer.print("AST Nodes:")
             astNodes.forEach { node ->
-                printer.print(node.toString()) // Asume que el método toString() está bien implementado en ASTNode
+                printer.print(node.toString())
             }
         } catch (e: Exception) {
             printer.print("Validation failed: ${e.message}")

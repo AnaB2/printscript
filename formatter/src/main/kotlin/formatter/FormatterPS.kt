@@ -1,7 +1,7 @@
 package formatter
 
 import ast.ASTNode
-import formatOperations.FormatOperation
+import formatOperations.FormattingOperation
 import formatOperations.commons.HandleLineBreak
 import formatOperations.commons.HandleSemicolon
 import lexer.Lexer
@@ -10,39 +10,30 @@ import rules.RulesReader
 import token.Token
 import token.TokenType
 
-class FormatterPS : Formatter {
-    private val rulesPath: String
-    private val formatOperations: List<FormatOperation>
-    private val rulesReader: RulesReader
+class FormatterPS(
+    private val rulesReader: RulesReader,
+    private val rulesPath: String,
+    private val formattingOperations: List<FormattingOperation>,
+    private val lexer: Lexer,
+    private val parser: Parser,
+) : Formatter {
     private val handleSemicolon = HandleSemicolon()
     private val handleLineBreak = HandleLineBreak()
-    private val lexer: Lexer
-    private val parser: Parser
-
-    constructor(rulesReader: RulesReader, rulesPath: String, formatOperations: List<FormatOperation>, lexer: Lexer, parser: Parser) {
-        this.rulesPath = rulesPath
-        this.formatOperations = formatOperations
-        this.rulesReader = rulesReader
-        this.lexer = lexer
-        this.parser = parser
-    }
 
     override fun format(input: String): String {
         val tokens: List<Token> = lexer.execute(input)
         val tokensWithSemicolon: List<Token> = addSemicolonForEachStatement(tokens)
         val astNodes: List<ASTNode> = parser.execute(tokensWithSemicolon)
 
-        val formatedNodes: List<String> = astNodes.map { node -> formatNode(node) } // formatear cada nodo
+        val formatedNodes: List<String> = astNodes.map { node -> formatNode(node) }
 
         val formatedNodesWithSemicolon =
             formatedNodes.map {
                     line ->
                 if (!line.contains("if")) handleSemicolon.handleSemicolon(line) else line
-            } // manejar punto y coma de cada linea
+            }
 
-        // añade saltos de línea y devuelve String
-        val numberOfLineBreak = rulesReader.readFile(rulesPath)["lineBreak"] as Int
-        val result = handleLineBreak.handleLineBreak(formatedNodesWithSemicolon, numberOfLineBreak) // manejar saltos de linea
+        val result = handleLineBreak.handleLineBreak(formatedNodesWithSemicolon, 1)
 
         return result
     }
@@ -52,7 +43,7 @@ class FormatterPS : Formatter {
     }
 
     private fun formatNode(node: ASTNode): String {
-        val formatter = formatOperations.find { it -> it.canHandle(node) }
+        val formatter = formattingOperations.find { it -> it.canHandle(node) }
         return formatter?.format(node, this) ?: ""
     }
 
@@ -64,7 +55,10 @@ class FormatterPS : Formatter {
         val result: MutableList<Token> = mutableListOf()
         for (token in tokens) {
             if (token.value == "\n") {
-                if (result.last().value != ";" && result.last().value != "}") {
+                if (result.last().value != ";" &&
+                    result.last().value != "}" &&
+                    result.last().value != "{"
+                ) {
                     result.add(
                         Token(
                             TokenType.PUNCTUATOR,

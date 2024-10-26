@@ -7,16 +7,14 @@ class RulesReader(
     private val requiredRules: Map<String, KClass<*>>,
 ) {
     fun readFile(path: String): Map<String, Any> {
-        val yaml: String = File(path).readText() // transforma el contenido a String
-        val rulesMap: Map<String, Any> = Yaml().load(yaml) // convierte contenido a Map<String, Any>
+        val yaml: String = File(path).readText()
+        val rulesMap: Map<String, Any> = Yaml().load(yaml)
 
-        // chequea que se encuentren las configuraciones requeridas
         checkRules(rulesMap, requiredRules)
 
         return rulesMap
     }
 
-    // chequea que las reglas requeridas se encuentren en el archivo, y sean del tipo esperado
     private fun checkRules(
         rulesMap: Map<String, Any>,
         requiredRules: Map<String, KClass<*>>,
@@ -29,6 +27,12 @@ class RulesReader(
                 error(
                     "El valor de la regla $keyRequired no es del tipo esperado",
                 )
+            }
+            if (keyRequired == "lineBreakPrintln") {
+                val value = rulesMap[keyRequired] as Int
+                if (value < 0 || value > 2) {
+                    error("El valor de la regla $keyRequired debe estar entre 0 y 2")
+                }
             }
         }
     }

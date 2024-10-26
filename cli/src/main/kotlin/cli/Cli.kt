@@ -5,7 +5,7 @@ import commands.ExecutionCommand
 import commands.FormattingCommand
 import commands.ValidationCommand
 import lexer.Lexer
-import org.example.lexer.TokenMapper
+import lexer.TokenMapper
 import token.Token
 import java.io.File
 
@@ -57,7 +57,6 @@ fun main() {
     println("Please enter the version (default is 1.0):")
     val version = readLine() ?: "1.0"
 
-    // Creación del comando basado en la operación
     val command =
         when (operation) {
             "validation" -> ValidationCommand(source, version)
@@ -70,7 +69,6 @@ fun main() {
             }
         }
 
-    // Ejecutar el comando seleccionado
     invoker.runCommand(command)
 }
 

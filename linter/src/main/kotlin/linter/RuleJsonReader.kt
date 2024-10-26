@@ -9,7 +9,6 @@ import rules.Rule
 import rules.SnakeCaseRule
 import java.io.File
 
-// Definición de reglas de formato
 class FormattingRules {
     @JsonProperty("identifier_format")
     var identifier: String? = null
@@ -21,21 +20,17 @@ class FormattingRules {
     var isEnableInputOnly: Boolean = false
 }
 
-// Clase para leer y obtener reglas desde JSON
 class RuleJsonReader {
-    // Método para leer reglas desde un archivo JSON
     fun getRulesFromFile(path: String): List<Rule> {
         val file = File(path)
-        return getRulesFromJson(file.readText()) // Lee el contenido del archivo y pasa al método que procesa el contenido
+        return getRulesFromJson(file.readText())
     }
 
-    // Método para leer reglas desde un contenido JSON en formato String
     fun getRulesFromJson(jsonContent: String): List<Rule> {
         val mapper = jacksonObjectMapper()
         val formattingRules = mapper.readValue(jsonContent, FormattingRules::class.java)
         val rules = mutableListOf<Rule>()
 
-        // Normalize and trim the identifier to handle variations like "camel case" or "snake case"
         when (formattingRules.identifier?.replace(" ", "")?.lowercase()) {
             "camelcase" -> rules.add(CamelCaseRule())
             "snakecase" -> rules.add(SnakeCaseRule())

@@ -16,13 +16,11 @@ class ValidationCommandTest {
 
         resourceFiles.forEach { file ->
             val source = file.readText()
-            val version = "1.0" // Puedes ajustar la versión según sea necesario
+            val version = "1.0"
 
             try {
                 val command = ValidationCommand(source, version)
                 command.execute()
-                // Puedes agregar aserciones adicionales basadas en el resultado esperado
-                // Por ejemplo:
                 // assertEquals(expectedOutput, actualOutput)
             } catch (e: Exception) {
             }
