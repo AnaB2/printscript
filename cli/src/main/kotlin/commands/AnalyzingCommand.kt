@@ -45,13 +45,13 @@ class AnalyzingCommand(private val source: String, private val version: String) 
                     println("No cumple con la regla: ${rule.ruleDescription} en la posición de error: ${rule.errorPosition}")
                 }
             }
-
+/*
             // Generar y guardar los informes
             val txtReport = linter.createTxtContent(brokenRules)
             val htmlReport = linter.createHtmlContent(brokenRules)
             linter.writeToFile(txtReport, "analysis_report.txt")
             linter.writeToFile(htmlReport, "analysis_report.html")
-
+ */
             println("Analysis completed!")
         } catch (e: Exception) {
             handleError(e, source)

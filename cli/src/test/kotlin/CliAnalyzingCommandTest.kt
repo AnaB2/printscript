@@ -131,25 +131,52 @@ class CliAnalyzingCommandTest {
     }
 
     @Test
-    fun `should analyze code from test03txt`() {
-        // Ruta del archivo que contiene el código a analizar
-        val filePath = "C:\\Users\\vgian\\PrintScript\\cli\\src\\test\\resources\\test03.txt"
-        val source = File(filePath).readText()
-        val version = "1.1" // Cambia según sea necesario
+    fun testAnalyzingCommandWithNoIssues2() {
+        val source =
+            """
+            println("Hello" + " , " + "world!"        );
+            """.trimIndent()
+        val version = "1.1" // Asegúrate de que la versión coincida con tu output esperado
 
-        // Ejecutamos el comando de análisis
-        val analyzingCommand = AnalyzingCommand(source, version)
+        // Redirigir la salida de println a un ByteArrayOutputStream para capturar el output
         val outputStream = ByteArrayOutputStream()
+        val originalOut = System.out
         System.setOut(PrintStream(outputStream))
 
-        analyzingCommand.execute()
+        try {
+            // Ejecutar el comando de análisis
+            val command = AnalyzingCommand(source, version)
+            command.execute()
 
-        // Verificar la salida
-        val output = outputStream.toString()
-        // Revisa si se detectan problemas de CamelCase
-        assertTrue(output.contains("Issues found:"))
-        assertTrue(output.contains("Rule broken: The following identifier must be in camel case"))
-        assertTrue(output.contains("Detailed broken rules:"))
-        assertTrue(output.contains("Analysis completed!"))
+            // Restaurar el stream de salida original
+            System.setOut(originalOut)
+
+            // Obtener el output capturado
+            val output = outputStream.toString().trim()
+
+            // Verificar que se muestre el código original
+            assertTrue(output.contains("Original Source Code:"), "Expected source code output missing")
+
+            // Verificar que se confirme que no hay problemas
+            assertTrue(
+                output.contains("No issues found. The code adheres to the rules."),
+                "Expected 'No issues found. The code adheres to the rules.' message missing.",
+            )
+
+            // Verificar otros mensajes de salida esperados
+            assertTrue(output.contains("Analyzing..."), "Expected 'Analyzing...' message missing.")
+            assertTrue(output.contains("Processing..... done."), "Expected 'Processing..... done.' message missing.")
+
+            // Asegúrate de que los tokens se impriman correctamente
+            assertTrue(output.contains("Tokens from AST Node:"), "Expected 'Tokens from AST Node:' message missing.")
+            assertTrue(output.contains("Token(type = 'FUNCTION', value = 'print'"), "Expected function token message missing.")
+            assertTrue(output.contains("Token(type = 'STRINGLITERAL', value = 'Hello'"), "Expected string literal token message missing.")
+
+            // Imprimir un mensaje adicional si el test pasa
+            println("Test for code without issues completed successfully.")
+        } catch (e: Exception) {
+            System.setOut(originalOut) // Restaurar el stream en caso de excepción
+            throw e // Volver a lanzar la excepción para el framework de pruebas
+        }
     }
 }
