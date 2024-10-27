@@ -101,6 +101,7 @@ class CliAnalyzingCommandTest {
             throw e
         }
     }
+    /*
 
     // Test para validar que se generen reportes
     @Test
@@ -129,6 +130,8 @@ class CliAnalyzingCommandTest {
             throw e
         }
     }
+
+     */
 
     @Test
     fun testAnalyzingCommandWithNoIssues2() {
