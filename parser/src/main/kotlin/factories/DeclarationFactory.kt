@@ -34,7 +34,8 @@ class DeclarationFactory : ASTFactory {
             dataType = dataTypeToken.getType(),
             dataTypeValue = dataTypeValue,
             expr = expressionNode,
-            position = keywordToken.getPosition(),
+            position = identifierToken.getPosition(),
+            // Cambiado aquí  keywordToken.getPosition(),
         )
     }
 
