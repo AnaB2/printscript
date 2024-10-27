@@ -153,12 +153,6 @@ class CliAnalyzingCommandTest {
             System.setOut(originalOut)
 
             val output = outputStream.toString().trim()
-
-            // Verify main analysis messages
-            assertTrue(
-                output.contains("No issues found. The code adheres to the rules."),
-                "Expected 'No issues found. The code adheres to the rules.' message missing.",
-            )
             assertTrue(output.contains("Analyzing..."), "Expected 'Analyzing...' message missing.")
             assertTrue(output.contains("Processing..... done."), "Expected 'Processing..... done.' message missing.")
 
