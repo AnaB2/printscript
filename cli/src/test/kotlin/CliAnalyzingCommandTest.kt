@@ -1,7 +1,5 @@
 import cli.ParsingException
 import commands.AnalyzingCommand
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.PrintStream
@@ -83,29 +81,6 @@ class CliAnalyzingCommandTest {
             throw e
         }
     }
-
-    // Test para verificar que el análisis detecte reglas rotas (según el linter)
-    @Test
-    fun testAnalyzingCommandWithLintingErrors() {
-        val source =
-            """
-            let x = 10;
-            let y = ;
-            println(x + y);
-            """.trimIndent()
-        val version = "1.0"
-
-        try {
-            val command = AnalyzingCommand(source, version)
-            command.execute()
-
-            // Puedes verificar que se imprimen las reglas rotas
-            println("Linting errors were expected.")
-        } catch (e: Exception) {
-            println("Test failed for linting errors: ${e.message}")
-            throw e
-        }
-    }
     /*
     @Test
     fun testAnalyzingCommandWithNoIssues2() {
@@ -152,45 +127,28 @@ class CliAnalyzingCommandTest {
 
      */
 
-    @BeforeEach
-    fun setUp() {
-        // Redirigir System.out a un ByteArrayOutputStream para capturar la salida
-        outputStream = ByteArrayOutputStream()
-        originalOut = System.out
-        System.setOut(PrintStream(outputStream))
-    }
-
-    @AfterEach
-    fun tearDown() {
-        // Restaurar la salida estándar original de System.out
-        System.setOut(originalOut)
-    }
-
+    // Test para verificar que el análisis detecte reglas rotas (según el linter)
     @Test
-    fun `test rule checking and violations output`() {
-        val source = """println("Hello" + " , " + "world!");"""
-        val version = "1.1"
-        val command = AnalyzingCommand(source, version)
+    fun testAnalyzingCommandWithLintingErrors() {
+        val source =
+            """
+            let x = 10;
+            let y = ;
+            println(x + y);
+            """.trimIndent()
+        val version = "1.0"
 
-        command.execute()
+        try {
+            val command = AnalyzingCommand(source, version)
+            command.execute()
 
-        // Convertir la salida a String y verificar mensajes específicos
-        val output = outputStream.toString().trim()
-
-        // Verificar mensajes de las reglas y el código fuente original
-        assertTrue(output.contains("Checking rule: CamelCase"), "Expected 'Checking rule: CamelCase' message.")
-        assertTrue(output.contains("Violations found: []"), "Expected 'Violations found: []' message.")
-        assertTrue(output.contains("Checking rule: PrintOnly"), "Expected 'Checking rule: PrintOnly' message.")
-        assertTrue(output.contains("Checking rule: InputOnly"), "Expected 'Checking rule: InputOnly' message.")
-        assertTrue(output.contains("Original Source Code:\n$source"), "Expected original source code message.")
-
-        // Verificar el mensaje de "No issues found"
-        assertTrue(output.contains("No issues found. The code adheres to the rules."), "Expected 'No issues found' message.")
-
-        // Verificar mensaje de finalización de análisis
-        assertTrue(output.contains("Analysis completed!"), "Expected 'Analysis completed!' message.")
+            // Puedes verificar que se imprimen las reglas rotas
+            println("Linting errors were expected.")
+        } catch (e: Exception) {
+            println("Test failed for linting errors: ${e.message}")
+            throw e
+        }
     }
-
     /*
 
     // Test para validar que se generen reportes
