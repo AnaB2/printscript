@@ -137,46 +137,49 @@ class CliAnalyzingCommandTest {
     fun testAnalyzingCommandWithNoIssues2() {
         val source =
             """
-            println("Hello" + " , " + "world!"        );
+            println("Hello" + " , " + "world!");
             """.trimIndent()
-        val version = "1.1" // Asegúrate de que la versión coincida con tu output esperado
+        val version = "1.1"
 
-        // Redirigir la salida de println a un ByteArrayOutputStream para capturar el output
         val outputStream = ByteArrayOutputStream()
         val originalOut = System.out
         System.setOut(PrintStream(outputStream))
 
         try {
-            // Ejecutar el comando de análisis
             val command = AnalyzingCommand(source, version)
             command.execute()
 
-            // Restaurar el stream de salida original
+            System.out.flush()
             System.setOut(originalOut)
 
-            // Obtener el output capturado
             val output = outputStream.toString().trim()
 
-            // Verificar que se confirme que no hay problemas
+            // Verify main analysis messages
             assertTrue(
                 output.contains("No issues found. The code adheres to the rules."),
                 "Expected 'No issues found. The code adheres to the rules.' message missing.",
             )
-
-            // Verificar otros mensajes de salida esperados
             assertTrue(output.contains("Analyzing..."), "Expected 'Analyzing...' message missing.")
             assertTrue(output.contains("Processing..... done."), "Expected 'Processing..... done.' message missing.")
 
-            // Asegúrate de que los tokens se impriman correctamente
-            assertTrue(output.contains("Tokens from AST Node:"), "Expected 'Tokens from AST Node:' message missing.")
-            assertTrue(output.contains("Token(type = 'FUNCTION', value = 'print'"), "Expected function token message missing.")
-            assertTrue(output.contains("Token(type = 'STRINGLITERAL', value = 'Hello'"), "Expected string literal token message missing.")
+            // Regex patterns to match token entries
+            val functionTokenPattern = Regex("Token\\(type = 'FUNCTION', value = 'print'")
+            val stringLiteralPatternHello = Regex("Token\\(type = 'STRINGLITERAL', value = 'Hello'")
+            val operatorTokenPattern = Regex("Token\\(type = 'OPERATOR', value = '\\+'")
+            val stringLiteralPatternComma = Regex("Token\\(type = 'STRINGLITERAL', value = ' , '")
+            val stringLiteralPatternWorld = Regex("Token\\(type = 'STRINGLITERAL', value = 'world!'")
 
-            // Imprimir un mensaje adicional si el test pasa
+            // Assert each token format
+            assertTrue(functionTokenPattern.containsMatchIn(output), "Expected function token message missing.")
+            assertTrue(stringLiteralPatternHello.containsMatchIn(output), "Expected 'Hello' string literal token message missing.")
+            assertTrue(operatorTokenPattern.containsMatchIn(output), "Expected '+' operator token message missing.")
+            assertTrue(stringLiteralPatternComma.containsMatchIn(output), "Expected ' , ' string literal token message missing.")
+            assertTrue(stringLiteralPatternWorld.containsMatchIn(output), "Expected 'world!' string literal token message missing.")
+
             println("Test for code without issues completed successfully.")
         } catch (e: Exception) {
-            System.setOut(originalOut) // Restaurar el stream en caso de excepción
-            throw e // Volver a lanzar la excepción para el framework de pruebas
+            System.setOut(originalOut)
+            throw e
         }
     }
 }
