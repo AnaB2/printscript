@@ -1,5 +1,5 @@
 {
-  "identifier_format": "snakecase",
+  "identifier_format": "camelcase",
   "enablePrintOnly": true,
   "enableInputOnly": true,
   "enable_print_only": true,
