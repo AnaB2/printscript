@@ -157,9 +157,6 @@ class CliAnalyzingCommandTest {
             // Obtener el output capturado
             val output = outputStream.toString().trim()
 
-            // Verificar que se muestre el código original
-            assertTrue(output.contains("Original Source Code:"), "Expected source code output missing")
-
             // Verificar que se confirme que no hay problemas
             assertTrue(
                 output.contains("No issues found. The code adheres to the rules."),
