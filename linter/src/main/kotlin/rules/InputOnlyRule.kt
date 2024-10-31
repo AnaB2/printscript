@@ -18,7 +18,7 @@ class InputOnlyRule(
         return brokenRules
     }
 
-    private fun containsReadInput(tokens: List<Token>): Boolean {
+    fun containsReadInput(tokens: List<Token>): Boolean {
         for (token in tokens) {
             if (isReadInputType(token)) {
                 return true
@@ -31,7 +31,7 @@ class InputOnlyRule(
         return token.getType() == TokenType.FUNCTION && token.value.lowercase() == "inputonly"
     }
 
-    private fun containsExpression(tokens: List<Token>): Boolean {
+    fun containsExpression(tokens: List<Token>): Boolean {
         for (token in tokens) {
             if (isExpressionType(token)) {
                 return true
