@@ -19,7 +19,7 @@ class PrintOnlyRule(
         return brokenRules
     }
 
-    private fun containsPrintln(tokens: List<Token>): Boolean {
+    fun containsPrintln(tokens: List<Token>): Boolean {
         val firstToken = tokens[0]
         return isPrintlnType(firstToken)
     }
@@ -28,7 +28,7 @@ class PrintOnlyRule(
         return token.getType() == TokenType.FUNCTION && token.value.lowercase() == "println"
     }
 
-    private fun containsExpression(tokens: List<Token>): Boolean {
+    fun containsExpression(tokens: List<Token>): Boolean {
         for (token in tokens) {
             if (isExpressionType(token)) {
                 return true

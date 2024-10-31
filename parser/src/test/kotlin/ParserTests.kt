@@ -4,6 +4,7 @@ import ast.BinaryNode
 import ast.DeclarationNode
 import ast.LiteralNode
 import ast.PrintNode
+import factories.ConditionalFactory
 import lexer.Lexer
 import lexer.TokenMapper
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -158,5 +159,103 @@ class ParserTests {
         // Assert that a specific exception is thrown
         assertThrows<Exception> { parser.execute(tokens1) }
         assertThrows<Exception> { parser.execute(tokens2) }
+    }
+
+    private val parser = Parser()
+    private val startPos = TokenPosition(0, 0)
+    private val endPos = TokenPosition(0, 1)
+
+    @Test
+    fun `test incorrect statement without ending symbol throws exception`() {
+        val tokens =
+            listOf(
+                Token(TokenType.CONDITIONAL, "if", startPos, endPos),
+                Token(TokenType.IDENTIFIER, "x", startPos, endPos),
+                Token(TokenType.ASSIGNATION, "=", startPos, endPos),
+                Token(TokenType.NUMBERLITERAL, "10", startPos, endPos),
+            )
+
+        val exception = assertThrows<Exception> { parser.execute(tokens) }
+        assertEquals("las sentencias deben finalizar con \";\", \"}\" o \"{\"", exception.message)
+    }
+
+    @Test
+    fun `test missing opening brace in if block throws exception`() {
+        val tokens =
+            listOf(
+                Token(TokenType.CONDITIONAL, "if", startPos, endPos),
+                Token(TokenType.PUNCTUATOR, "(", startPos, endPos),
+                Token(TokenType.LITERAL, "true", startPos, endPos),
+                Token(TokenType.PUNCTUATOR, ")", startPos, endPos),
+                // Missing opening brace {
+                Token(TokenType.KEYWORD, "println", startPos, endPos),
+                Token(TokenType.PUNCTUATOR, "(", startPos, endPos),
+                Token(TokenType.LITERAL, "\"if block\"", startPos, endPos),
+                Token(TokenType.PUNCTUATOR, ")", startPos, endPos),
+                Token(TokenType.PUNCTUATOR, ";", startPos, endPos),
+                Token(TokenType.PUNCTUATOR, "}", startPos, endPos),
+            )
+
+        val exception = assertThrows<RuntimeException> { ConditionalFactory().createAST(tokens) }
+        assertEquals("Error parsing block: missing or unbalanced braces", exception.message)
+    }
+
+    @Test
+    fun `test missing closing brace in if block throws exception`() {
+        val tokens =
+            listOf(
+                Token(TokenType.CONDITIONAL, "if", startPos, endPos),
+                Token(TokenType.PUNCTUATOR, "(", startPos, endPos),
+                Token(TokenType.LITERAL, "true", startPos, endPos),
+                Token(TokenType.PUNCTUATOR, ")", startPos, endPos),
+                Token(TokenType.PUNCTUATOR, "{", startPos, endPos),
+                Token(TokenType.KEYWORD, "println", startPos, endPos),
+                Token(TokenType.PUNCTUATOR, "(", startPos, endPos),
+                Token(TokenType.LITERAL, "\"if block\"", startPos, endPos),
+                Token(TokenType.PUNCTUATOR, ")", startPos, endPos),
+                Token(TokenType.PUNCTUATOR, ";", startPos, endPos),
+                // Missing closing brace }
+            )
+
+        val exception = assertThrows<RuntimeException> { ConditionalFactory().createAST(tokens) }
+        assertEquals("Error parsing block: missing or unbalanced braces", exception.message)
+    }
+
+    @Test
+    fun `test execute with missing closing brace`() {
+        val tokens =
+            listOf(
+                Token(TokenType.CONDITIONAL, "if", TokenPosition(0, 2), TokenPosition(1, 3)),
+                Token(TokenType.PARENTHESIS, "(", TokenPosition(2, 3), TokenPosition(1, 4)),
+                Token(TokenType.NUMBERLITERAL, "1", TokenPosition(3, 4), TokenPosition(1, 5)),
+                Token(TokenType.PARENTHESIS, ")", TokenPosition(4, 5), TokenPosition(1, 6)),
+                Token(TokenType.PUNCTUATOR, "{", TokenPosition(5, 6), TokenPosition(1, 7)),
+                Token(TokenType.NUMBERLITERAL, "2", TokenPosition(6, 7), TokenPosition(1, 8)),
+                // Missing closing brace
+            )
+
+        assertThrows<Exception> {
+            parser.execute(tokens)
+        }
+    }
+
+    @Test
+    fun `test execute with missing parentheses`() {
+        val tokens =
+            listOf(
+                Token(TokenType.CONDITIONAL, "if", TokenPosition(0, 2), TokenPosition(1, 3)),
+                Token(TokenType.NUMBERLITERAL, "1", TokenPosition(0, 3), TokenPosition(1, 4)),
+                Token(TokenType.PUNCTUATOR, "{", TokenPosition(0, 4), TokenPosition(1, 5)),
+                Token(TokenType.NUMBERLITERAL, "2", TokenPosition(0, 5), TokenPosition(1, 6)),
+                Token(TokenType.PUNCTUATOR, "}", TokenPosition(0, 6), TokenPosition(1, 7)),
+                Token(TokenType.CONDITIONAL, "else", TokenPosition(0, 7), TokenPosition(1, 8)),
+                Token(TokenType.PUNCTUATOR, "{", TokenPosition(0, 8), TokenPosition(1, 9)),
+                Token(TokenType.NUMBERLITERAL, "3", TokenPosition(0, 9), TokenPosition(1, 10)),
+                Token(TokenType.PUNCTUATOR, "}", TokenPosition(0, 10), TokenPosition(1, 11)),
+            )
+
+        assertThrows<Exception> {
+            parser.execute(tokens)
+        }
     }
 }
