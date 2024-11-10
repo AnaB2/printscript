@@ -1,0 +1,34 @@
+@startuml
+
+package "Modules" {
+
+    [Commons]
+
+    [Lexer] --> [Commons]
+
+    [Parser] --> [Commons]
+    [Parser] --> [Lexer]
+
+    [Formatter] --> [Commons]
+    [Formatter] --> [Lexer]
+    [Formatter] --> [Parser]
+
+    [Interpreter] --> [Commons]
+    [Interpreter] --> [Lexer]
+    [Interpreter] --> [Parser]
+
+    [Linter] --> [Commons]
+    [Linter] --> [Lexer]
+    [Linter] --> [Parser]
+    [Linter] --> [Interpreter]
+
+    [CLI] --> [Commons]
+    [CLI] --> [Lexer]
+    [CLI] --> [Parser]
+    [CLI] --> [Interpreter]
+    [CLI] --> [Formatter]
+    [CLI] --> [Linter]
+
+}
+
+@enduml
