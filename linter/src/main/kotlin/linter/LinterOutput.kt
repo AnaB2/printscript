@@ -4,12 +4,12 @@ import token.TokenPosition
 
 class LinterOutput {
     var isCorrect: Boolean = true
-    private var brokenRules: MutableList<String> = mutableListOf()
+    var brokenRulesList: MutableList<String> = mutableListOf()
 
     fun addBrokenRule(brokenRule: BrokenRule) {
         isCorrect = false
         val ruleAsString = formatBrokenRule(brokenRule)
-        brokenRules.add(ruleAsString)
+        brokenRulesList.add(ruleAsString)
     }
 
     private fun formatBrokenRule(brokenRule: BrokenRule): String {
@@ -19,7 +19,7 @@ class LinterOutput {
 
     // new function for CLI, it basically generates the error message
     fun getBrokenRules(): List<BrokenRule> {
-        return brokenRules.map { brokenRule ->
+        return brokenRulesList.map { brokenRule ->
             val parts = brokenRule.split(" at ")
             val ruleDescription = parts[0].removePrefix("Broken rule: ")
             val positionParts = parts[1].split(":")
