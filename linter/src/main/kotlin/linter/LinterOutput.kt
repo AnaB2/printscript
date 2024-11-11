@@ -4,7 +4,7 @@ import token.TokenPosition
 
 class LinterOutput {
     var isCorrect: Boolean = true
-    private var brokenRules: MutableList<String> = mutableListOf()
+    var brokenRules: MutableList<String> = mutableListOf()
 
     fun addBrokenRule(brokenRule: BrokenRule) {
         isCorrect = false
