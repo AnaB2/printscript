@@ -8,4 +8,4 @@ dependencies {
     implementation project(':lexer')
 }
 group = 'printscript'
-version = '1.0.0-SNAPSHOT'
+version = '1.0.1-SNAPSHOT'

@@ -12,4 +12,4 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'}
 
 group = 'printscript'
-version = '1.0.0-SNAPSHOT'
+version = '1.0.1-SNAPSHOT'
